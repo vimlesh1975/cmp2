@@ -155,12 +155,12 @@ Public Class ucTemplate
     End Sub
     Private Sub playtsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles playtsrundown.Click
         On Error Resume Next
-        CasparDevice.SendString(BuildCgCommand(dgvrundown.CurrentRow.Cells(2).Value, "add", dgvrundown.CurrentRow.Cells(3).Value, dgvrundown.CurrentRow.Cells(1).Value, BuildTemplateData()))
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " add " & dgvrundown.CurrentRow.Cells(3).Value & " " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & BuildTemplateData() & """")
 
     End Sub
     Sub playrundownforvideo()
         On Error Resume Next
-        CasparDevice.SendString(BuildCgCommand(21, "add", 21, dgvrundown.CurrentRow.Cells(1).Value, BuildTemplateData()))
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-21 add 21 " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & BuildTemplateData() & """" & vbCrLf)
         dgvrundown.CurrentCell = dgvrundown.Rows(dgvrundown.CurrentRow.Index + 1).Cells(0)
     End Sub
 
@@ -656,7 +656,7 @@ Public Class ucTemplate
         On Error Resume Next
         If chkanimatetemplate.Checked Then frmmediaplayer.animation1()
 
-        CasparDevice.SendString(BuildCgCommand(cmbvideolayerfortemplate.Text, "add", cmblayertemplate.Text, Replace(lsttemplate.SelectedItem.ToString, "\", "/"), BuildTemplateData(True)))
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmbvideolayerfortemplate.Text & " add " & cmblayertemplate.Text & " " & """" & Replace(lsttemplate.SelectedItem.ToString, "\", "/") & """" & " 1 " & """" & BuildTemplateData(True) & """" & vbCrLf)
         If chkanimatetemplate.Checked Then
             CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 0 0 1 1 50 easeoutexpo")
         End If
