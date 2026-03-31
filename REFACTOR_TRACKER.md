@@ -16,6 +16,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucCG` | `CasparMediaPlayback/ucCG.vb` | Done | Logic refactored; visual redesign was reverted, original look kept. |
 | `ucCG2` | `CasparMediaPlayback/ucCG2.vb` | Done | Logic refactored and duplication reduced. |
 | `ucMixer` | `CasparMediaPlayback/ucMixer.vb` | Done | Mixer command sending, status reads, and XML save/load logic consolidated into shared helpers. |
+| `ucMixernew` | `CasparMediaPlayback/ucMixernew.vb` | Done | Applied the same mixer helper consolidation as `ucMixer`, including XML settings and status-query cleanup. |
 
 ## Repository Cleanup
 
@@ -31,7 +32,6 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
 | `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Pending | Good candidate for shared helper extraction and cleanup. |
-| `ucMixernew` | `CasparMediaPlayback/ucMixernew.vb` | Pending | Important if this is the active mixer UI. |
 | `Form1` | `CasparMediaPlayback/Form1.vb` | Pending | Composition module; high-value module for cleanup. |
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
 
