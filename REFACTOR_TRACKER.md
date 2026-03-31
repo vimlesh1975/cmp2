@@ -97,6 +97,13 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Done | Connection-state UI and server-path propagation consolidated into shared helpers. |
 | `mdlcmp1` | `CasparMediaPlayback/mdlcmp1.vb` | Done | Shared fill-command calculation and external player launch argument building consolidated into reusable helpers. |
 | `Settings` | `CasparMediaPlayback/My Project/Settings.settings` | Done | Settings file annotated for clearer long-term maintenance without changing values. |
+| `ApplicationEvents` | `CasparMediaPlayback/ApplicationEvents.vb` | Done | Left as a documented extension point with an explicit maintenance note. |
+| `BuildString` | `CasparMediaPlayback/BuildString.vb` | Done | Shared string encode/decode logic consolidated into helper methods. |
+| `CalendarColumn` | `CasparMediaPlayback/CalendarColumn.vb` | Done | Calendar-cell validation and time editor setup consolidated into shared helpers. |
+| `CalendarColumnDateWise` | `CasparMediaPlayback/CalendarColumnDateWise.vb` | Done | Date-wise calendar-cell validation and editor formatting consolidated into shared helpers. |
+| `ClsResizeableControl` | `CasparMediaPlayback/ClsResizeableControl.vb` | Done | Repeated resize-state reset flow consolidated into a helper. |
+| `ClsResizeableControlNew` | `CasparMediaPlayback/ClsResizeableControlNew.vb` | Done | Repeated resize-state reset flow consolidated into a helper. |
+| `frmXDCamContoller` | `CasparMediaPlayback/frmXDCamContoller.vb` | Done | Default XDCAM service address setup routed through a helper. |
 | `ucTab` | `CasparMediaPlayback/ucTab.vb` | Done | Small shell cleanup: hide action routed through a helper for consistency with other docked utility modules. |
 | `ucUdpChat` | `CasparMediaPlayback/ucUdpChat.vb` | Done | UDP send, receive-start, and receive-stop flows consolidated into shared helpers. |
 | `ucUtility` | `CasparMediaPlayback/ucUtility.vb` | Done | Utility grid row setup and repeated explorer/notepad launch paths consolidated into shared helpers. |
@@ -133,9 +140,9 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
-| `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Still worth a graphics-module cleanup pass similar to `ucScroll` and `ucTwoLiner`. |
-| `frmROI` | `CasparMediaPlayback/frmROI.vb` | Pending | Small form, likely quick cleanup if needed. |
-| `VolumeMixer` | `CasparMediaPlayback/VolumeMixer.vb` | Pending | Utility/helper file not yet tracked in the refactor pass. |
+| `ucTemplate` follow-up | `CasparMediaPlayback/ucTemplate.vb` | Pending | Optional hardening pass to reduce remaining `On Error Resume Next` and strengthen play/update safety. |
+| `frmROI` | `CasparMediaPlayback/frmROI.vb` | Pending | Optional small-form cleanup if you want every file on the tracker. |
+| `VolumeMixer` | `CasparMediaPlayback/VolumeMixer.vb` | Pending | Optional utility/helper cleanup if you want every support file tracked. |
 
 ## How To Update
 
