@@ -56,6 +56,17 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucMultiBulletScroll` | `CasparMediaPlayback/ucMultiBulletScroll.vb` | Done | Default icon setup, selection toggles, HTML scroller layer/call helpers, and marquee payload building consolidated into shared helpers. |
 | `ucMySqlTest` | `CasparMediaPlayback/ucMySqlTest.vb` | Done | SQL/MySQL connection setup, adapter/command creation, HTML table generation, and color-picker updates consolidated into shared helpers. |
 | `ucnewOffAirLogger` | `CasparMediaPlayback/ucnewOffAirLogger.vb` | Done | Recording path/command helpers, schedule file open/save, decklink/clock command building, and schedule-status updates consolidated into shared helpers. |
+| `ucnewPreview` | `CasparMediaPlayback/ucnewPreview.vb` | Done | Preview stream URI building, keyed/plain preview command sending, and VLC preview playback consolidated into shared helpers. |
+| `ucnewRecorder` | `CasparMediaPlayback/ucnewRecorder.vb` | Done | Recorder layer/path command building, recording-folder browsing, and repeated decklink/record/remove command text consolidated into shared helpers. |
+| `ucnewSM2` | `CasparMediaPlayback/ucnewSM2.vb` | Done | Slow-motion layer addressing, speed command sending, and repeated load-seek command paths consolidated into shared helpers. |
+| `ucnewTrimmer1` | `CasparMediaPlayback/ucnewTrimmer1.vb` | Done | Frame-to-time conversion, VLC seek stepping, and shared FFmpeg/BMX executable paths consolidated into small helpers. |
+| `ucNG2015` | `CasparMediaPlayback/ucNG2015.vb` | Done | Scoped cleanup: repeated games-logo file pickers and shooting series button routing consolidated into shared helpers. |
+| `ucOffAirLogger` | `CasparMediaPlayback/ucOffAirLogger.vb` | Done | Single-channel off-air logger initialization and shutdown flow consolidated into shared helper methods. |
+| `ucOffAirLoggers` | `CasparMediaPlayback/ucOffAirLoggers.vb` | Done | Four-channel off-air logger setup and hide/cleanup flows consolidated into shared logger-list helpers. |
+| `ucOneLiner` | `CasparMediaPlayback/ucOneLiner.vb` | Done | One-liner file dialog setup, selected-text routing, HTML layer/call sending, and repeated style update calls consolidated into shared helpers. |
+| `ucOnLineCG` | `CasparMediaPlayback/ucOnLineCG.vb` | Done | Online CG host URLs and layer-address command building consolidated into shared helpers. |
+| `ucOSC` | `CasparMediaPlayback/ucOSC.vb` | Done | OSC grid row population for message, bundle, and packet events consolidated into a shared row-update helper. |
+| `ucOSD` | `CasparMediaPlayback/ucOSD.vb` | Done | OSD layer addressing, call sending, and selected-color routing consolidated into shared helpers. |
 
 ## Repository Cleanup
 

@@ -2,6 +2,8 @@
 Imports System.ComponentModel
 
 Public Class ucnewTrimmer1
+    Private Const FfmpegExecutablePath As String = "c:/casparcg/mydata/ffmpeg/ffmpeg.exe"
+    Private Const BmxTranswrapExecutablePath As String = "c:/casparcg/mydata/bmx-win32-exe-snapshot-20170814/bmxtranswrap.exe"
     Public ofdtrimmer As New OpenFileDialog
     Public osdcutfilename As New SaveFileDialog
     Dim intCut As Integer = 1
@@ -10,19 +12,19 @@ Public Class ucnewTrimmer1
     Dim isplaying As Boolean = False
     Private Sub cmdgototcvlc_Click(sender As Object, e As EventArgs) Handles cmdgototcvlc.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = HMSFtoF(txtgototcvlc.Text) * 1000 / (fps)
+        SetVlcTimeFromFrame(HMSFtoF(txtgototcvlc.Text))
         'vlc1.VlcMediaPlayer.Pause()
 
     End Sub
 
     Private Sub cmdplaylast5sectrimmer_Click(sender As Object, e As EventArgs) Handles cmdplaylast5sectrimmer.Click
         If System.IO.Path.GetExtension(lblfilenametrimmer.Text) = ".txt" Then
-            vlc1.VlcMediaPlayer.Time = (txtmarkouttrimmer.Text - fps * 5) * 1000 / (fps)
+            SetVlcTimeFromFrame(txtmarkouttrimmer.Text - fps * 5)
             vlc1.VlcMediaPlayer.Play()
             Threading.Thread.Sleep(5000)
-            vlc1.VlcMediaPlayer.Time = (txtmarkouttrimmer.Text) * 1000 / (fps)
+            SetVlcTimeFromFrame(txtmarkouttrimmer.Text)
         Else
-            vlc1.VlcMediaPlayer.Time = (lblmaxtrimmer.Text - fps * 5) * 1000 / (fps)
+            SetVlcTimeFromFrame(lblmaxtrimmer.Text - fps * 5)
             vlc1.VlcMediaPlayer.Play()
         End If
         'vlc1.VlcMediaPlayer.Pause()
@@ -37,7 +39,7 @@ Public Class ucnewTrimmer1
 
     Private Sub cmdgotointrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotointrimmer.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = (txtmarkintrimmer.Text) * 1000 / (fps)
+        SetVlcTimeFromFrame(txtmarkintrimmer.Text)
         'vlc1.VlcMediaPlayer.Pause()
     End Sub
 
@@ -50,7 +52,7 @@ Public Class ucnewTrimmer1
     Private Sub cmdbackoneframetrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdbackoneframetrimmer.Click
 
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = vlc1.VlcMediaPlayer.Time - (1000 / fps)
+        MoveVlcByFrames(-1)
     End Sub
     Private Sub cmdPlaySingleCliptrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdPlaySingleCliptrimmer.Click
         On Error Resume Next
@@ -60,7 +62,7 @@ Public Class ucnewTrimmer1
     Private Sub cmdforwardoneframetrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdforwardoneframetrimmer.Click
 
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = vlc1.VlcMediaPlayer.Time + (1000 / fps)
+        MoveVlcByFrames(1)
     End Sub
 
     Private Sub cmdresumetrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdresumetrimmer.Click
@@ -79,7 +81,7 @@ Public Class ucnewTrimmer1
     Private Sub TrackBarseektrimmer_Scroll(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TrackBarseektrimmer.Scroll
 
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = TrackBarseektrimmer.Value * (1000 / fps)
+        SetVlcTimeFromFrame(TrackBarseektrimmer.Value)
     End Sub
     Private Sub nvlcspeed_ValueChanged(sender As Object, e As EventArgs) Handles nvlcspeed.ValueChanged
         On Error Resume Next
@@ -209,7 +211,7 @@ Public Class ucnewTrimmer1
 
     Private Sub cmdgotoouttrimmer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotoouttrimmer.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = (txtmarkouttrimmer.Text) * 1000 / (fps)
+        SetVlcTimeFromFrame(txtmarkouttrimmer.Text)
         'vlc1.VlcMediaPlayer.Pause()
     End Sub
 
@@ -248,11 +250,11 @@ Public Class ucnewTrimmer1
         Dim startinfo As New System.Diagnostics.ProcessStartInfo
         Dim sr As StreamReader
         Dim strinout = " -ss " & FToHMSms(txtmarkintrimmer.Text) & " -t " & FToHMSms(txtmarkouttrimmer.Text - txtmarkintrimmer.Text)
-        startinfo.FileName = "c:/casparcg/mydata/ffmpeg/ffmpeg.exe"
+        startinfo.FileName = FfmpegExecutablePath
 
         Dim cmd As String
         If (System.IO.Path.GetExtension(osdcutfilename.FileName).ToUpper = ".MXF") And (System.IO.Path.GetExtension(ofdtrimmer.FileName).ToUpper = ".MXF") Then
-            Process.Start("CMD", "/K " & "c:/casparcg/mydata/bmx-win32-exe-snapshot-20170814/bmxtranswrap.exe -p -o " & """" & osdcutfilename.FileName & """" & " --start " & Val(txtmarkintrimmer.Text) & " --dur " & Val(txtmarkouttrimmer.Text - txtmarkintrimmer.Text) & " " & """" & ofdtrimmer.FileName & """")
+            Process.Start("CMD", "/K " & BmxTranswrapExecutablePath & " -p -o " & """" & osdcutfilename.FileName & """" & " --start " & Val(txtmarkintrimmer.Text) & " --dur " & Val(txtmarkouttrimmer.Text - txtmarkintrimmer.Text) & " " & """" & ofdtrimmer.FileName & """")
             'cmd = "-y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & " -c copy " & """" & osdcutfilename.FileName & """"
             Exit Sub
         Else
@@ -281,7 +283,7 @@ Public Class ucnewTrimmer1
     End Sub
     Private Sub cmdgotoendtrimmer_Click(sender As Object, e As EventArgs) Handles cmdgotoendtrimmer.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = (Val(lblmaxtrimmer.Text) - 2) * 1000 / (fps)
+        SetVlcTimeFromFrame(Val(lblmaxtrimmer.Text) - 2)
     End Sub
 
     Private Sub tmrtrimmer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrtrimmer.Tick
@@ -316,7 +318,7 @@ Public Class ucnewTrimmer1
         osdcutfilename.DereferenceLinks = False
         osdcutfilename.Filter = "original wrapper (*" & System.IO.Path.GetExtension(ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|avi files (*.avi)|*.avi|mov files (*.mov)|*.mov|mxf files (*.mxf)|*.mxf|All files (*.*)|*.*"
         If (osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Process.Start("CMD", "/K " & "C:/casparcg/mydata/ffmpeg/ffmpeg.exe -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & " -b:v 25M -minrate 25M -maxrate 25M -vcodec mpeg2video -acodec pcm_s16le -alternate_scan 1 " & """" & osdcutfilename.FileName & """")
+            Process.Start("CMD", "/K " & FfmpegExecutablePath & " -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & " -b:v 25M -minrate 25M -maxrate 25M -vcodec mpeg2video -acodec pcm_s16le -alternate_scan 1 " & """" & osdcutfilename.FileName & """")
 
         End If
     End Sub
@@ -349,12 +351,12 @@ Public Class ucnewTrimmer1
 
     Private Sub cmdforwardtenframetrimmer_Click(sender As Object, e As EventArgs) Handles cmdforwardtenframetrimmer.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = vlc1.VlcMediaPlayer.Time + ((nforwardFrame.Value) * 1000 / fps)
+        MoveVlcByFrames(nforwardFrame.Value)
     End Sub
 
     Private Sub cmdbackTenframetrimmer_Click(sender As Object, e As EventArgs) Handles cmdbackTenframetrimmer.Click
         On Error Resume Next
-        vlc1.VlcMediaPlayer.Time = vlc1.VlcMediaPlayer.Time - ((nforwardFrame.Value) * 1000 / fps)
+        MoveVlcByFrames(-nforwardFrame.Value)
     End Sub
 
     Private Sub cmdExportOnlyAudio_Click(sender As Object, e As EventArgs) Handles cmdExportOnlyAudio.Click
@@ -387,7 +389,7 @@ Public Class ucnewTrimmer1
         Dim ffmpegOutput As String
 
         ' all parameters required to run the process
-        startinfo.FileName = "c:/casparcg/mydata/ffmpeg/ffmpeg.exe"
+        startinfo.FileName = FfmpegExecutablePath
         startinfo.Arguments = cmd
         startinfo.UseShellExecute = False
         startinfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -420,5 +422,17 @@ Public Class ucnewTrimmer1
         cmdexportclipwithoutanychanges.Enabled = True
         pbexportclip.Value = pbexportclip.Maximum
         lblexportclipinfo.Text = "Completed"
+    End Sub
+
+    Private Function FramesToMilliseconds(frameValue As Integer) As Double
+        Return frameValue * (1000 / fps)
+    End Function
+
+    Private Sub SetVlcTimeFromFrame(frameValue As Integer)
+        vlc1.VlcMediaPlayer.Time = FramesToMilliseconds(frameValue)
+    End Sub
+
+    Private Sub MoveVlcByFrames(frameOffset As Integer)
+        vlc1.VlcMediaPlayer.Time = vlc1.VlcMediaPlayer.Time + FramesToMilliseconds(frameOffset)
     End Sub
 End Class

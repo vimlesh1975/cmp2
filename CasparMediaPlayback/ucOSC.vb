@@ -141,23 +141,7 @@ Public Class ucOSC
             Dim jregisteredmethods As Integer
             For jregisteredmethods = 0 To sOscServer.RegisteredMethods.Count - 1
                 If dgvosc.Rows(jregisteredmethods).Cells(0).Value = e.Message.Address Then
-                    dgvosc.Rows(jregisteredmethods).Cells(1).Value = e.Message.Data(0)
-                    dgvosc.Rows(jregisteredmethods).Cells(2).Value = e.Message.Data(1)
-                    dgvosc.Rows(jregisteredmethods).Cells(3).Value = e.Message.Data(2)
-                    dgvosc.Rows(jregisteredmethods).Cells(4).Value = e.Message.Data(3)
-                    dgvosc.Rows(jregisteredmethods).Cells(5).Value = e.Message.Data(4)
-                    dgvosc.Rows(jregisteredmethods).Cells(6).Value = e.Message.Data(5)
-                    dgvosc.Rows(jregisteredmethods).Cells(7).Value = e.Message.Data(6)
-                    dgvosc.Rows(jregisteredmethods).Cells(8).Value = e.Message.Data(7)
-                    dgvosc.Rows(jregisteredmethods).Cells(9).Value = e.Message.Data(8)
-                    dgvosc.Rows(jregisteredmethods).Cells(10).Value = e.Message.Data(9)
-                    dgvosc.Rows(jregisteredmethods).Cells(11).Value = e.Message.Data(10)
-                    dgvosc.Rows(jregisteredmethods).Cells(12).Value = e.Message.Data(11)
-                    dgvosc.Rows(jregisteredmethods).Cells(13).Value = e.Message.Data(12)
-                    dgvosc.Rows(jregisteredmethods).Cells(14).Value = e.Message.Data(13)
-                    dgvosc.Rows(jregisteredmethods).Cells(15).Value = e.Message.Data(14)
-                    dgvosc.Rows(jregisteredmethods).Cells(16).Value = e.Message.Data(15)
-                    dgvosc.Rows(jregisteredmethods).Cells(17).Value = e.Message.Data(16)
+                    UpdateOscRowValues(jregisteredmethods, e.Message.Data)
                     Exit For
                 End If
             Next
@@ -218,8 +202,7 @@ Public Class ucOSC
             Dim jregisteredmethods As Integer
             For jregisteredmethods = 0 To sOscServer.RegisteredMethods.Count - 1
                 If dgvosc.Rows(jregisteredmethods).Cells(0).Value = e.Bundle.Address Then
-                    dgvosc.Rows(jregisteredmethods).Cells(1).Value = e.Bundle.Data(0)
-                    dgvosc.Rows(jregisteredmethods).Cells(2).Value = e.Bundle.Data(1)
+                    UpdateOscRowValues(jregisteredmethods, e.Bundle.Data)
                     If jregisteredmethods = 6 And e.Bundle.Data(0) <> "" Then
                         dgvosc.Rows(6).Cells(1).Value = Int((dgvosc.Rows(5).Cells(1).Value) * (dgvosc.Rows(7).Cells(1).Value))
                         dgvosc.Rows(6).Cells(2).Value = Int((dgvosc.Rows(5).Cells(2).Value) * (dgvosc.Rows(7).Cells(1).Value))
@@ -237,8 +220,7 @@ Public Class ucOSC
             Dim jregisteredmethods As Integer
             For jregisteredmethods = 0 To sOscServer.RegisteredMethods.Count - 1
                 If dgvosc.Rows(jregisteredmethods).Cells(0).Value = e.Packet.Address Then
-                    dgvosc.Rows(jregisteredmethods).Cells(1).Value = e.Packet.Data(0)
-                    dgvosc.Rows(jregisteredmethods).Cells(2).Value = e.Packet.Data(1)
+                    UpdateOscRowValues(jregisteredmethods, e.Packet.Data)
                     If jregisteredmethods = 6 And e.Packet.Data(0) <> "" Then
                         dgvosc.Rows(6).Cells(1).Value = Int((dgvosc.Rows(5).Cells(1).Value) * (dgvosc.Rows(7).Cells(1).Value))
                         dgvosc.Rows(6).Cells(2).Value = Int((dgvosc.Rows(5).Cells(2).Value) * (dgvosc.Rows(7).Cells(1).Value))
@@ -285,5 +267,12 @@ Public Class ucOSC
 
     Private Sub ucOSC_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+    End Sub
+
+    Private Sub UpdateOscRowValues(rowIndex As Integer, oscData As System.Collections.IList)
+        Dim maxColumn As Integer = Math.Min(17, oscData.Count)
+        For columnOffset As Integer = 0 To maxColumn - 1
+            dgvosc.Rows(rowIndex).Cells(columnOffset + 1).Value = oscData(columnOffset)
+        Next
     End Sub
 End Class

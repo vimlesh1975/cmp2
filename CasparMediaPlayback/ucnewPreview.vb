@@ -1,43 +1,54 @@
-﻿Public Class ucnewPreview
+Public Class ucnewPreview
     Public chnumber As Integer = 1
     Dim isplaying As Boolean = False
+
     Private Sub cmdpreviewkey_Click(sender As Object, e As EventArgs) Handles cmdpreviewkey.Click
         On Error Resume Next
-        If ServerVersion > 2.1 Then
-            CasparDevice.SendString("ADD " & chnumber & " STREAM " & "udp://" & cmbippreview.Text & " " & txtoptionspreview.Text & " -filter:v alphaextract")
-
-        Else
-            CasparDevice.SendString("ADD " & chnumber & " STREAM " & "udp://" & cmbippreview.Text & " " & txtoptionspreview.Text & " -vf alphaextract")
-
-        End If
-
-
-        If isplaying = True Then vlcpreview.VlcMediaPlayer.Stop()
-        vlcpreview.VlcMediaPlayer.SetMedia(New Uri("udp://@" & cmbippreview.Text))
-        vlcpreview.VlcMediaPlayer.Play()
-        isplaying = True
-
-
+        SendPreviewCommand(True)
+        PlayPreviewStream()
     End Sub
 
     Private Sub cmdpreview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpreview.Click
         On Error Resume Next
-        CasparDevice.SendString("ADD " & chnumber & " STREAM " & "udp://" & cmbippreview.Text & " " & txtoptionspreview.Text)
-        'Threading.Thread.Sleep(2000)
-        If isplaying = True Then vlcpreview.VlcMediaPlayer.Stop()
-        vlcpreview.VlcMediaPlayer.SetMedia(New Uri("udp://@" & cmbippreview.Text))
-        vlcpreview.VlcMediaPlayer.Play()
-        isplaying = True
+        SendPreviewCommand(False)
+        PlayPreviewStream()
     End Sub
 
     Private Sub cmdremovepreview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremovepreview.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & chnumber & " stream " & "udp://" & cmbippreview.Text)
+        CasparDevice.SendString("remove " & chnumber & " stream " & GetPreviewStreamUri())
         vlcpreview.VlcMediaPlayer.Stop()
         isplaying = False
     End Sub
 
     Private Sub Cmdhid_Click(sender As Object, e As EventArgs) Handles cmdhid.Click
         Hide()
+    End Sub
+
+    Private Function GetPreviewStreamUri() As String
+        Return "udp://" & cmbippreview.Text
+    End Function
+
+    Private Function GetVlcPreviewUri() As String
+        Return "udp://@" & cmbippreview.Text
+    End Function
+
+    Private Sub SendPreviewCommand(includeAlphaKey As Boolean)
+        Dim commandText As String = "ADD " & chnumber & " STREAM " & GetPreviewStreamUri() & " " & txtoptionspreview.Text
+        If includeAlphaKey Then
+            commandText = commandText & If(ServerVersion > 2.1, " -filter:v alphaextract", " -vf alphaextract")
+        End If
+
+        CasparDevice.SendString(commandText)
+    End Sub
+
+    Private Sub PlayPreviewStream()
+        If isplaying = True Then
+            vlcpreview.VlcMediaPlayer.Stop()
+        End If
+
+        vlcpreview.VlcMediaPlayer.SetMedia(New Uri(GetVlcPreviewUri()))
+        vlcpreview.VlcMediaPlayer.Play()
+        isplaying = True
     End Sub
 End Class

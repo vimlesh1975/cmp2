@@ -3,6 +3,7 @@ Imports Bespoke.Common
 Imports Bespoke.Common.Osc
 Imports System.Net
 Public Class ucnewRecorder
+    Private Const RecorderLayer As Integer = 1
     Public chnumber As Integer
     Public oscportnumber As Integer
     Dim lengthfilename As Integer
@@ -39,10 +40,7 @@ Public Class ucnewRecorder
     Private Sub cmdinput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinput.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-
-            str = "play " & chnumber & "-1" & " decklink " & cmbdecklinkforrecording.Text
-            CasparDevice.SendString(str)
+            CasparDevice.SendString(BuildDecklinkCommand("play"))
         End If
     End Sub
 
@@ -51,17 +49,7 @@ Public Class ucnewRecorder
     End Sub
     Private Sub cmdOpenFolderforRecording_Click(sender As Object, e As EventArgs) Handles cmdOpenFolderforRecording.Click
         On Error Resume Next
-        Dim aa As New OpenFileDialog
-        aa.DereferenceLinks = False
-        aa.CheckFileExists = False
-        aa.CheckPathExists = False
-        aa.Filter = "folders|n"
-        aa.Title = "Select Folder"
-        aa.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media"
-        aa.FileName = aa.InitialDirectory & "select folder"
-        If aa.ShowDialog() = DialogResult.OK Then
-            lblRecordingFolder.Text = Directory.GetParent(aa.FileName).ToString & "\"
-        End If
+        lblRecordingFolder.Text = BrowseRecordingFolder()
     End Sub
 
     Private Sub cmdopenintrimmer_Click(sender As Object, e As EventArgs) Handles cmdopenintrimmer.Click
@@ -77,9 +65,7 @@ Public Class ucnewRecorder
     Private Sub cmdremove_input_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremove_input.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str = "stop " & chnumber & "-1"
-            CasparDevice.SendString(str)
-
+            CasparDevice.SendString("stop " & GetRecorderLayerAddress())
         End If
     End Sub
     Private Sub cmdlooprecord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdlooprecord.Click
@@ -99,9 +85,7 @@ Public Class ucnewRecorder
         On Error Resume Next
         lblRecordedduration.Text = ""
         lblRecordedSize.Text = ""
-        Dim str As String
-        str = "ADD " & chnumber & " FILE " & """" & Replace(Mid(lblRecordingFolder.Text, Len(mediafullpath) + 1), "\", "/") & "/" & txtfilename.Text & "." & mp4.Text & """" & " -b:v " & Val(txtbitrate.Text) & "000k -minrate " & Val(txtbitrate.Text) & "000k -maxrate " & Val(txtbitrate.Text) & "000k " & txtextrarecordoptions.Text
-        CasparDevice.SendString(str)
+        CasparDevice.SendString(BuildRecordCommand())
 
         startingtimeofrecording = Now
         cmdlooprecord.BackColor = Color.Green
@@ -129,17 +113,14 @@ Public Class ucnewRecorder
     End Sub
     Sub stoprecord()
         On Error Resume Next
-        Dim str As String
-        str = "REMOVE " & chnumber & " FILE " & "/" & txtfilename.Text & "." & mp4.Text
-
-        CasparDevice.SendString(str)
+        CasparDevice.SendString(BuildRemoveRecordCommand())
         cmdlooprecord.BackColor = Color.Red
     End Sub
 
     Private Sub tmrrecordedfileinfo_Tick(sender As Object, e As EventArgs) Handles tmrrecordedfileinfo.Tick
 
         On Error Resume Next
-        lblrecordingfilename.Text = lblRecordingFolder.Text & txtfilename.Text & "." & mp4.Text
+        lblrecordingfilename.Text = GetRecordingFilePath()
         If File.Exists(lblrecordingfilename.Text) Then
             Dim f As New FileInfo(lblrecordingfilename.Text)
 
@@ -243,6 +224,46 @@ Public Class ucnewRecorder
         stoposcserver()
         Parent.Controls.Remove(Me)
     End Sub
+
+    Private Function GetRecorderLayerAddress() As String
+        Return chnumber & "-" & RecorderLayer
+    End Function
+
+    Private Function BuildDecklinkCommand(actionName As String) As String
+        Return actionName & " " & GetRecorderLayerAddress() & " decklink " & cmbdecklinkforrecording.Text
+    End Function
+
+    Private Function GetRecordingRelativePath() As String
+        Return Replace(Mid(lblRecordingFolder.Text, Len(mediafullpath) + 1), "\", "/") & "/" & txtfilename.Text & "." & mp4.Text
+    End Function
+
+    Private Function GetRecordingFilePath() As String
+        Return lblRecordingFolder.Text & txtfilename.Text & "." & mp4.Text
+    End Function
+
+    Private Function BuildRecordCommand() As String
+        Return "ADD " & chnumber & " FILE " & """" & GetRecordingRelativePath() & """" & " -b:v " & Val(txtbitrate.Text) & "000k -minrate " & Val(txtbitrate.Text) & "000k -maxrate " & Val(txtbitrate.Text) & "000k " & txtextrarecordoptions.Text
+    End Function
+
+    Private Function BuildRemoveRecordCommand() As String
+        Return "REMOVE " & chnumber & " FILE /" & txtfilename.Text & "." & mp4.Text
+    End Function
+
+    Private Function BrowseRecordingFolder() As String
+        Dim aa As New OpenFileDialog
+        aa.DereferenceLinks = False
+        aa.CheckFileExists = False
+        aa.CheckPathExists = False
+        aa.Filter = "folders|n"
+        aa.Title = "Select Folder"
+        aa.InitialDirectory = Replace(mediafullpath, "/", "\")
+        aa.FileName = aa.InitialDirectory & "select folder"
+        If aa.ShowDialog() = DialogResult.OK Then
+            Return Directory.GetParent(aa.FileName).ToString & "\"
+        End If
+
+        Return lblRecordingFolder.Text
+    End Function
 End Class
 
 

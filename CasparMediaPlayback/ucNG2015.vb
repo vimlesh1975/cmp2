@@ -6,6 +6,7 @@ Imports System.Data.OleDb
 Imports System.Data
 Imports System.IO
 Public Class ucNG2015
+    Private Const GamesLogoDirectory As String = "C:\casparcg\mydata\games\games logo\"
     Private Sub NG_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         On Error Resume Next
 
@@ -1150,20 +1151,12 @@ Public Class ucNG2015
 
     Private Sub gamelogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         On Error Resume Next
-        Dim picofd As New OpenFileDialog
-        picofd.InitialDirectory = "C:\casparcg\mydata\games\games logo\"
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            gamelogo.ImageLocation = picofd.FileName
-        End If
+        OpenGamesImage(gamelogo)
     End Sub
 
     Private Sub piceventcg_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         On Error Resume Next
-        Dim picofd As New OpenFileDialog
-        picofd.InitialDirectory = "C:\casparcg\mydata\games\games logo\"
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            eventlogo.ImageLocation = picofd.FileName
-        End If
+        OpenGamesImage(eventlogo)
     End Sub
     ' Shooting code----------------------------------------------------------------------------------------------------------------------------------------------------------------
     Private Sub shootingdefaultdata()
@@ -1905,48 +1898,48 @@ Public Class ucNG2015
 
     Private Sub cmdseries1shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries1shooting.Click
         On Error Resume Next
-        seriestemplate("Series 1", 4, 5, "cmp/games/shooting/series_score1", 6)
+        ShowShootingSeriesTemplate(1)
     End Sub
 
     Private Sub cmdseries2shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries2shooting.Click
         On Error Resume Next
-        seriestemplate("Series 2", 7, 8, "cmp/games/shooting/series_score1", 9)
+        ShowShootingSeriesTemplate(2)
     End Sub
 
     Private Sub cmdseries3shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries3shooting.Click
         On Error Resume Next
-        seriestemplate("Series 3", 10, 11, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(3)
     End Sub
 
     Private Sub cmdseries4shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries4shooting.Click
         On Error Resume Next
-        seriestemplate("Series 4", 12, 13, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(4)
     End Sub
 
     Private Sub cmdseries5shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries5shooting.Click
         On Error Resume Next
-        seriestemplate("Series 5", 14, 15, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(5)
     End Sub
 
     Private Sub cmdseries6shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries6shooting.Click
         On Error Resume Next
-        seriestemplate("Series 6", 16, 17, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(6)
     End Sub
 
     Private Sub cmdseries7shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries7shooting.Click
         On Error Resume Next
-        seriestemplate("Series 7", 18, 19, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(7)
 
     End Sub
 
     Private Sub cmdseries8shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries8shooting.Click
         On Error Resume Next
-        seriestemplate("Series 8", 20, 21, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(8)
     End Sub
 
     Private Sub cmdseries9shooting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdseries9shooting.Click
         On Error Resume Next
-        seriestemplate("Series 9", 22, 23, "cmp/games/shooting/series_score2")
+        ShowShootingSeriesTemplate(9)
     End Sub
     Sub seriestemplate(ByVal seriesname As String, ByVal col1 As Integer, ByVal col2 As Integer, ByVal templatename As String, Optional ByVal col3 As Integer = 0)
         On Error Resume Next
@@ -3740,6 +3733,37 @@ Public Class ucNG2015
     End Sub
     Private Sub cmdhide_Click(sender As Object, e As EventArgs)
         Hide()
+    End Sub
+
+    Private Sub OpenGamesImage(targetPictureBox As PictureBox)
+        Dim picofd As New OpenFileDialog
+        picofd.InitialDirectory = GamesLogoDirectory
+        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            targetPictureBox.ImageLocation = picofd.FileName
+        End If
+    End Sub
+
+    Private Sub ShowShootingSeriesTemplate(seriesNumber As Integer)
+        Select Case seriesNumber
+            Case 1
+                seriestemplate("Series 1", 4, 5, "cmp/games/shooting/series_score1", 6)
+            Case 2
+                seriestemplate("Series 2", 7, 8, "cmp/games/shooting/series_score1", 9)
+            Case 3
+                seriestemplate("Series 3", 10, 11, "cmp/games/shooting/series_score2")
+            Case 4
+                seriestemplate("Series 4", 12, 13, "cmp/games/shooting/series_score2")
+            Case 5
+                seriestemplate("Series 5", 14, 15, "cmp/games/shooting/series_score2")
+            Case 6
+                seriestemplate("Series 6", 16, 17, "cmp/games/shooting/series_score2")
+            Case 7
+                seriestemplate("Series 7", 18, 19, "cmp/games/shooting/series_score2")
+            Case 8
+                seriestemplate("Series 8", 20, 21, "cmp/games/shooting/series_score2")
+            Case 9
+                seriestemplate("Series 9", 22, 23, "cmp/games/shooting/series_score2")
+        End Select
     End Sub
 End Class
 
