@@ -4,6 +4,8 @@
 Imports Bespoke.Common.Osc
 Imports System.Net
 Public Class ucnewOffAirLogger
+    Private Const ScheduleDirectory As String = "c:\casparcg\mydata\shedule_recording\"
+    Private Const ClockHtmlPath As String = "c:/casparcg/CMP/off_air_logger_clock/clock_html.html"
     Dim WithEvents tmrshedulerecordingstart As New Timer
     Dim WithEvents tmrshedulerecordingend As New Timer
 
@@ -89,8 +91,7 @@ Public Class ucnewOffAirLogger
 
         recordoal()
 
-        lbltestshedulerecording.Text = "Recordind Started"
-        lbltestshedulerecording.BackColor = Color.Green
+        SetRecordingStatus("Recordind Started", Color.Green)
         tmrshedulerecordingstart.Enabled = False
 
         tmrshedulerecordingend.Interval = dgvshedulerecording.Rows(0).Cells(1).Value * 1000
@@ -117,16 +118,13 @@ Public Class ucnewOffAirLogger
         tmrshedulerecordingstart.Enabled = True
         tmroal.Enabled = False
 
-        lblsheduleStatus.Text = "Schedule Started"
-        lblsheduleStatus.BackColor = Color.Green
+        SetScheduleStatus("Schedule Started", Color.Green)
     End Sub
 
     Private Sub cmdshowinputoal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdshowinputoal.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-            str = "play " & ichannel & "-" & 1 & " decklink " & cmbliveoal.Text
-            CasparDevice.SendString(str)
+            CasparDevice.SendString(BuildDecklinkCommand("play"))
 
             ucPlaylist.tmrduration.Enabled = True
         End If
@@ -135,9 +133,7 @@ Public Class ucnewOffAirLogger
     Private Sub cmdremoveinputoal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremoveinputoal.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-            str = "stop " & ichannel & "-" & 1 & " decklink " & cmbliveoal.Text
-            CasparDevice.SendString(str)
+            CasparDevice.SendString(BuildDecklinkCommand("stop"))
         End If
     End Sub
     Private Sub cmdlocaterecordingfileoal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdlocaterecordingfileoal.Click
@@ -153,15 +149,14 @@ Public Class ucnewOffAirLogger
             cmdrecordoal.BackColor = Color.Green
 
             tmrshedulerecordingstart.Enabled = False
-            lblsheduleStatus.Text = "Schedule Stopped"
-            lblsheduleStatus.BackColor = Color.Red
+            SetScheduleStatus("Schedule Stopped", Color.Red)
 
         End If
     End Sub
 
     Private Sub tmrrecordedfileinfooal_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrrecordedfileinfooal.Tick
         On Error Resume Next
-        lblrecordingfilenameoal.Text = mediafullpath & "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text
+        lblrecordingfilenameoal.Text = GetRecordingFilePath()
         If File.Exists(lblrecordingfilenameoal.Text) Then
             Dim f As New FileInfo(lblrecordingfilenameoal.Text)
             Dim recoreddurationoal As TimeSpan = Now - startingtimeofrecordingoal
@@ -178,19 +173,11 @@ Public Class ucnewOffAirLogger
     Dim startingtimeofrecordingoal As DateTime
     Sub recordoal()
         On Error Resume Next
-        Directory.CreateDirectory(mediafullpath & "ch" & ichannel & "/")
+        Directory.CreateDirectory(GetRecordingChannelDirectory())
         lblRecordeddurationoal.Text = ""
         lblRecordedSizeoal.Text = ""
         dtpoal.Text = Now
-        Dim str As String
-        If ServerVersion = "2.0" Then
-            str = "ADD " & ichannel & " FILE " & "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text & " -b " & Val(txtbitrateofl.Text) * 1000000 & " " & txtextraoptionoal.Text
-        ElseIf ServerVersion = "2.1" Then
-            str = "ADD " & ichannel & " FILE " & "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text & " -b:v " & Val(txtbitrateofl.Text) * 1000000 & " -maxrate:v " & Val(txtbitrateofl.Text) * 1000000 & " -bufsize:v " & 1000000 & " -b:a 128k -pix_fmt yuv420p -preset slow -crf 22 " & txtextraoptionoal.Text
-        Else
-            str = "ADD " & ichannel & " FILE " & "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text & " -b:v " & Val(txtbitrateofl.Text) * 1000000 & " -maxrate:v " & Val(txtbitrateofl.Text) * 1000000 & " -bufsize:v " & 1000000 & " -filter:v format=pix_fmts=yuv420p -filter:a pan=stereo|c0=c0|c1=c1 " & txtextraoptionoal.Text
-        End If
-        CasparDevice.SendString(str)
+        CasparDevice.SendString(BuildRecordCommand())
         startingtimeofrecordingoal = Now
     End Sub
 
@@ -203,9 +190,7 @@ Public Class ucnewOffAirLogger
 
     Sub stoprecordoal()
         On Error Resume Next
-        Dim str As String
-        str = "REMOVE " & ichannel & " FILE " & "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text
-        CasparDevice.SendString(str)
+        CasparDevice.SendString(BuildRemoveRecordCommand())
         cmdrecordoal.BackColor = Color.Red
     End Sub
 
@@ -235,21 +220,15 @@ Public Class ucnewOffAirLogger
     End Sub
     Private Sub cmdmediadirectoryofl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdmediadirectoryofl.Click
         On Error Resume Next
-        Dim fbd1 As New FolderBrowserDialog
-        If (fbd1.ShowDialog = Windows.Forms.DialogResult.OK) Then
-            Me.txtmediadirectoryoal.Text = fbd1.SelectedPath
-        End If
+        Me.txtmediadirectoryoal.Text = BrowseFolder(txtmediadirectoryoal.Text, False)
     End Sub
 
     Private Sub chkshowtimeofl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkshowtimeofl.CheckedChanged
         On Error Resume Next
         If chkshowtimeofl.Checked Then
-            ' Dim str As String = "cg " & ichannel & " add 21 " & "CMP/off_air_logger_clock/off_air_logger_clock 1"
-            Dim str As String = "play " & ichannel & "-21 [html] " & "c:/casparcg/CMP/off_air_logger_clock/clock_html.html"
-            CasparDevice.SendString(str)
+            CasparDevice.SendString("play " & GetClockLayerAddress() & " [html] " & ClockHtmlPath)
         Else
-            Dim str As String = "stop " & ichannel & "-21"
-            CasparDevice.SendString(str)
+            CasparDevice.SendString("stop " & GetClockLayerAddress())
         End If
 
     End Sub
@@ -259,8 +238,7 @@ Public Class ucnewOffAirLogger
         stoprecordoal()
 
 
-        lbltestshedulerecording.Text = "Recordind Stoped"
-        lbltestshedulerecording.BackColor = Color.Red
+        SetRecordingStatus("Recordind Stoped", Color.Red)
 
         tmrshedulerecordingend.Enabled = False
 
@@ -276,16 +254,14 @@ Public Class ucnewOffAirLogger
     Private Sub cmdshedulerecordingstop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdshedulerecordingstop.Click
         On Error Resume Next
         CasparDevice.SendString("REMOVE " & ichannel & " FILE")
-        lbltestshedulerecording.Text = "Recordind Stoped"
-        lbltestshedulerecording.BackColor = Color.Red
+        SetRecordingStatus("Recordind Stoped", Color.Red)
 
         tmrshedulerecordingstart.Enabled = False
         tmrshedulerecordingend.Enabled = False
         tmrrecordedfileinfooal.Enabled = False
         cmdrecordoal.BackColor = Color.Red
 
-        lblsheduleStatus.Text = "Schedule Stopped"
-        lblsheduleStatus.BackColor = Color.Red
+        SetScheduleStatus("Schedule Stopped", Color.Red)
 
     End Sub
     Sub initialisedataforshedulerecording()
@@ -361,51 +337,25 @@ Public Class ucnewOffAirLogger
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
         On Error Resume Next
         dgvshedulerecording.Rows.Clear()
-        Me.lblshedulerecordingplaylist.Text = "Shedule Recording= " & "new playlist"
+        UpdateSchedulePlaylistLabel("new playlist")
     End Sub
 
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         On Error Resume Next
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\shedule_recording\"
+        ConfigureScheduleFileDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
-                dgvshedulerecording.Rows.Clear()
-                Dim g As Integer = 0
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvshedulerecording.Rows.Add()
-                    Dim xyz As Array = Split(li, ",")
-                    dgvshedulerecording.Rows(g).Cells(0).Value = xyz(0)
-                    dgvshedulerecording.Rows(g).Cells(1).Value = xyz(1)
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            Me.lblshedulerecordingplaylist.Text = "Shedule Recording= " & ofd2.FileName
+            LoadScheduleFile(ofd2.FileName)
+            UpdateSchedulePlaylistLabel(ofd2.FileName)
         End If
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         On Error Resume Next
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.InitialDirectory = "c:\casparcg\mydata\shedule_recording\"
+        ConfigureScheduleFileDialog(osd2)
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sw As StreamWriter = New StreamWriter(osd2.FileName)
-                If dgvshedulerecording.Rows.Count = 0 Then
-                    sw.Write("")
-                Else
-                    Dim f As Integer = 0
-                    Do Until f = dgvshedulerecording.Rows.Count
-                        sw.WriteLine(Format(CType(dgvshedulerecording.Rows(f).Cells(0).Value, DateTime), "H:mm:ss") & "," & dgvshedulerecording.Rows(f).Cells(1).Value)
-                        f = f + 1
-                    Loop
-                End If
-                sw.Close()
-            End Using
-            Me.lblshedulerecordingplaylist.Text = "Shedule Recording=  " & osd2.FileName
+            SaveScheduleFile(osd2.FileName)
+            UpdateSchedulePlaylistLabel(osd2.FileName)
         End If
     End Sub
     Private Sub MenuStrip1_MouseHover(sender As Object, e As EventArgs) Handles MenuStrip1.MouseHover
@@ -428,5 +378,110 @@ Public Class ucnewOffAirLogger
 
     Private Sub ucnewOffAirLogger_Load_1(sender As Object, e As EventArgs)
 
+    End Sub
+
+    Private Function BuildDecklinkCommand(actionName As String) As String
+        Return actionName & " " & ichannel & "-1 decklink " & cmbliveoal.Text
+    End Function
+
+    Private Function GetRecordingChannelDirectory() As String
+        Return mediafullpath & "ch" & ichannel & "/"
+    End Function
+
+    Private Function GetRecordingRelativeFileName() As String
+        Return "ch" & ichannel & "/" & dtpoal.Text & "." & cmbfileformateoal.Text
+    End Function
+
+    Private Function GetRecordingFilePath() As String
+        Return mediafullpath & GetRecordingRelativeFileName()
+    End Function
+
+    Private Function BuildRecordCommand() As String
+        Dim baseCommand As String = "ADD " & ichannel & " FILE " & GetRecordingRelativeFileName()
+        Dim bitrateValue As Integer = Val(txtbitrateofl.Text) * 1000000
+
+        If ServerVersion = "2.0" Then
+            Return baseCommand & " -b " & bitrateValue & " " & txtextraoptionoal.Text
+        ElseIf ServerVersion = "2.1" Then
+            Return baseCommand & " -b:v " & bitrateValue & " -maxrate:v " & bitrateValue & " -bufsize:v 1000000 -b:a 128k -pix_fmt yuv420p -preset slow -crf 22 " & txtextraoptionoal.Text
+        End If
+
+        Return baseCommand & " -b:v " & bitrateValue & " -maxrate:v " & bitrateValue & " -bufsize:v 1000000 -filter:v format=pix_fmts=yuv420p -filter:a pan=stereo|c0=c0|c1=c1 " & txtextraoptionoal.Text
+    End Function
+
+    Private Function BuildRemoveRecordCommand() As String
+        Return "REMOVE " & ichannel & " FILE " & GetRecordingRelativeFileName()
+    End Function
+
+    Private Function GetClockLayerAddress() As String
+        Return ichannel & "-21"
+    End Function
+
+    Private Function BrowseFolder(currentPath As String, appendSlash As Boolean) As String
+        Dim fbd1 As New FolderBrowserDialog
+        If currentPath <> "" Then
+            fbd1.SelectedPath = currentPath
+        End If
+
+        If fbd1.ShowDialog() <> Windows.Forms.DialogResult.OK Then
+            Return currentPath
+        End If
+
+        If appendSlash Then
+            Return fbd1.SelectedPath & "\"
+        End If
+
+        Return fbd1.SelectedPath
+    End Function
+
+    Private Sub SetRecordingStatus(statusText As String, statusColor As Color)
+        lbltestshedulerecording.Text = statusText
+        lbltestshedulerecording.BackColor = statusColor
+    End Sub
+
+    Private Sub SetScheduleStatus(statusText As String, statusColor As Color)
+        lblsheduleStatus.Text = statusText
+        lblsheduleStatus.BackColor = statusColor
+    End Sub
+
+    Private Sub UpdateSchedulePlaylistLabel(fileLabel As String)
+        Me.lblshedulerecordingplaylist.Text = "Shedule Recording= " & fileLabel
+    End Sub
+
+    Private Sub ConfigureScheduleFileDialog(dialog As FileDialog)
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.InitialDirectory = ScheduleDirectory
+    End Sub
+
+    Private Sub LoadScheduleFile(fileName As String)
+        Using sr As StreamReader = New StreamReader(fileName)
+            dgvshedulerecording.Rows.Clear()
+            Dim rowIndex As Integer = 0
+            Dim li As String
+
+            Do Until sr.EndOfStream = True
+                li = sr.ReadLine()
+                dgvshedulerecording.Rows.Add()
+                Dim xyz As Array = Split(li, ",")
+                dgvshedulerecording.Rows(rowIndex).Cells(0).Value = xyz(0)
+                dgvshedulerecording.Rows(rowIndex).Cells(1).Value = xyz(1)
+                rowIndex = rowIndex + 1
+            Loop
+        End Using
+    End Sub
+
+    Private Sub SaveScheduleFile(fileName As String)
+        Using sw As StreamWriter = New StreamWriter(fileName)
+            If dgvshedulerecording.Rows.Count = 0 Then
+                sw.Write("")
+                Exit Sub
+            End If
+
+            Dim rowIndex As Integer = 0
+            Do Until rowIndex = dgvshedulerecording.Rows.Count
+                sw.WriteLine(Format(CType(dgvshedulerecording.Rows(rowIndex).Cells(0).Value, DateTime), "H:mm:ss") & "," & dgvshedulerecording.Rows(rowIndex).Cells(1).Value)
+                rowIndex = rowIndex + 1
+            Loop
+        End Using
     End Sub
 End Class

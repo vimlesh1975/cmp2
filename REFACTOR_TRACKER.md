@@ -51,6 +51,11 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucHTML` | `CasparMediaPlayback/ucHTML.vb` | Done | HTML layer-address, play/call/mixer helpers, Facebook URL building, and YouTube/live-stream helper flows consolidated. |
 | `ucHtmlScroller` | `CasparMediaPlayback/ucHtmlScroller.vb` | Done | Already refactored; retained shared scroller helper structure from earlier cleanup pass. |
 | `ucImageScroll` | `CasparMediaPlayback/ucImageScroll.vb` | Done | Image-scroll layer addressing, play/call option toggles, and pause/resume command selection consolidated into shared helpers. |
+| `ucMAM` | `CasparMediaPlayback/ucMAM.vb` | Done | Folder browsing, file-list population, command-window launching, bulk transcoder row selection, and EBU/FFmpeg utility command paths consolidated into shared helpers. |
+| `ucMetadata` | `CasparMediaPlayback/ucMetadata.vb` | Done | FFmpeg metadata read/write command paths, grid reset/load, and metadata file save flow consolidated into shared helpers. |
+| `ucMultiBulletScroll` | `CasparMediaPlayback/ucMultiBulletScroll.vb` | Done | Default icon setup, selection toggles, HTML scroller layer/call helpers, and marquee payload building consolidated into shared helpers. |
+| `ucMySqlTest` | `CasparMediaPlayback/ucMySqlTest.vb` | Done | SQL/MySQL connection setup, adapter/command creation, HTML table generation, and color-picker updates consolidated into shared helpers. |
+| `ucnewOffAirLogger` | `CasparMediaPlayback/ucnewOffAirLogger.vb` | Done | Recording path/command helpers, schedule file open/save, decklink/clock command building, and schedule-status updates consolidated into shared helpers. |
 
 ## Repository Cleanup
 

@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports System.Net
 Public Class ucMultiBulletScroll
+    Private Const DefaultIconPath As String = "C:\Casparcg\mydata\icon\cmp2.jpg"
+    Private Const HtmlScrollerPath As String = "C:/casparcg/mydata/html/htmlscrollerMultiBullet.html"
     Dim iPauseResumeV As Integer = 0
     Dim paused As Boolean = False
     Private Sub newtsscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -13,7 +15,7 @@ Public Class ucMultiBulletScroll
         dgvscroll.Rows.Add(7)
 
         For Each row As DataGridViewRow In dgvscroll.Rows
-            row.Cells(2).Tag = "C:\Casparcg\mydata\icon\cmp2.jpg"
+            ApplyDefaultScrollImage(row)
         Next
         Me.dgvscroll.Columns(0).HeaderText = "new playlist"
     End Sub
@@ -37,8 +39,7 @@ Public Class ucMultiBulletScroll
                     Dim xyz As Array = Split(li, Chr(2))
                     dgvscroll.Rows(g).Cells(0).Value = xyz(0)
                     dgvscroll.Rows(g).Cells(1).Value = xyz(1)
-                    dgvscroll.Rows(g).Cells(2).Value = Image.FromFile(xyz(2))
-                    dgvscroll.Rows(g).Cells(2).Tag = xyz(2)
+                    SetScrollImageCell(dgvscroll.Rows(g), xyz(2))
                     g = g + 1
                 Loop
                 sr.Close()
@@ -181,18 +182,12 @@ Public Class ucMultiBulletScroll
 
     Private Sub cmdselectallforscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdselectallforscroll.Click
         On Error Resume Next
-        Dim iscrollselectall As Integer
-        For iscrollselectall = 0 To dgvscroll.RowCount - 1
-            dgvscroll.Rows(iscrollselectall).Cells(1).Value = 1
-        Next
+        SetSelectedStateForAllRows(1)
     End Sub
 
     Private Sub cmddeselectallforscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmddeselectallforscroll.Click
         On Error Resume Next
-        Dim iscrolldeselectall As Integer
-        For iscrolldeselectall = 0 To dgvscroll.RowCount - 1
-            dgvscroll.Rows(iscrolldeselectall).Cells(1).Value = 0
-        Next
+        SetSelectedStateForAllRows(0)
     End Sub
     Sub setdataofscroll()
         On Error Resume Next
@@ -250,35 +245,10 @@ Public Class ucMultiBulletScroll
         Me.dgvscroll.Item(0, 5).Value = "KD prasad is good in programing."
         Me.dgvscroll.Item(0, 6).Value = "Rajeev makes news graphics."
 
-        Dim xx As String = "C:\Casparcg\mydata\icon\cmp2.jpg"
-        Me.dgvscroll.Item(2, 0).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 0).Tag = xx
-
-        Me.dgvscroll.Item(2, 1).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 1).Tag = xx
-
-        Me.dgvscroll.Item(2, 2).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 2).Tag = xx
-
-        Me.dgvscroll.Item(2, 3).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 3).Tag = xx
-
-        Me.dgvscroll.Item(2, 4).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 4).Tag = xx
-
-        Me.dgvscroll.Item(2, 5).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 5).Tag = xx
-
-        Me.dgvscroll.Item(2, 6).Value = Image.FromFile(xx)
-        Me.dgvscroll.Item(2, 6).Tag = xx
-
-        Me.dgvscroll.Item(1, 0).Value = 1
-        Me.dgvscroll.Item(1, 1).Value = 1
-        Me.dgvscroll.Item(1, 2).Value = 1
-        Me.dgvscroll.Item(1, 3).Value = 1
-        Me.dgvscroll.Item(1, 4).Value = 1
-        Me.dgvscroll.Item(1, 5).Value = 1
-        Me.dgvscroll.Item(1, 6).Value = 1
+        For rowIndex As Integer = 0 To 6
+            SetScrollImageCell(dgvscroll.Rows(rowIndex), DefaultIconPath)
+            Me.dgvscroll.Item(1, rowIndex).Value = 1
+        Next
 
 
     End Sub
@@ -290,8 +260,7 @@ Public Class ucMultiBulletScroll
         If e.ColumnIndex = 2 Then
             Dim aa As New OpenFileDialog
             If aa.ShowDialog = DialogResult.OK Then
-                dgvscroll.CurrentRow.Cells(2).Value = Image.FromFile(aa.FileName)
-                dgvscroll.CurrentRow.Cells(2).Tag = aa.FileName
+                SetScrollImageCell(dgvscroll.CurrentRow, aa.FileName)
             End If
         End If
     End Sub
@@ -306,8 +275,7 @@ Public Class ucMultiBulletScroll
 
     Private Sub dgvscroll_DefaultValuesNeeded(sender As Object, e As DataGridViewRowEventArgs) Handles dgvscroll.DefaultValuesNeeded
         On Error Resume Next
-        e.Row.Cells(2).Value = Image.FromFile("C:\Casparcg\mydata\icon\cmp2.jpg")
-        e.Row.Cells(2).Tag = "C:\Casparcg\mydata\icon\cmp2.jpg"
+        SetScrollImageCell(e.Row, DefaultIconPath)
     End Sub
 
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
@@ -347,79 +315,32 @@ Public Class ucMultiBulletScroll
         'tmrshowdatascrollHtml.Enabled = True
         iPauseResumeV = 0
 
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " [HTML] " & """" & "C:/casparcg/mydata/html/htmlscrollerMultiBullet.html" & """" & " mix 20")
-        ' Threading.Thread.Sleep(1000)
-
-        If chkltrhtmlscroll.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " setltr('1')")
-
-            If chkbase64htmlscroller.Checked Then
-                Dim xx As String = ""
-                For i = dgvscroll.Rows.Count - 1 To 0 Step -1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + " " & Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "") & " <img src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle>" & " "
-
-                    End If
-                Next
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " marqueedatabase64('" & System.Convert.ToBase64String(Array) & "')")
-
-            Else
-                Dim xx As String
-                For i = dgvscroll.Rows.Count - 1 To 0 Step -1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + replacestring1(Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "")) & Chr(2) & "<img" & Chr(2) & "src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, "\", "/") & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2)
-                    End If
-                Next
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " marqueedata('" & xx & "')")
-
-            End If
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " setltr('0')")
-            If chkbase64htmlscroller.Checked Then
-                Dim xx As String = ""
-                For i = 0 To dgvscroll.Rows.Count - 1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + " <img src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle>" & " " & Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "")
-                    End If
-                Next
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " marqueedatabase64('" & System.Convert.ToBase64String(Array) & "')")
-
-            Else 'mostly this
-                Dim xx As String = ""
-                For i = 0 To dgvscroll.Rows.Count - 1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + Chr(2) & "<img" & Chr(2) & "src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, "\", "/") & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2) & replacestring1(Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, ""))
-                    End If
-                Next
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " marqueedata('" & xx & "')")
-
-            End If
-        End If
+        CasparDevice.SendString("play " & GetHtmlScrollLayerAddress() & " [HTML] " & """" & HtmlScrollerPath & """" & " mix 20")
+        SendHtmlScrollDirection()
+        SendHtmlScrollData(False)
 
         'Threading.Thread.Sleep(100)
         If chkltrhtmlscroll.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " start2()")
+            SendHtmlScrollCall("start2()")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " start1()")
+            SendHtmlScrollCall("start1()")
         End If
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
+        SendHtmlScrollCall("fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
 
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
+        SendHtmlScrollCall("stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
 
         'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " stripy('" & nyhtmlscroll.Value & "')")
+        SendHtmlScrollCall("stripy('" & nyhtmlscroll.Value & "')")
 
         ' Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " fontsize('" & nsizehtmlscroll.Value & "')")
+        SendHtmlScrollCall("fontsize('" & nsizehtmlscroll.Value & "')")
 
         'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
+        SendHtmlScrollCall("font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
 
         'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " Tickery('" & nyhtmlscrollticker.Value & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+        SendHtmlScrollCall("Tickery('" & nyhtmlscrollticker.Value & "')")
+        SendHtmlScrollCall("speed('" & nspeedhtmlscroll.Value & "')")
 
     End Sub
 
@@ -434,12 +355,12 @@ Public Class ucMultiBulletScroll
 
     Private Sub nyhtmlscroll_ValueChanged(sender As Object, e As EventArgs) Handles nyhtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " stripy('" & nyhtmlscroll.Value & "')")
+        SendHtmlScrollCall("stripy('" & nyhtmlscroll.Value & "')")
     End Sub
 
     Private Sub nyhtmlscrollticker_ValueChanged(sender As Object, e As EventArgs) Handles nyhtmlscrollticker.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " Tickery('" & nyhtmlscrollticker.Value & "')")
+        SendHtmlScrollCall("Tickery('" & nyhtmlscrollticker.Value & "')")
 
     End Sub
 
@@ -450,7 +371,7 @@ Public Class ucMultiBulletScroll
         If (aa.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             cmdstripcolorhtmlscroll.BackColor = aa.Color
             cmdcolorhtmlscroll.BackColor = aa.Color
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
+            SendHtmlScrollCall("stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
         End If
     End Sub
 
@@ -458,19 +379,19 @@ Public Class ucMultiBulletScroll
 
     Private Sub nsizehtmlscroll_ValueChanged(sender As Object, e As EventArgs) Handles nsizehtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " fontsize('" & nsizehtmlscroll.Value & "')")
+        SendHtmlScrollCall("fontsize('" & nsizehtmlscroll.Value & "')")
 
     End Sub
     Private Sub nspeedhtmlscroll_ValueChanged(sender As Object, e As EventArgs) Handles nspeedhtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+        SendHtmlScrollCall("speed('" & nspeedhtmlscroll.Value & "')")
 
     End Sub
 
     Private Sub cmbfonthtmlscroll_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbfonthtmlscroll.SelectedIndexChanged
         On Error Resume Next
 
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
+        SendHtmlScrollCall("font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
     End Sub
 
     Private Sub cmdcolorhtmlscroll_Click(sender As Object, e As EventArgs) Handles cmdcolorhtmlscroll.Click
@@ -482,14 +403,14 @@ Public Class ucMultiBulletScroll
             cmdstripcolorhtmlscroll.ForeColor = aa.Color
 
 
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
+            SendHtmlScrollCall("fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
         End If
     End Sub
 
     Private Sub cmdstopcrawlhtmlscroll_Click(sender As Object, e As EventArgs) Handles cmdstopcrawlhtmlscroll.Click
         On Error Resume Next
         chkAutoUpdate.Checked = False
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " empty mix 20")
+        CasparDevice.SendString("play " & GetHtmlScrollLayerAddress() & " empty mix 20")
     End Sub
 
     Private Sub cmdpauseresumehtmlscroller_Click(sender As Object, e As EventArgs) Handles cmdpauseresumehtmlscroller.Click
@@ -498,10 +419,10 @@ Public Class ucMultiBulletScroll
     Sub pauseresume()
         iPauseResumeV = iPauseResumeV + 1
         If iPauseResumeV = 1 Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " pause()")
+            SendHtmlScrollCall("pause()")
 
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " resume()")
+            SendHtmlScrollCall("resume()")
             'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
             iPauseResumeV = 0
         End If
@@ -512,53 +433,7 @@ Public Class ucMultiBulletScroll
     Private Sub tmrshowdatascrollHtml_Tick(sender As Object, e As EventArgs) Handles tmrshowdatascrollHtml.Tick
 
         On Error Resume Next
-        If chkltrhtmlscroll.Checked Then
-            'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " setltr('1')")
-            If chkbase64htmlscroller.Checked Then
-                Dim xx As String = ""
-                For i = dgvscroll.Rows.Count - 1 To 0 Step -1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + " " & Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "") & " <img src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle>" & " "
-
-
-                    End If
-                Next
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " updatestrbase64('" & System.Convert.ToBase64String(array) & "')")
-
-            Else
-                Dim xx As String
-                For i = dgvscroll.Rows.Count - 1 To 0 Step -1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + replacestring1(Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "")) & Chr(2) & "<img" & Chr(2) & "src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, "\", "/") & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2)
-                    End If
-                Next
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " updatestr('" & xx & "')")
-
-            End If
-        Else
-            'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " setltr('0')")
-            If chkbase64htmlscroller.Checked Then
-                Dim xx As String = ""
-                For i = 0 To dgvscroll.Rows.Count - 1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + " <img src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle>" & " " & Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, "")
-                    End If
-                Next
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " updatestrbase64('" & System.Convert.ToBase64String(array) & "')")
-
-            Else 'mostly this
-                Dim xx As String = ""
-                For i = 0 To dgvscroll.Rows.Count - 1
-                    If dgvscroll.Rows(i).Cells(1).Value = 1 Then
-                        xx = xx + Chr(2) & "<img" & Chr(2) & "src=" & Replace(dgvscroll.Rows(i).Cells(2).Tag, "\", "/") & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2) & replacestring1(Replace(Me.dgvscroll.Item(0, i).Value, vbCrLf, ""))
-                    End If
-                Next
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerscroll.Text & " updatestr('" & xx & "')")
-
-            End If
-        End If
+        SendHtmlScrollData(True)
     End Sub
 
     Private Sub chkAutoUpdate_CheckedChanged(sender As Object, e As EventArgs) Handles chkAutoUpdate.CheckedChanged
@@ -569,6 +444,88 @@ Public Class ucMultiBulletScroll
         End If
 
     End Sub
+
+    Private Sub ApplyDefaultScrollImage(row As DataGridViewRow)
+        row.Cells(2).Tag = DefaultIconPath
+    End Sub
+
+    Private Sub SetScrollImageCell(row As DataGridViewRow, imagePath As String)
+        row.Cells(2).Value = Image.FromFile(imagePath)
+        row.Cells(2).Tag = imagePath
+    End Sub
+
+    Private Sub SetSelectedStateForAllRows(selectedValue As Integer)
+        For rowIndex As Integer = 0 To dgvscroll.RowCount - 1
+            dgvscroll.Rows(rowIndex).Cells(1).Value = selectedValue
+        Next
+    End Sub
+
+    Private Function GetHtmlScrollLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & cmblayerscroll.Text
+    End Function
+
+    Private Sub SendHtmlScrollCall(commandText As String)
+        CasparDevice.SendString("call " & GetHtmlScrollLayerAddress() & " " & commandText)
+    End Sub
+
+    Private Sub SendHtmlScrollDirection()
+        If chkltrhtmlscroll.Checked Then
+            SendHtmlScrollCall("setltr('1')")
+        Else
+            SendHtmlScrollCall("setltr('0')")
+        End If
+    End Sub
+
+    Private Sub SendHtmlScrollData(isUpdate As Boolean)
+        If chkbase64htmlscroller.Checked Then
+            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(BuildHtmlScrollText(True))
+            SendHtmlScrollCall(GetHtmlScrollDataCommandName(isUpdate, True) & "('" & System.Convert.ToBase64String(array) & "')")
+        Else
+            SendHtmlScrollCall(GetHtmlScrollDataCommandName(isUpdate, False) & "('" & BuildHtmlScrollText(False) & "')")
+        End If
+    End Sub
+
+    Private Function GetHtmlScrollDataCommandName(isUpdate As Boolean, useBase64 As Boolean) As String
+        If isUpdate Then
+            Return If(useBase64, "updatestrbase64", "updatestr")
+        End If
+
+        Return If(useBase64, "marqueedatabase64", "marqueedata")
+    End Function
+
+    Private Function BuildHtmlScrollText(useBase64 As Boolean) As String
+        Dim startIndex As Integer = If(chkltrhtmlscroll.Checked, dgvscroll.Rows.Count - 1, 0)
+        Dim endIndex As Integer = If(chkltrhtmlscroll.Checked, 0, dgvscroll.Rows.Count - 1)
+        Dim stepValue As Integer = If(chkltrhtmlscroll.Checked, -1, 1)
+        Dim xx As String = ""
+
+        For i = startIndex To endIndex Step stepValue
+            If dgvscroll.Rows(i).Cells(1).Value = 1 Then
+                xx = xx & BuildHtmlScrollRowText(i, useBase64)
+            End If
+        Next
+
+        Return xx
+    End Function
+
+    Private Function BuildHtmlScrollRowText(rowIndex As Integer, useBase64 As Boolean) As String
+        Dim textValue As String = Replace(Me.dgvscroll.Item(0, rowIndex).Value, vbCrLf, "")
+        Dim imageTag As String = Replace(dgvscroll.Rows(rowIndex).Cells(2).Tag, "\", "/")
+
+        If useBase64 Then
+            If chkltrhtmlscroll.Checked Then
+                Return " " & textValue & " <img src=" & Replace(dgvscroll.Rows(rowIndex).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle> "
+            End If
+
+            Return " <img src=" & Replace(dgvscroll.Rows(rowIndex).Cells(2).Tag, " \ ", " / ") & " width=40px height=30px style=vertical-align:middle> " & textValue
+        End If
+
+        If chkltrhtmlscroll.Checked Then
+            Return replacestring1(textValue) & Chr(2) & "<img" & Chr(2) & "src=" & imageTag & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2)
+        End If
+
+        Return Chr(2) & "<img" & Chr(2) & "src=" & imageTag & Chr(2) & "width=40px" & Chr(2) & "height=30px" & Chr(2) & "style=vertical-align:middle>" & Chr(2) & replacestring1(textValue)
+    End Function
 
 
 End Class

@@ -5,6 +5,9 @@ Imports MediaInfoLib
 Imports System.Data
 Imports Microsoft.Win32 'for number of processor
 Public Class ucMAM
+    Private Const FfmpegExecutablePath As String = "c:\casparcg\mydata\ffmpeg\ffmpeg.exe"
+    Private Const YoutubeDlExecutablePath As String = "c:/casparcg/mydata/ffmpeg/youtube-dl.exe"
+    Private Const EbuMxfDirectory As String = "c:/casparcg/mydata/ebumxf/"
     Dim ibt As Integer
 
     Dim fps As Integer = 25
@@ -56,15 +59,12 @@ Public Class ucMAM
     End Sub
     Private Sub cmdshowfilesinSourcelistbox_Click(sender As Object, e As EventArgs) Handles cmdshowfilesinSourcelistbox.Click
         On Error Resume Next
-        lstSourceDirectory.Items.Clear()
-
-        ProcessDirectory(txtSourceDirectory.Text, lstSourceDirectory)
+        PopulateFileList(txtSourceDirectory.Text, lstSourceDirectory)
     End Sub
 
     Private Sub cmdshowfilesinDestinationlistbox_Click(sender As Object, e As EventArgs) Handles cmdshowfilesinDestinationlistbox.Click
         On Error Resume Next
-        lstDestinationDirectory.Items.Clear()
-        ProcessDirectory(txtDestinationDirectory.Text, lstDestinationDirectory)
+        PopulateFileList(txtDestinationDirectory.Text, lstDestinationDirectory)
     End Sub
 
     Private Sub cmdmakeproxy_Click(sender As Object, e As EventArgs) Handles cmdmakeproxy.Click
@@ -73,7 +73,7 @@ Public Class ucMAM
         UcTranscodingProfile1.ofdtrimmer.FileName = lstSourceDirectory.SelectedItem.ToString
         UcTranscodingProfile1.osdcutfilename.FileName = txtDestinationDirectoryProxy.Text & getfilenamewithoutdirectotyandExtension(lstSourceDirectory.SelectedItem.ToString) & UcTranscodingProfile1.strFileExtension
         UcTranscodingProfile1.gettranscodingcommand()
-        Process.Start("CMD", " /K c:\casparcg\mydata\ffmpeg\ffmpeg.exe " & UcTranscodingProfile1.cmdtranscodingcommand)
+        RunCommandWindow(FfmpegExecutablePath & " " & UcTranscodingProfile1.cmdtranscodingcommand)
     End Sub
 
     Function ModifyFilenamewithoutextension(FilenameWithExtension As String) As String
@@ -88,8 +88,7 @@ Public Class ucMAM
 
     Private Sub cmdshowfilesinDestinationlistboxproxy_Click(sender As Object, e As EventArgs) Handles cmdshowfilesinDestinationlistboxproxy.Click
         On Error Resume Next
-        lstDestinationDirectoryProxy.Items.Clear()
-        ProcessDirectory(txtDestinationDirectoryProxy.Text, lstDestinationDirectoryProxy)
+        PopulateFileList(txtDestinationDirectoryProxy.Text, lstDestinationDirectoryProxy)
     End Sub
     Private Sub cmdopendestinationdirectory_Click(sender As Object, e As EventArgs) Handles cmdopendestinationdirectory.Click
         On Error Resume Next
@@ -124,21 +123,12 @@ Public Class ucMAM
 
     Private Sub cmdselectsourcefolderfortranscoding_Click(sender As Object, e As EventArgs) Handles cmdselectsourcefolderfortranscoding.Click
         On Error Resume Next
-        Dim aa As New FolderBrowserDialog
-        aa.SelectedPath = txtsourcedirectorybt.Text
-        If aa.ShowDialog = Windows.Forms.DialogResult.OK Then
-            txtsourcedirectorybt.Text = aa.SelectedPath & "\"
-        End If
+        txtsourcedirectorybt.Text = folderbrowsing(txtsourcedirectorybt.Text)
     End Sub
 
     Private Sub cmdselectdestinationfolderfortranscoding_Click(sender As Object, e As EventArgs) Handles cmdselectdestinationfolderfortranscoding.Click
         On Error Resume Next
-        Dim aa As New FolderBrowserDialog
-        aa.SelectedPath = txtdestinationdirectorybt.Text
-        If aa.ShowDialog = Windows.Forms.DialogResult.OK Then
-            txtdestinationdirectorybt.Text = aa.SelectedPath & "\"
-        End If
-
+        txtdestinationdirectorybt.Text = folderbrowsing(txtdestinationdirectorybt.Text)
     End Sub
     Private Sub cmdfilldatgridbt_Click(sender As Object, e As EventArgs) Handles cmdfilldatgridbt.Click
         filldatagridbt()
@@ -651,15 +641,33 @@ Public Class ucMAM
         txtmediabackupfplder.Text = folderbrowsing(txtmediabackupfplder.Text)
     End Sub
 
+    Private Sub PopulateFileList(directoryPath As String, targetListBox As ListBox)
+        targetListBox.Items.Clear()
+        ProcessDirectory(directoryPath, targetListBox)
+    End Sub
+
     Function folderbrowsing(originaldirectory As String)
         On Error Resume Next
         Dim fbd As New FolderBrowserDialog
+        If originaldirectory <> "" Then
+            fbd.SelectedPath = originaldirectory
+        End If
         If fbd.ShowDialog = Windows.Forms.DialogResult.OK Then
             Return fbd.SelectedPath & "\"
         Else
             Return originaldirectory
         End If
     End Function
+
+    Private Sub RunCommandWindow(commandText As String)
+        Process.Start("CMD", "/K " & commandText)
+    End Sub
+
+    Private Sub SetTranscoderSelectionForAllRows(selectedValue As Integer)
+        For ii = 0 To dgvtranscoder.RowCount - 1
+            dgvtranscoder.Rows(ii).Cells(1).Value = selectedValue
+        Next
+    End Sub
 
     Private Sub cmdSelectDirectoryForAutoTranscode_Click(sender As Object, e As EventArgs) Handles cmdSelectDirectoryForAutoTranscode.Click
         On Error Resume Next
@@ -695,18 +703,12 @@ Public Class ucMAM
     Private Sub cmdSelectAll_Click(sender As Object, e As EventArgs) Handles cmdSelectAll.Click
 
         On Error Resume Next
-        For ii = 0 To dgvtranscoder.RowCount - 1
-            dgvtranscoder.Rows(ii).Cells(1).Value = 1
-        Next
-
-
+        SetTranscoderSelectionForAllRows(1)
     End Sub
 
     Private Sub cmdDeSelectAll_Click(sender As Object, e As EventArgs) Handles cmdDeSelectAll.Click
         On Error Resume Next
-        For ii = 0 To dgvtranscoder.RowCount - 1
-            dgvtranscoder.Rows(ii).Cells(1).Value = 0
-        Next
+        SetTranscoderSelectionForAllRows(0)
     End Sub
 
     Private Sub dgvtranscoder_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvtranscoder.CellContentClick
@@ -815,14 +817,12 @@ Public Class ucMAM
 
     Private Sub cmdaddingaudiotracktovideomam_Click(sender As Object, e As EventArgs) Handles cmdaddingaudiotracktovideomam.Click
         On Error Resume Next
-        Dim addingaudiotracktovideomam As String = "/K " & txtaddingaudiotracktovideomam.Text
-        Process.Start("CMD", addingaudiotracktovideomam)
+        RunCommandWindow(txtaddingaudiotracktovideomam.Text)
     End Sub
     Private Sub cmdaudioinsinglestream_Click(sender As Object, e As EventArgs) Handles cmdaudioinsinglestream.Click
 
         On Error Resume Next
-        Dim cmdaudioinsinglestream As String = "/K " & txtaudioinsinglestream.Text
-        Process.Start("CMD", cmdaudioinsinglestream)
+        RunCommandWindow(txtaudioinsinglestream.Text)
 
     End Sub
 
@@ -878,15 +878,14 @@ Public Class ucMAM
     Private Sub cmdvideohd_Click(sender As Object, e As EventArgs) Handles cmdvideohd.Click
         On Error Resume Next
         Dim codecname As String
-        Dim sdtohdscaling As String = "/K c:/casparcg/mydata/ffmpeg/ffmpeg.exe -y -i " & """" & txtsourcefileforalphavideosd.Text & """" & " -vcodec qtrle -vf scale=1920:1080 " & """" & txtdestinationfolderforhd.Text & txtfilenameforhd.Text & """" & ".mov"
-        Process.Start("CMD", sdtohdscaling)
+        Dim sdtohdscaling As String = FfmpegExecutablePath & " -y -i " & """" & txtsourcefileforalphavideosd.Text & """" & " -vcodec qtrle -vf scale=1920:1080 " & """" & txtdestinationfolderforhd.Text & txtfilenameforhd.Text & """" & ".mov"
+        RunCommandWindow(sdtohdscaling)
     End Sub
 
 
     Private Sub cmdFfmbcTargetTranscoding_Click(sender As Object, e As EventArgs) Handles cmdFfmbcTargetTranscoding.Click
         On Error Resume Next
-        Dim cmdFfmbcTargetTranscoding As String = "/K " & txtFfmbcTargetTranscoding.Text
-        Process.Start("CMD", cmdFfmbcTargetTranscoding)
+        RunCommandWindow(txtFfmbcTargetTranscoding.Text)
     End Sub
 
     Private Sub cmdsearchdatagridbt_Click(sender As Object, e As EventArgs) Handles cmdsearchdatagridbt.Click, txtsearchdatagridbt.TextChanged
@@ -920,12 +919,12 @@ Public Class ucMAM
         If ofdmetadata.ShowDialog = Windows.Forms.DialogResult.OK Then
             dgvmetadata.Rows.Clear()
             dgvmetadata.Rows.Add(1)
-            File.Delete("c:/casparcg/mydata/ebumxf/v2.xml")
-            Process.Start("CMD", "/K " & "c:/casparcg/mydata/ebumxf/mxf2ebu --ebu-core " & "c:/casparcg/mydata/ebumxf/v2.xml " & """" & ofdmetadata.FileName & """")
+            File.Delete(EbuMxfDirectory & "v2.xml")
+            RunCommandWindow(EbuMxfDirectory & "mxf2ebu --ebu-core " & EbuMxfDirectory & "v2.xml " & """" & ofdmetadata.FileName & """")
             lblfilenamemetadata.Text = ofdmetadata.FileName
             Threading.Thread.Sleep(1000)
 
-            Dim webAddress As String = "c:/casparcg/mydata/ebumxf/v2.xml"
+            Dim webAddress As String = EbuMxfDirectory & "v2.xml"
             Process.Start(webAddress)
 
         End If
@@ -934,8 +933,8 @@ Public Class ucMAM
     Private Sub cmdwritemetadata_Click(sender As Object, e As EventArgs) Handles cmdwritemetadata.Click
         On Error Resume Next
 
-        Process.Start("CMD", "/K " & "c:/casparcg/mydata/ebumxf/ebu2mxf.exe --remove " & """" & lblfilenamemetadata.Text & """")
-        Using sw As StreamWriter = New StreamWriter("c:/casparcg/mydata/ebumxf/v1.xml")
+        RunCommandWindow(EbuMxfDirectory & "ebu2mxf.exe --remove " & """" & lblfilenamemetadata.Text & """")
+        Using sw As StreamWriter = New StreamWriter(EbuMxfDirectory & "v1.xml")
 
             sw.WriteLine("<?xml version='1.0' encoding='UTF-8'?><ebuCoreMain xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:default='http://iptc.org/std/nar/2006-10-01/' xmlns:ebu = 'http://ebu.org/nar-extensions/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns ='urn:ebu:metadata-schema:ebuCore_2012' Schema='EBU_CORE_20120817.xsd' Version = '1.3' dateLastModified='2011-01-31'><coreMetadata>")
 
@@ -950,7 +949,7 @@ Public Class ucMAM
         End Using
 
         Threading.Thread.Sleep(1000)
-        Process.Start("CMD", "/K " & "c:/casparcg/mydata/ebumxf/ebu2mxf.exe --dark --ebu-core " & "c:/casparcg/mydata/ebumxf/v1.xml " & """" & lblfilenamemetadata.Text & """")
+        RunCommandWindow(EbuMxfDirectory & "ebu2mxf.exe --dark --ebu-core " & EbuMxfDirectory & "v1.xml " & """" & lblfilenamemetadata.Text & """")
     End Sub
 
     Private Sub cmdclearfieldmetadata_Click(sender As Object, e As EventArgs) Handles cmdclearfieldmetadata.Click
@@ -960,31 +959,29 @@ Public Class ucMAM
 
     Private Sub cmdanalyse_Click(sender As Object, e As EventArgs) Handles cmdanalyse.Click
 
-        Process.Start("CMD", "/K " & "c:/casparcg/mydata/ebumxf/mxfanalyzer.exe " & cmbanalyzeroption.Text & " " & """" & lblfilenamemetadata.Text & """")
+        RunCommandWindow(EbuMxfDirectory & "mxfanalyzer.exe " & cmbanalyzeroption.Text & " " & """" & lblfilenamemetadata.Text & """")
 
         Threading.Thread.Sleep(1000)
 
-        Dim webAddress As String = "c:/casparcg/mydata/ebumxf/report.xml"
+        Dim webAddress As String = EbuMxfDirectory & "report.xml"
         Process.Start(webAddress)
     End Sub
 
     Private Sub cmdebu2mxf_Click(sender As Object, e As EventArgs) Handles cmdebu2mxf.Click
 
-        Process.Start("CMD", "/K " & "c:/casparcg/mydata/ebumxf/ebu2mxf.exe " & cmbebu2mxfoption.Text & " " & """" & lblfilenamemetadata.Text & """")
+        RunCommandWindow(EbuMxfDirectory & "ebu2mxf.exe " & cmbebu2mxfoption.Text & " " & """" & lblfilenamemetadata.Text & """")
 
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         On Error Resume Next
-        Dim cmd As String = "/K " & txtffplay.Text
-        Process.Start("CMD", cmd)
+        RunCommandWindow(txtffplay.Text)
 
     End Sub
 
     Private Sub cmdFFMpeg_Click(sender As Object, e As EventArgs) Handles cmdFFMpeg.Click
         On Error Resume Next
-        Dim cmd As String = "/K " & txtFFMpeg.Text
-        Process.Start("CMD", cmd)
+        RunCommandWindow(txtFFMpeg.Text)
     End Sub
 
     Private Sub cmdhide_Click(sender As Object, e As EventArgs)
@@ -993,14 +990,12 @@ Public Class ucMAM
 
     Private Sub Cmdrecord_Click(sender As Object, e As EventArgs) Handles cmdrecord.Click
         On Error Resume Next
-        Dim cmd As String = "/K " & txtrecord.Text
-        Process.Start("CMD", cmd)
+        RunCommandWindow(txtrecord.Text)
     End Sub
 
     Private Sub CmdOutputToDecklink_Click(sender As Object, e As EventArgs) Handles cmdOutputToDecklink.Click
         On Error Resume Next
-        Dim cmd As String = "/K " & txtOutputToDecklink.Text
-        Process.Start("CMD", cmd)
+        RunCommandWindow(txtOutputToDecklink.Text)
     End Sub
 
     Private Sub Chktranscode_CheckedChanged(sender As Object, e As EventArgs) Handles chktranscode.CheckedChanged
@@ -1013,14 +1008,12 @@ Public Class ucMAM
 
     Private Sub CmdScreenRecorder_Click(sender As Object, e As EventArgs) Handles cmdScreenRecorderwithMicrophone.Click
         On Error Resume Next
-        Dim cmdScreenRecorder As String = "/K " & txtScreenRecorderwithmicrophone.Text
-        Process.Start("CMD", cmdScreenRecorder)
+        RunCommandWindow(txtScreenRecorderwithmicrophone.Text)
     End Sub
 
     Private Sub CmdScreenRecorderwithSystemAudio_Click(sender As Object, e As EventArgs) Handles cmdScreenRecorderwithSystemAudio.Click
         On Error Resume Next
-        Dim cmdScreenRecorder As String = "/K " & txtScreenRecorderwirhSystemAudio.Text
-        Process.Start("CMD", cmdScreenRecorder)
+        RunCommandWindow(txtScreenRecorderwirhSystemAudio.Text)
     End Sub
 
     Private Sub cmdopenfirstfile_Click(sender As Object, e As EventArgs) Handles cmdopenfirstfile.Click
@@ -1034,16 +1027,12 @@ Public Class ucMAM
 
     Private Sub cdmDesinationDirectoryyt_Click(sender As Object, e As EventArgs) Handles cdmDesinationDirectoryyt.Click
         On Error Resume Next
-        Dim aa As New FolderBrowserDialog
-        aa.SelectedPath = txtDesinationDirectoryyt.Text
-        If aa.ShowDialog = Windows.Forms.DialogResult.OK Then
-            txtDesinationDirectoryyt.Text = Replace(aa.SelectedPath, "\", "/") & "/"
-        End If
+        txtDesinationDirectoryyt.Text = Replace(folderbrowsing(Replace(txtDesinationDirectoryyt.Text, "/", "\")), "\", "/")
     End Sub
 
     Private Sub cmdDownloadyoutubeVideo_Click(sender As Object, e As EventArgs) Handles cmdDownloadyoutubeVideo.Click
-        Dim commandyt As String = "/K c:/casparcg/mydata/ffmpeg/youtube-dl.exe -o " & """" & txtDesinationDirectoryyt.Text & "/%(title)s.%(ext)s" & """" & " " & txtYTurl.Text
-        Process.Start("CMD", commandyt)
+        Dim commandyt As String = YoutubeDlExecutablePath & " -o " & """" & txtDesinationDirectoryyt.Text & "/%(title)s.%(ext)s" & """" & " " & txtYTurl.Text
+        RunCommandWindow(commandyt)
 
     End Sub
 
