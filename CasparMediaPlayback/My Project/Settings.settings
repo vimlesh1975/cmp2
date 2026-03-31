@@ -1,6 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
+  <!-- CMP user-scoped settings retained here for designer compatibility. -->
   <Settings>
     <Setting Name="rss" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://news.google.com/news?pz=1&amp;cf=all&amp;ned=hi_in&amp;hl=hi&amp;output=rss</Value>

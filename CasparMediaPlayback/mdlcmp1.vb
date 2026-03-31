@@ -176,27 +176,24 @@ Module mdlcmp1
     })
 
 
-    Public Function fillcommand(aaa As Control) As String()
-
+    Private Function BuildFillCommand(aaa As Control, includeParentOffset As Boolean) As String()
         On Error Resume Next
-        Dim ss = aaa.Parent
-        Dim x As Double = (aaa.Left) / Form1.Panel1.Width
+        Dim x As Double = aaa.Left / Form1.Panel1.Width
         Dim y As Double = aaa.Top / Form1.Panel1.Height
+        If includeParentOffset Then
+            x = (aaa.Left + aaa.Parent.Left) / Form1.Panel1.Width
+            y = (aaa.Top + aaa.Parent.Top) / Form1.Panel1.Height
+        End If
         Dim xx As Double = aaa.Size.Width / Form1.Panel1.Width
         Dim yy As Double = aaa.Size.Height / Form1.Panel1.Height
         fillstring = x & " " & y & " " & xx & " " & yy
         Return {fillstring, x, y, xx, yy}
     End Function
+    Public Function fillcommand(aaa As Control) As String()
+        Return BuildFillCommand(aaa, False)
+    End Function
     Public Function fillcommandCaption(aaa As Control) As String()
-
-        On Error Resume Next
-        Dim ss = aaa.Parent
-        Dim x As Double = ((aaa.Left) + (ss.Left)) / Form1.Panel1.Width
-        Dim y As Double = ((aaa.Top) + (ss.Top)) / Form1.Panel1.Height
-        Dim xx As Double = aaa.Size.Width / Form1.Panel1.Width
-        Dim yy As Double = aaa.Size.Height / Form1.Panel1.Height
-        fillstring = x & " " & y & " " & xx & " " & yy
-        Return {fillstring, x, y, xx, yy}
+        Return BuildFillCommand(aaa, True)
     End Function
 
     Public Sub Changebackcolor(oBackColor As Object)
@@ -240,49 +237,34 @@ Module mdlcmp1
         Return PlayerPath
     End Function
 
-    Public Sub playinvlc(filename As String)
-        On Error Resume Next
-
-        Dim process As Process = New Process
-        process.StartInfo.FileName = vlcplayerpath() 'PlayerPath
-        process.StartInfo.Verb = "open"
-
+    Private Function BuildPlayerArguments(filename As String) As String
         If filename.ToLower.Contains("p://") Then
-            process.StartInfo.Arguments = """" & filename & """"
-            GoTo 20
+            Return """" & filename & """"
         End If
 
         If System.IO.Path.GetExtension(filename) = ".txt" Then
             readsubclip(filename)
-            process.StartInfo.Arguments = """" & Replace(mediafullpath & masterfilename, "/", "\") & """"
-        Else
-            process.StartInfo.Arguments = """" & Replace(filename, "/", "\") & """"
+            Return """" & Replace(mediafullpath & masterfilename, "/", "\") & """"
         End If
-20:
+
+        Return """" & Replace(filename, "/", "\") & """"
+    End Function
+
+    Private Sub StartExternalPlayer(playerPath As String, filename As String)
+        Dim process As Process = New Process
+        process.StartInfo.FileName = playerPath
+        process.StartInfo.Verb = "open"
+        process.StartInfo.Arguments = BuildPlayerArguments(filename)
         process.Start()
+    End Sub
+
+    Public Sub playinvlc(filename As String)
+        On Error Resume Next
+        StartExternalPlayer(vlcplayerpath(), filename)
     End Sub
     Public Sub playinffplay(filename As String)
         On Error Resume Next
-        Dim PlayerPath As String = ""
-        PlayerPath = "C:\casparcg\mydata\ffmpeg\ffplay.exe"
-        Dim process As Process = New Process
-        process.StartInfo.FileName = PlayerPath
-        process.StartInfo.Verb = "open"
-
-        If filename.ToLower.Contains("p://") Then
-            process.StartInfo.Arguments = """" & filename & """"
-            GoTo 20
-        End If
-
-        If System.IO.Path.GetExtension(filename) = ".txt" Then
-            readsubclip(filename)
-            process.StartInfo.Arguments = """" & Replace(mediafullpath & masterfilename, "/", "\") & """"
-        Else
-            process.StartInfo.Arguments = """" & Replace(filename, "/", "\") & """"
-        End If
-
-20:
-        process.Start()
+        StartExternalPlayer("C:\casparcg\mydata\ffmpeg\ffplay.exe", filename)
     End Sub
 
     Public Function IntervalTill(ByVal d As DateTime) As Integer

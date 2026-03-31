@@ -93,6 +93,10 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucStreamPlayer` | `CasparMediaPlayback/ucStreamPlayer.vb` | Done | External bin command launching and repeated NDI start/stop handling consolidated into shared helpers. |
 | `ucSwfPlayer` | `CasparMediaPlayback/ucSwfPlayer.vb` | Done | SWF layer addressing and selected movie path handling consolidated into shared helpers. |
 | `ucSystemAudio` | `CasparMediaPlayback/ucSystemAudio.vb` | Done | Per-channel add/remove audio toggles consolidated into a shared helper. |
+| `frmfileinformation` | `CasparMediaPlayback/frmfileinformation.vb` | Done | Small shell cleanup: form positioning routed through a helper. |
+| `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Done | Connection-state UI and server-path propagation consolidated into shared helpers. |
+| `mdlcmp1` | `CasparMediaPlayback/mdlcmp1.vb` | Done | Shared fill-command calculation and external player launch argument building consolidated into reusable helpers. |
+| `Settings` | `CasparMediaPlayback/My Project/Settings.settings` | Done | Settings file annotated for clearer long-term maintenance without changing values. |
 | `ucTab` | `CasparMediaPlayback/ucTab.vb` | Done | Small shell cleanup: hide action routed through a helper for consistency with other docked utility modules. |
 | `ucUdpChat` | `CasparMediaPlayback/ucUdpChat.vb` | Done | UDP send, receive-start, and receive-stop flows consolidated into shared helpers. |
 | `ucUtility` | `CasparMediaPlayback/ucUtility.vb` | Done | Utility grid row setup and repeated explorer/notepad launch paths consolidated into shared helpers. |

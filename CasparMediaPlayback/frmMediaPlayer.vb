@@ -13,6 +13,55 @@ Imports WeifenLuo.WinFormsUI.Docking
 Public Class frmmediaplayer
 
     Dim strHelppath As String = "c:/casparcg/mydata/CMPHelp/CMPHelp.chm"
+    Private Sub UpdateConnectionUi(isConnected As Boolean)
+        If isConnected Then
+            cmdconnect.BackColor = Color.Green
+            cmdconnect.Text = "Connected"
+            ToolTip1.SetToolTip(cmdconnect, "Click to DisConnect")
+            cmbhost.Enabled = False
+        Else
+            cmdconnect.BackColor = Color.Red
+            cmdconnect.Text = "DisConnected"
+            ToolTip1.SetToolTip(cmdconnect, "Click to Connect")
+            cmbhost.Enabled = True
+        End If
+    End Sub
+
+    Private Function ResolveServerPath(pathValue As String, fallbackPath As String) As String
+        Dim pathParts = Split(pathValue, ":")
+        If pathParts(1) = "" Then
+            Return initialpath & fallbackPath
+        End If
+        Return pathValue
+    End Function
+
+    Private Sub UpdateMediaDependentPaths()
+        ucOffAirLogger.UcnewOffAirLogger1.txtmediadirectoryoal.Text = mediafullpath
+
+        ucOffAirLoggers.UcnewOffAirLogger1.txtmediadirectoryoal.Text = mediafullpath
+        ucOffAirLoggers.UcnewOffAirLogger2.txtmediadirectoryoal.Text = mediafullpath
+        ucOffAirLoggers.UcnewOffAirLogger4.txtmediadirectoryoal.Text = mediafullpath
+        ucOffAirLoggers.UcnewOffAirLogger3.txtmediadirectoryoal.Text = mediafullpath
+
+        ucRecorder.lblRecordingFolder.Text = mediafullpath
+
+        uc4ChannelRecorderAndTrimmer.UcnewRecorder1.lblRecordingFolder.Text = mediafullpath
+        uc4ChannelRecorderAndTrimmer.UcnewRecorder2.lblRecordingFolder.Text = mediafullpath
+        uc4ChannelRecorderAndTrimmer.UcnewRecorder3.lblRecordingFolder.Text = mediafullpath
+        uc4ChannelRecorderAndTrimmer.UcnewRecorder4.lblRecordingFolder.Text = mediafullpath
+    End Sub
+
+    Private Sub UpdateUtilityPathGrid()
+        With ucTab1
+            .UcUtility1.dgvutility.Rows(0).Cells(1).Value = mediafullpath
+            .UcUtility1.dgvutility.Rows(1).Cells(1).Value = templatefullpath
+            .UcUtility1.dgvutility.Rows(2).Cells(1).Value = thumbnailsfullpath
+            .UcUtility1.dgvutility.Rows(3).Cells(1).Value = initialpath
+            .UcUtility1.dgvutility.Rows(4).Cells(1).Value = logpath
+            .UcUtility1.dgvutility.Rows(5).Cells(1).Value = datapath
+            .UcUtility1.dgvutility.Rows(7).Cells(1).Value = fontpath
+        End With
+    End Sub
 
     Friend WithEvents ucLogo1 As ucLogo
     Friend WithEvents ucBreakingNews1 As ucBreakingNews
@@ -120,21 +169,8 @@ Public Class frmmediaplayer
 
     Sub connectionhandler()
         On Error Resume Next
-        If CasparDevice.IsConnected = True Then
-            cmdconnect.BackColor = Color.Green
-            cmdconnect.Text = "Connected"
-            ToolTip1.SetToolTip(cmdconnect, "Click to DisConnect")
-            cmbhost.Enabled = False
-
-            ucOSC.stoposcserver()
-            'ucOSC1.oscstartandregister()
-        Else
-            cmdconnect.BackColor = Color.Red
-            cmdconnect.Text = "DisConnected"
-            ToolTip1.SetToolTip(cmdconnect, "Click to Connect")
-            cmbhost.Enabled = True
-            ucOSC.stoposcserver()
-        End If
+        UpdateConnectionUi(CasparDevice.IsConnected)
+        ucOSC.stoposcserver()
     End Sub
 
     Private Sub cmdconnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdconnect.Click
@@ -249,71 +285,15 @@ Public Class frmmediaplayer
         Dim nnn As Array = Split(mmm(1), "</font-path>")
         fontpath = nnn(0)
 
-        Dim xyz = Split(templatepath, ":")
-        If xyz(1) = "" Then
-            templatefullpath = initialpath & d(0)
-        Else
-            templatefullpath = templatepath
-        End If
+        templatefullpath = ResolveServerPath(templatepath, d(0))
+        mediafullpath = ResolveServerPath(mediapath, b(0))
+        thumbnailsfullpath = ResolveServerPath(thumbnailspath, h(0))
+        logpath = ResolveServerPath(logpath, jjj(0))
+        datapath = ResolveServerPath(datapath, lll(0))
+        fontpath = ResolveServerPath(fontpath, nnn(0))
 
-        Dim xyz1 = Split(mediapath, ":")
-        If xyz1(1) = "" Then
-            mediafullpath = initialpath & b(0)
-        Else
-            mediafullpath = mediapath
-        End If
-
-        Dim xyz2 = Split(thumbnailspath, ":")
-        If xyz2(1) = "" Then
-            thumbnailsfullpath = initialpath & h(0)
-        Else
-            thumbnailsfullpath = thumbnailspath
-        End If
-        Dim xyz3 = Split(logpath, ":")
-        If xyz3(1) = "" Then
-            logpath = initialpath & jjj(0)
-        Else
-            logpath = logpath
-        End If
-
-        Dim xyz4 = Split(datapath, ":")
-        If xyz4(1) = "" Then
-            datapath = initialpath & lll(0)
-        Else
-            datapath = datapath
-        End If
-
-        Dim xyz5 = Split(fontpath, ":")
-        If xyz5(1) = "" Then
-            fontpath = initialpath & nnn(0)
-        Else
-            fontpath = fontpath
-        End If
-
-        ucOffAirLogger.UcnewOffAirLogger1.txtmediadirectoryoal.Text = mediafullpath
-
-        ucOffAirLoggers.UcnewOffAirLogger1.txtmediadirectoryoal.Text = mediafullpath
-        ucOffAirLoggers.UcnewOffAirLogger2.txtmediadirectoryoal.Text = mediafullpath
-        ucOffAirLoggers.UcnewOffAirLogger4.txtmediadirectoryoal.Text = mediafullpath
-        ucOffAirLoggers.UcnewOffAirLogger3.txtmediadirectoryoal.Text = mediafullpath
-
-        ucRecorder.lblRecordingFolder.Text = mediafullpath
-
-        uc4ChannelRecorderAndTrimmer.UcnewRecorder1.lblRecordingFolder.Text = mediafullpath
-        uc4ChannelRecorderAndTrimmer.UcnewRecorder2.lblRecordingFolder.Text = mediafullpath
-        uc4ChannelRecorderAndTrimmer.UcnewRecorder3.lblRecordingFolder.Text = mediafullpath
-        uc4ChannelRecorderAndTrimmer.UcnewRecorder4.lblRecordingFolder.Text = mediafullpath
-
-        With ucTab1
-            .UcUtility1.dgvutility.Rows(0).Cells(1).Value = mediafullpath
-            .UcUtility1.dgvutility.Rows(1).Cells(1).Value = templatefullpath
-            .UcUtility1.dgvutility.Rows(2).Cells(1).Value = thumbnailsfullpath
-            .UcUtility1.dgvutility.Rows(3).Cells(1).Value = initialpath
-            .UcUtility1.dgvutility.Rows(4).Cells(1).Value = logpath
-            .UcUtility1.dgvutility.Rows(5).Cells(1).Value = datapath
-
-            .UcUtility1.dgvutility.Rows(7).Cells(1).Value = fontpath
-        End With
+        UpdateMediaDependentPaths()
+        UpdateUtilityPathGrid()
 
         ucPlaylist.initialisetvclips()
     End Sub
