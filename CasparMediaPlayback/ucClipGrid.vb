@@ -3,6 +3,9 @@ Imports System.IO
 Imports System.Threading.Tasks
 
 Public Class ucClipGrid
+    Private Const NameColumn As String = "Name"
+    Private Const DurationColumn As String = "Duration"
+
     Private Async Sub cmdclipsearch_ClickAsync(sender As Object, e As EventArgs) Handles cmdclipsearch.Click
         ''On Error Resume Next
         labelclips.Text = ""
@@ -35,15 +38,66 @@ Public Class ucClipGrid
     Dim dt As New DataTable()
     Dim strcurrentrowcell0value As String
     Dim searchnumber As Integer = 1
-    Sub refreshclips1()
-        On Error Resume Next
+
+    Private Sub EnsureClipTableColumns()
+        If dt.Columns.Count = 0 Then
+            dt.Columns.Add(NameColumn)
+            dt.Columns.Add(DurationColumn)
+        End If
+    End Sub
+
+    Private Sub ResetClipSearchState()
         cmdclipsearch.Enabled = False
         Control.CheckForIllegalCrossThreadCalls = False
         strcurrentrowcell0value = dgvclips.CurrentRow.Cells(0).Value
-
-
         dt.Clear()
-        Dim dr As DataRow
+        EnsureClipTableColumns()
+    End Sub
+
+    Private Sub AddClipRow(clipName As String, Optional duration As String = "")
+        Dim dr As DataRow = dt.NewRow()
+        dr(NameColumn) = clipName
+        dr(DurationColumn) = duration
+        dt.Rows.Add(dr)
+    End Sub
+
+    Private Sub UpdateClipSearchProgress(progressValue As Integer)
+        pbclipsearchstatus.Value = progressValue
+        labelclips.Text = dt.Rows.Count
+    End Sub
+
+    Private Function MatchesClipSearch(clipName As String) As Boolean
+        Return UCase(Replace(clipName, "\", "/")) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*"
+    End Function
+
+    Private Function MatchesFileSystemClipSearch(fileInfo As FileInfo) As Boolean
+        Dim relativeName As String = Replace(fileInfo.FullName.Substring(Len(mediafullpath)), "\", "/").ToString
+        Return UCase(relativeName) Like "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*"
+    End Function
+
+    Private Function GetClipDurationValue(fullPath As String) As String
+        If chkclipduration.Checked Then
+            Return getdurationofclip(fullPath)
+        End If
+
+        Return ""
+    End Function
+
+    Private Function GetNormalizedClipPath(fullPath As String) As String
+        Return Replace(Replace(fullPath, ":", ":\"), "\", "/")
+    End Function
+
+    Private Sub LoadClipIntoSlowMotionPlayer(targetPlayer As Object, normalizedPath As String, clipDuration As String)
+        CasparDevice.SendString("load " & cmbChannelDestination.Text & "-1 " & """" & normalizedPath & """")
+        targetPlayer.lblmax.Text = HMStoF(clipDuration)
+        targetPlayer.lblplaying.Text = normalizedPath
+        targetPlayer.TrackBarseek.Maximum = targetPlayer.lblmax.Text
+        targetPlayer.TrackBarseek.Value = 0
+    End Sub
+
+    Sub refreshclips1()
+        On Error Resume Next
+        ResetClipSearchState()
 
         If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked = True Then
             'MsgBox("from file sysytem")
@@ -51,29 +105,17 @@ Public Class ucClipGrid
             s1 = Directory.GetFiles(mediafullpath & lblsearch.Text, "*.*", 1)
             pbclipsearchstatus.Maximum = s1.Length - 1
             For i As Integer = 0 To s1.Length - 1
-                If i = 0 Then
-                    dt.Columns.Add("Name")
-                    dt.Columns.Add("Duration")
-                End If
-
                 Dim f1 As New FileInfo(s1(i))
-                dr = dt.NewRow()
                 If (Path.GetExtension(f1.FullName).ToUpper = ".MXF") Or (Path.GetExtension(f1.FullName).ToUpper = ".TS") Then
                     GoTo 40
                 End If
 
                 If (f1.Attributes And FileAttributes.Hidden) <> 0 Or CheckFileHasCopied(f1.FullName) = False Then GoTo 50
-40:             If UCase(Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString) Like "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-
-                    dr("Name") = Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString
-                    If chkclipduration.Checked Then
-                        dr("Duration") = getdurationofclip(f1.FullName)
-                    End If
-                    dt.Rows.Add(dr)
+40:             If MatchesFileSystemClipSearch(f1) Then
+                    AddClipRow(Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString, GetClipDurationValue(f1.FullName))
                 End If
 50:             'hidden file
-                pbclipsearchstatus.Value = i
-                labelclips.Text = dt.Rows.Count
+                UpdateClipSearchProgress(i)
             Next
 
 
@@ -86,21 +128,12 @@ Public Class ucClipGrid
 
                 pbclipsearchstatus.Maximum = aa.Count - 3
                 For ss = 1 To aa.Count - 3
-                    If ss = 1 Then
-                        dt.Columns.Add("Name")
-                        dt.Columns.Add("Duration")
-                    End If
-                    If UCase(Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-
-                        dr = dt.NewRow()
-                        dr("Name") = Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")
-                        'dr("Name") = aa(ss)
-                        dr("Duration") = "" 'Mid(CasparDevice.Mediafiles.Item(i).Timecode, 1, 8)
-                        dt.Rows.Add(dr)
+                    Dim clipName As String = Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")
+                    If MatchesClipSearch(clipName) Then
+                        AddClipRow(clipName)
                     End If
 
-                    pbclipsearchstatus.Value = ss
-                    labelclips.Text = dt.Rows.Count
+                    UpdateClipSearchProgress(ss)
                 Next
 
             Else
@@ -109,20 +142,12 @@ Public Class ucClipGrid
                 Threading.Thread.Sleep(250)
                 pbclipsearchstatus.Maximum = CasparDevice.Mediafiles.Count - 1
                 For i As Integer = 0 To CasparDevice.Mediafiles.Count - 1
-                    If i = 0 Then
-                        dt.Columns.Add("Name")
-                        dt.Columns.Add("Duration")
-                    End If
-                    If UCase(Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/").ToString) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-
-                        dr = dt.NewRow()
-                        dr("Name") = Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/")
-                        dr("Duration") = Mid(CasparDevice.Mediafiles.Item(i).Timecode, 1, 8)
-                        dt.Rows.Add(dr)
+                    Dim clipName As String = Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/")
+                    If MatchesClipSearch(clipName) Then
+                        AddClipRow(clipName, Mid(CasparDevice.Mediafiles.Item(i).Timecode, 1, 8))
                     End If
 
-                    pbclipsearchstatus.Value = i
-                    labelclips.Text = dt.Rows.Count
+                    UpdateClipSearchProgress(i)
                 Next
             End If
 
@@ -137,11 +162,11 @@ Public Class ucClipGrid
         Me.dgvclips.DataSource = dt
         'labelclips.Text = dt.Rows.Count
 
-        dgvclips.Columns("Name").Width = 400
+        dgvclips.Columns(NameColumn).Width = 400
 
-        dgvclips.Columns("Duration").Width = 60
+        dgvclips.Columns(DurationColumn).Width = 60
 
-        dgvclips.Sort(dgvclips.Columns("Name"), System.ComponentModel.ListSortDirection.Ascending)
+        dgvclips.Sort(dgvclips.Columns(NameColumn), System.ComponentModel.ListSortDirection.Ascending)
 
         For iii = 0 To dgvclips.RowCount - 1
             If dgvclips.Rows(iii).Cells(0).Value = strcurrentrowcell0value Then
@@ -277,23 +302,15 @@ Public Class ucClipGrid
     Sub LoadinSM()
         On Error Resume Next
         Dim fullpath As String = mediafullpath & dgvclips.CurrentRow.Cells(0).Value
+        Dim normalizedPath As String = GetNormalizedClipPath(fullpath)
+        Dim clipDuration As String = getdurationofclip(fullpath)
 
         With ucSlowMotion21
             If cmbChannelDestination.Text = .UcnewSM21.cmbChannel.Text Then
-
-                CasparDevice.SendString("load " & cmbChannelDestination.Text & "-" & 1 & " " & """" & Replace(Replace(fullpath, ":", ":\"), "\", "/") & """")
-
-                .UcnewSM21.lblmax.Text = HMStoF(getdurationofclip(fullpath))
-                .UcnewSM21.lblplaying.Text = Replace(Replace(fullpath, ":", ":\"), "\", "/")
-                .UcnewSM21.TrackBarseek.Maximum = .UcnewSM21.lblmax.Text
-                .UcnewSM21.TrackBarseek.Value = 0
+                LoadClipIntoSlowMotionPlayer(.UcnewSM21, normalizedPath, clipDuration)
 
             ElseIf cmbChannelDestination.Text = .UcnewSM22.cmbChannel.Text Then
-                CasparDevice.SendString("load " & cmbChannelDestination.Text & "-" & 1 & " " & """" & Replace(Replace(fullpath, ":", ":\"), "\", "/") & """")
-                .UcnewSM22.lblmax.Text = HMStoF(getdurationofclip(fullpath))
-                .UcnewSM22.lblplaying.Text = Replace(Replace(fullpath, ":", ":\"), "\", "/")
-                .UcnewSM22.TrackBarseek.Maximum = .UcnewSM22.lblmax.Text
-                .UcnewSM22.TrackBarseek.Value = 0
+                LoadClipIntoSlowMotionPlayer(.UcnewSM22, normalizedPath, clipDuration)
             End If
         End With
 
