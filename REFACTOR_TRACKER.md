@@ -39,6 +39,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucAMCPcommands` | `CasparMediaPlayback/ucAMCPcommands.vb` | Done | AMCP file open/save, reset, and command-send/response flow consolidated into shared helpers. |
 | `ucCasparcgWindow` | `CasparMediaPlayback/ucCasparcgWindow.vb` | Done | Window parenting, seek/play/load command building, audio meter colors, and aspect-ratio layout updates consolidated into shared helpers. |
 | `ucChannelInfo` | `CasparMediaPlayback/ucChannelInfo.vb` | Done | Channel-info XML read, row creation, version-specific parsing, and remove/stop actions consolidated into shared helpers. |
+| `UcCommandScheduler` | `CasparMediaPlayback/UcCommandScheduler.vb` | Done | Scheduler grid setup, file open/save, reset/start/stop actions, and multi-command execution consolidated into shared helpers. |
 
 ## Repository Cleanup
 
