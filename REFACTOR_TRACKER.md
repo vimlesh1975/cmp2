@@ -67,6 +67,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucOnLineCG` | `CasparMediaPlayback/ucOnLineCG.vb` | Done | Online CG host URLs and layer-address command building consolidated into shared helpers. |
 | `ucOSC` | `CasparMediaPlayback/ucOSC.vb` | Done | OSC grid row population for message, bundle, and packet events consolidated into a shared row-update helper. |
 | `ucOSD` | `CasparMediaPlayback/ucOSD.vb` | Done | OSD layer addressing, call sending, and selected-color routing consolidated into shared helpers. |
+| `ucPlayers` | `CasparMediaPlayback/ucPlayers.vb` | Done | Player photo/flag picking and repeated Davis Cup template play flow consolidated into shared helpers. |
 
 ## Repository Cleanup
 
