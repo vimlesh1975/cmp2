@@ -1,10 +1,140 @@
 ﻿Imports System.IO
 Imports System.Data
 Public Class ucPlaylist
+    Private Const PlaylistClipNameColumn As String = "File_Name"
+    Private Const PlaylistDurationColumn As String = "Duration"
+    Private Const PlaylistSizeColumn As String = "Size"
+
     Public i As Integer 'for loop
     Public j As Integer
     Public k As Integer
     Public jj As Integer
+
+    Private Function BuildServerClipFolders() As String()
+        Dim folders() As String
+
+        If ServerVersion = 2.1 Then
+            CasparDevice.RefreshMediafiles()
+            Threading.Thread.Sleep(500)
+            ReDim folders(CasparDevice.Mediafiles.Count)
+            For iclips = 0 To CasparDevice.Mediafiles.Count - 1
+                Dim foldername As String = Mid(CasparDevice.Mediafiles.Item(iclips).Name, 1, Len(CasparDevice.Mediafiles.Item(iclips).Name) - Len(Split(CasparDevice.Mediafiles.Item(iclips).Name, "/").Last) - 1)
+                folders(iclips) = "Clips\" & Replace(foldername, "/", "\")
+            Next
+        ElseIf ServerVersion = 2.0 Then
+            CasparDevice.RefreshMediafiles()
+            Threading.Thread.Sleep(500)
+            ReDim folders(CasparDevice.Mediafiles.Count)
+            For iclips = 0 To CasparDevice.Mediafiles.Count - 1
+                folders(iclips) = "Clips\" & CasparDevice.Mediafiles.Item(iclips).Folder
+            Next
+        ElseIf ServerVersion > 2.1 Then
+            Dim webClient As New System.Net.WebClient
+            Dim result As String = webClient.DownloadString("http://" & frmmediaplayer.cmbhost.Text & ":8000/cls")
+            Dim serverRows() = Split(result, vbNewLine)
+            ReDim folders(serverRows.Count)
+            For iclips = 0 To serverRows.Count - 1
+                Dim clipname As String = Replace(Replace(Split(serverRows(iclips), "  ")(0), "\", "/"), """", "")
+                Dim foldername As String = Mid(clipname, 1, Len(clipname) - Len(Split(clipname, "/").Last) - 1)
+                folders(iclips) = "Clips\" & Replace(foldername, "/", "\")
+            Next
+        End If
+
+        Return folders
+    End Function
+
+    Private Function GetSelectedClipFolderPrefix() As String
+        If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked Then
+            Return mediafullpath
+        End If
+
+        Return "Clips\"
+    End Function
+
+    Private Function GetSelectedClipSearchPath() As String
+        If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked Then
+            Return Replace(Mid(tvclips.SelectedNode.FullPath, Len(mediafullpath) + 2), "\", "/") & "/"
+        End If
+
+        Return Replace(Mid(tvclips.SelectedNode.FullPath, 5 + 2), "\", "/") & "/"
+    End Function
+
+    Private Sub EnsureClipSearchColumns(includeSize As Boolean)
+        If dt.Columns.Contains(PlaylistClipNameColumn) = False Then
+            dt.Columns.Add(PlaylistClipNameColumn)
+        End If
+        If dt.Columns.Contains(PlaylistDurationColumn) = False Then
+            dt.Columns.Add(PlaylistDurationColumn)
+        End If
+        If includeSize AndAlso dt.Columns.Contains(PlaylistSizeColumn) = False Then
+            dt.Columns.Add(PlaylistSizeColumn)
+        End If
+    End Sub
+
+    Private Sub ResetClipSearchState()
+        Control.CheckForIllegalCrossThreadCalls = False
+        If dt.Columns.Contains(PlaylistClipNameColumn) = True Then
+            If dgvclips.Rows.Count > 1 Then
+                strcurrentrowcell0value = dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value
+            End If
+        End If
+        dt.Clear()
+    End Sub
+
+    Private Function MatchesPlaylistClipSearch(clipName As String) As Boolean
+        Return UCase(Replace(clipName, "\", "/")) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*"
+    End Function
+
+    Private Function MatchesPlaylistFileSystemClipSearch(fileInfo As FileInfo) As Boolean
+        Dim relativeName As String = Replace(fileInfo.FullName.Substring(Len(mediafullpath)), "\", "/").ToString
+        Return UCase(relativeName) Like "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*"
+    End Function
+
+    Private Sub AddClipSearchRow(clipName As String, duration As String, Optional size As String = "")
+        Dim dr As DataRow = dt.NewRow()
+        dr(PlaylistClipNameColumn) = clipName
+        dr(PlaylistDurationColumn) = duration
+        If dt.Columns.Contains(PlaylistSizeColumn) Then
+            dr(PlaylistSizeColumn) = size
+        End If
+        dt.Rows.Add(dr)
+    End Sub
+
+    Private Sub UpdateClipSearchProgress(progressValue As Integer)
+        pbclipsearchstatus.Value = progressValue
+        labelclips.Text = dt.Rows.Count
+    End Sub
+
+    Private Function GetClipGridCommandTarget(fileName As String) As String
+        If System.IO.Path.GetExtension(mediafullpath & fileName) = ".txt" Then
+            readsubclip(mediafullpath & fileName)
+            If ServerVersion > 2.1 Then
+                Return """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & " length " & cliplength * 2 & deinterlaced
+            End If
+
+            Return """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced
+        End If
+
+        Return """" & ModifyFilename(fileName) & """" & deinterlaced
+    End Function
+
+    Private Function GetClipGridCueTarget(fileName As String) As String
+        If System.IO.Path.GetExtension(mediafullpath & fileName) = ".txt" Then
+            readsubclip(mediafullpath & fileName)
+            If ServerVersion > 2.1 Then
+                Return """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & deinterlaced
+            End If
+
+            Return """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & deinterlaced
+        End If
+
+        Return """" & ModifyFilename(fileName) & """" & deinterlaced
+    End Function
+
+    Private Sub SendClipGridTransport(commandName As String, commandTarget As String)
+        SendString(NetStream, commandName & " " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & commandTarget & vbCrLf)
+    End Sub
+
     Private Sub dgvclips_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvclips.CellContentClick
     End Sub
     Private Sub cmdrefreshtvclips_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrefreshtvclips.Click
@@ -14,46 +144,11 @@ Public Class ucPlaylist
     Sub initialisetvclips()
         On Error Resume Next
         tvclips.Nodes.Clear()
-        Dim xx As String = ""
         If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked Then
             tvclips.Nodes.Add(mediafullpath)
             PopulateTreeView(mediafullpath, tvclips.Nodes(0))
         ElseIf frmmediaplayer.uctab1.UcPlaylistSetting1.rdoclipfromserver.Checked Then
-            Dim aa() As String
-            If ServerVersion = 2.1 Then 'added because server 2.1 sends each files as indivisual , no folder name. 150119
-                'MsgBox("from 2.1")
-                CasparDevice.RefreshMediafiles()
-                Threading.Thread.Sleep(500)
-                ReDim aa(CasparDevice.Mediafiles.Count)
-                For iclips = 0 To CasparDevice.Mediafiles.Count - 1
-                    Dim foldername As String = ""
-                    foldername = Mid(CasparDevice.Mediafiles.Item(iclips).Name, 1, Len(CasparDevice.Mediafiles.Item(iclips).Name) - Len(Split(CasparDevice.Mediafiles.Item(iclips).Name, "/").Last) - 1)
-                    aa(iclips) = "Clips\" & Replace(foldername, "/", "\")
-                Next
-            ElseIf ServerVersion = 2.0 Then
-                'MsgBox("from 2.07")
-                CasparDevice.RefreshMediafiles()
-                Threading.Thread.Sleep(500)
-                ReDim aa(CasparDevice.Mediafiles.Count)
-                For iclips = 0 To CasparDevice.Mediafiles.Count - 1
-                    aa(iclips) = "Clips\" & CasparDevice.Mediafiles.Item(iclips).Folder
-                Next
-
-            ElseIf ServerVersion > 2.1 Then
-                'MsgBox("from 2.2 or 2.3")
-                Dim webClient As New System.Net.WebClient
-                Dim result As String = webClient.DownloadString("http://" & frmmediaplayer.cmbhost.Text & ":8000/cls")
-                Dim bb() = Split(result, vbNewLine)
-                ReDim aa(bb.Count)
-                For iclips = 0 To bb.Count - 1
-                    Dim foldername As String = ""
-                    Dim clipname As String = Replace(Replace(Split(bb(iclips), "  ")(0), "\", "/"), """", "")
-                    foldername = Mid(clipname, 1, Len(clipname) - Len(Split(clipname, "/").Last) - 1)
-                    aa(iclips) = "Clips\" & Replace(foldername, "/", "\")
-                Next
-            End If
-50:
-            createTreeview(aa)
+            createTreeview(BuildServerClipFolders())
         End If
         tvclips.Sort() '210515
         tvclips.Nodes(0).Expand()
@@ -102,11 +197,7 @@ Public Class ucPlaylist
 
     Private Sub tvclips_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvclips.AfterSelect
         On Error Resume Next
-        If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked Then
-            lblsearch.Text = Replace(Mid(tvclips.SelectedNode.FullPath, Len(mediafullpath) + 2), "\", "/") & "/"
-        ElseIf frmmediaplayer.uctab1.UcPlaylistSetting1.rdoclipfromserver.Checked Then
-            lblsearch.Text = Replace(Mid(tvclips.SelectedNode.FullPath, 5 + 2), "\", "/") & "/"
-        End If
+        lblsearch.Text = GetSelectedClipSearchPath()
         If lblsearch.Text = "/" Then lblsearch.Text = ""
         txtsearch.Text = ""
     End Sub
@@ -1341,17 +1432,7 @@ Public Class ucPlaylist
     Dim searchnumber As Integer = 1
     Async Sub refreshclips1()
         Try
-            'cmdclipsearch.Enabled = False
-            Control.CheckForIllegalCrossThreadCalls = False
-            If dt.Columns.Contains("File_Name") = True Then ' And dgvclips.CurrentRow.Cells("File_Name").Value <> DBNull.Value Then '0 Then 'dt.Columns.Contains("File_Name") = True And
-                'MsgBox(dgvclips.Rows.Count)
-                If dgvclips.Rows.Count > 1 Then ' 1 is important
-                    strcurrentrowcell0value = dgvclips.CurrentRow.Cells("File_Name").Value
-                End If
-            End If
-
-            Dim dr As DataRow
-            dt.Clear()
+            ResetClipSearchState()
 
             If frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromfilesystem.Checked = True Then
                 'MsgBox("from file sysytem")
@@ -1360,17 +1441,9 @@ Public Class ucPlaylist
                 'If s1.Count = 0 Then Exit Sub
                 pbclipsearchstatus.Maximum = s1.Length - 1
                 For i As Integer = 0 To s1.Length - 1
-                    If i = 0 Then
-                        If dt.Columns.Contains("File_Name") = False Then
-                            dt.Columns.Add("File_Name")
-                            dt.Columns.Add("Duration")
-                            dt.Columns.Add("Size")
-                        End If
-
-                    End If
+                    EnsureClipSearchColumns(True)
 
                     Dim f1 As New FileInfo(s1(i))
-                    dr = dt.NewRow()
                     If (Path.GetExtension(f1.FullName).ToUpper = ".MXF") Or (Path.GetExtension(f1.FullName).ToUpper = ".TS") Then
                         GoTo 40
                     End If
@@ -1378,20 +1451,16 @@ Public Class ucPlaylist
                     If (f1.Attributes And FileAttributes.Hidden) <> 0 Or CheckFileHasCopied(f1.FullName) = False Then
                         GoTo 50
                     End If
-40:                 If UCase(Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString) Like "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-
-                        dr("File_Name") = Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString
+40:                 If MatchesPlaylistFileSystemClipSearch(f1) Then
                         If chkclipduration.Checked Then
-                            'Dim dd As String = getallvaules(f1.FullName)
                             Dim dd As String = Await getallvaluesAsync(f1.FullName)
-                            dr("Duration") = Split(dd, Chr(2))(0)
-                            dr("Size") = Split(dd, Chr(2))(1)
+                            AddClipSearchRow(Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString, Split(dd, Chr(2))(0), Split(dd, Chr(2))(1))
+                        Else
+                            AddClipSearchRow(Replace(f1.FullName.Substring(Len(mediafullpath)), "\", "/").ToString, "")
                         End If
-                        dt.Rows.Add(dr)
                     End If
 50:             'hidden file
-                    pbclipsearchstatus.Value = i
-                    labelclips.Text = dt.Rows.Count
+                    UpdateClipSearchProgress(i)
                 Next
             ElseIf frmmediaplayer.ucTab1.UcPlaylistSetting1.rdoclipfromserver.Checked = True Then
                 If ServerVersion > 2.1 Then
@@ -1402,16 +1471,9 @@ Public Class ucPlaylist
 
                     pbclipsearchstatus.Maximum = aa.Count - 3
                     For ss = 1 To aa.Count - 3
-                        If ss = 1 Then
-                            If dt.Columns.Contains("File_Name") = False Then
-                                dt.Columns.Add("File_Name")
-                                dt.Columns.Add("Duration")
-                            End If
-
-                        End If
-                        If UCase(Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-                            dr = dt.NewRow()
-                            dr("File_Name") = Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")
+                        EnsureClipSearchColumns(False)
+                        Dim clipName As String = Replace(Replace(Split(aa(ss), "  ")(0), "\", "/"), """", "")
+                        If MatchesPlaylistClipSearch(clipName) Then
 
                             Dim singleclip() = Split(aa(ss), "  ")
                             Dim duration As String = ""
@@ -1419,13 +1481,10 @@ Public Class ucPlaylist
                             If duration = "NaN" Then
                                 duration = "100"
                             End If
-                            dr("Duration") = FToHMS(duration)
-
-                            dt.Rows.Add(dr)
+                            AddClipSearchRow(clipName, FToHMS(duration))
                         End If
 
-                        pbclipsearchstatus.Value = ss
-                        labelclips.Text = dt.Rows.Count
+                        UpdateClipSearchProgress(ss)
                     Next
 
                 Else
@@ -1435,21 +1494,13 @@ Public Class ucPlaylist
                     pbclipsearchstatus.Maximum = CasparDevice.Mediafiles.Count - 1
                     Dim i As Integer
                     For i = 1 To CasparDevice.Mediafiles.Count - 1
-                        'MsgBox(CasparDevice.Mediafiles.Count)
-                        If dt.Columns.Contains("File_Name") = False Then
-                            dt.Columns.Add("File_Name")
-                            dt.Columns.Add("Duration")
-                        End If
-                        If UCase(Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/").ToString) Like lblsearch.Text & "*" & UCase(Replace(txtsearch.Text, "\", "/")) & "*" Then
-
-                            dr = dt.NewRow()
-                            dr("File_Name") = Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/")
-                            dr("Duration") = Mid(CasparDevice.Mediafiles.Item(i).Timecode, 1, 8)
-                            dt.Rows.Add(dr)
+                        EnsureClipSearchColumns(False)
+                        Dim clipName As String = Replace(CasparDevice.Mediafiles.Item(i).ToString, "\", "/")
+                        If MatchesPlaylistClipSearch(clipName) Then
+                            AddClipSearchRow(clipName, Mid(CasparDevice.Mediafiles.Item(i).Timecode, 1, 8))
                         End If
 
-                        pbclipsearchstatus.Value = i
-                        labelclips.Text = dt.Rows.Count
+                        UpdateClipSearchProgress(i)
                     Next
                 End If
             End If
@@ -1467,17 +1518,17 @@ Public Class ucPlaylist
         dgvclips.Columns(1).Width = 62
         dgvclips.Columns(2).Width = 73
 
-        dgvclips.Sort(dgvclips.Columns("File_Name"), System.ComponentModel.ListSortDirection.Ascending)
+        dgvclips.Sort(dgvclips.Columns(PlaylistClipNameColumn), System.ComponentModel.ListSortDirection.Ascending)
 
         For iii = 0 To dgvclips.RowCount - 1
-            If dgvclips.Rows(iii).Cells("File_Name").Value = strcurrentrowcell0value Then
-                dgvclips.CurrentCell = dgvclips.Rows(iii).Cells("File_Name")
+            If dgvclips.Rows(iii).Cells(PlaylistClipNameColumn).Value = strcurrentrowcell0value Then
+                dgvclips.CurrentCell = dgvclips.Rows(iii).Cells(PlaylistClipNameColumn)
                 Exit For
             End If
         Next
         cmdclipsearch.Enabled = True
         pbclipsearchstatus.Value = 0
-        dgvclips.Columns("File_Name").DefaultCellStyle.Font = New Font("Arial Black", frmmediaplayer.nfontsizeforall.Value, FontStyle.Regular)
+        dgvclips.Columns(PlaylistClipNameColumn).DefaultCellStyle.Font = New Font("Arial Black", frmmediaplayer.nfontsizeforall.Value, FontStyle.Regular)
     End Sub
     Private Sub chkplaylistlock_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkplaylistlock.CheckedChanged
         On Error Resume Next
@@ -1793,17 +1844,8 @@ Public Class ucPlaylist
     Sub playfromclipgrid()
         On Error Resume Next
 
-        If dgvclips.CurrentRow.Cells("File_Name").Value = "" Then Exit Sub
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            If ServerVersion > 2.1 Then
-                CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & " length " & cliplength * 2 & deinterlaced)
-            Else
-                CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-            End If
-        Else
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
+        If dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value = "" Then Exit Sub
+        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & GetClipGridCommandTarget(dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value))
 
         palyloopinsecondchannel()
         tmrduration.Enabled = True
@@ -1854,21 +1896,8 @@ Public Class ucPlaylist
     End Sub
     Sub cuefromclipgrid()
         On Error Resume Next
-        If dgvclips.CurrentRow.Cells("File_Name").Value = "" Then Exit Sub
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            If ServerVersion > 2.1 Then
-                SendString(NetStream, "load " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & deinterlaced & vbCrLf)
-
-            Else
-                SendString(NetStream, "load " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & deinterlaced & vbCrLf)
-
-            End If
-
-        Else
-            SendString(NetStream, "load " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced + vbCrLf)
-
-        End If
+        If dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value = "" Then Exit Sub
+        SendClipGridTransport("load", GetClipGridCueTarget(dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value))
         palyloopinsecondchannel()
         lastclickedbutton(cmdcueforclipgrid)
     End Sub

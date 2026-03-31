@@ -33,6 +33,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucTemplate` | `CasparMediaPlayback/ucTemplate.vb` | Done | Template data building, CG command assembly, rundown file I/O, preview updates, and default loader-row setup consolidated. |
 | `ucHtmlTemplate` | `CasparMediaPlayback/ucHtmlTemplate.vb` | Done | HTML play/call/stop helpers, rundown file I/O, update-row packing, and repeated mixer/layer command building consolidated. |
 | `ucClipGrid` | `CasparMediaPlayback/ucClipGrid.vb` | Done | Clip-search table setup, result-row creation, progress updates, search matching, and slow-motion load routing consolidated. |
+| `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Done | Playlist clip-tree building, clip-search table setup, search-result row creation, progress updates, and clip-grid play/cue command building consolidated. |
 
 ## Repository Cleanup
 
@@ -47,7 +48,6 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
-| `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Pending | Good candidate for shared helper extraction and cleanup. |
 | `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Likely another data-driven graphics module with repeated list/template handling. |
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
 
