@@ -23,3 +23,6 @@ CasparMediaPlayback/bin/x86/Release/
 *.vshost.exe.config
 *.vshost.exe.manifest
 *.vshost.application
+
+# Local credential / quickstart files
+CasparMediaPlayback/Quickstart-4d2796c29251.json
