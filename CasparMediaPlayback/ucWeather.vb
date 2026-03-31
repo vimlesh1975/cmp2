@@ -1,26 +1,46 @@
-﻿
 Public Class ucWeather
+    Private Sub AddWeatherIconData(index As Integer, movie As String, widthValue As Decimal, heightValue As Decimal, xValue As Decimal, yValue As Decimal, textValue As String)
+        CasparCGDataCollection.SetData("logofilename" & index, Replace(movie, "\", "/"))
+        CasparCGDataCollection.SetData("logowidth" & index, widthValue)
+        CasparCGDataCollection.SetData("logoheight" & index, heightValue)
+        CasparCGDataCollection.SetData("logox" & index, xValue)
+        CasparCGDataCollection.SetData("logoy" & index, yValue)
+        CasparCGDataCollection.SetData("f" & index, textValue)
+    End Sub
+
+    Private Sub LoadWeatherTemplateData()
+        CasparCGDataCollection.Clear()
+        AddWeatherIconData(1, weathericon1.Movie, nweathericon1width.Value, nweathericon1height.Value, nweathericon1x.Value, nweathericon1y.Value, txtweathericon1.Text)
+        AddWeatherIconData(2, weathericon2.Movie, nweathericon2width.Value, nweathericon2height.Value, nweathericon2x.Value, nweathericon2y.Value, txtweathericon2.Text)
+        AddWeatherIconData(3, weathericon3.Movie, nweathericon3width.Value, nweathericon3height.Value, nweathericon3x.Value, nweathericon3y.Value, txtweathericon3.Text)
+        AddWeatherIconData(4, weathericon4.Movie, nweathericon4width.Value, nweathericon4height.Value, nweathericon4x.Value, nweathericon4y.Value, txtweathericon4.Text)
+    End Sub
+
+    Private Sub ConfigureWeatherDialog(dialog As FileDialog)
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.InitialDirectory = "c:\casparcg\mydata\weather\weather list\"
+    End Sub
+
     Private Sub weathericon4_Enter(sender As Object, e As EventArgs) Handles weathericon4.Enter
-
     End Sub
+
     Private Sub weathericon3_Enter(sender As Object, e As EventArgs) Handles weathericon3.Enter
-
     End Sub
+
     Private Sub weathericon2_Enter(sender As Object, e As EventArgs) Handles weathericon2.Enter
-
     End Sub
-    Private Sub weathericon1_Enter(sender As Object, e As EventArgs) Handles weathericon1.Enter
 
+    Private Sub weathericon1_Enter(sender As Object, e As EventArgs) Handles weathericon1.Enter
     End Sub
 
     Private Sub cmdhideweather_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
+
     Private Sub ucWeather_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'for weather starts
         enumweathericons()
-        'fro weather ends
     End Sub
+
     Sub enumweathericons()
         On Error Resume Next
 
@@ -31,7 +51,7 @@ Public Class ucWeather
 
         For Each Filefound As String In IO.Directory.GetFiles("c:/casparcg/mydata/weather", "*.*")
             Dim stringtocut As Integer = 28
-            Dim filefound1 = Mid(Filefound, stringtocut) 'Split(Mid(Filefound, stringtocut), ".")
+            Dim filefound1 = Mid(Filefound, stringtocut)
             Me.cmbweathericon1.Items.Add(filefound1)
             Me.cmbweathericon2.Items.Add(filefound1)
             Me.cmbweathericon3.Items.Add(filefound1)
@@ -39,43 +59,12 @@ Public Class ucWeather
         Next
     End Sub
 
-    ' Weather code starts-------------------------------------------
     Sub playweather()
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-
-        CasparCGDataCollection.SetData("logofilename1", Replace(weathericon1.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth1", nweathericon1width.Value)
-        CasparCGDataCollection.SetData("logoheight1", nweathericon1height.Value)
-        CasparCGDataCollection.SetData("logox1", nweathericon1x.Value)
-        CasparCGDataCollection.SetData("logoy1", nweathericon1y.Value)
-        CasparCGDataCollection.SetData("f1", txtweathericon1.Text)
-
-        CasparCGDataCollection.SetData("logofilename2", Replace(weathericon2.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth2", nweathericon2width.Value)
-        CasparCGDataCollection.SetData("logoheight2", nweathericon2height.Value)
-        CasparCGDataCollection.SetData("logox2", nweathericon2x.Value)
-        CasparCGDataCollection.SetData("logoy2", nweathericon2y.Value)
-        CasparCGDataCollection.SetData("f2", txtweathericon2.Text)
-
-        CasparCGDataCollection.SetData("logofilename3", Replace(weathericon3.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth3", nweathericon3width.Value)
-        CasparCGDataCollection.SetData("logoheight3", nweathericon3height.Value)
-        CasparCGDataCollection.SetData("logox3", nweathericon3x.Value)
-        CasparCGDataCollection.SetData("logoy3", nweathericon3y.Value)
-        CasparCGDataCollection.SetData("f3", txtweathericon3.Text)
-
-        CasparCGDataCollection.SetData("logofilename4", Replace(weathericon4.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth4", nweathericon4width.Value)
-        CasparCGDataCollection.SetData("logoheight4", nweathericon4height.Value)
-        CasparCGDataCollection.SetData("logox4", nweathericon4x.Value)
-        CasparCGDataCollection.SetData("logoy4", nweathericon4y.Value)
-        CasparCGDataCollection.SetData("f4", txtweathericon4.Text)
-
+        LoadWeatherTemplateData()
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbweathericon1videolayer.Text), Int(cmbweathericon1videolayer.Text), txtWeatherTemplate.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
-
-
     End Sub
+
     Private Sub cmdweathericon1play_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdweathericon1play.Click
         On Error Resume Next
         playweather()
@@ -87,63 +76,27 @@ Public Class ucWeather
         nweathericon3x.ValueChanged, nweathericon3y.ValueChanged, nweathericon3width.ValueChanged, nweathericon3height.ValueChanged,
         nweathericon4x.ValueChanged, nweathericon4y.ValueChanged, nweathericon4width.ValueChanged, nweathericon4height.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-
-        CasparCGDataCollection.SetData("logofilename1", Replace(weathericon1.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth1", nweathericon1width.Value)
-        CasparCGDataCollection.SetData("logoheight1", nweathericon1height.Value)
-        CasparCGDataCollection.SetData("logox1", nweathericon1x.Value)
-        CasparCGDataCollection.SetData("logoy1", nweathericon1y.Value)
-        CasparCGDataCollection.SetData("f1", txtweathericon1.Text)
-
-        CasparCGDataCollection.SetData("logofilename2", Replace(weathericon2.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth2", nweathericon2width.Value)
-        CasparCGDataCollection.SetData("logoheight2", nweathericon2height.Value)
-        CasparCGDataCollection.SetData("logox2", nweathericon2x.Value)
-        CasparCGDataCollection.SetData("logoy2", nweathericon2y.Value)
-        CasparCGDataCollection.SetData("f2", txtweathericon2.Text)
-
-        CasparCGDataCollection.SetData("logofilename3", Replace(weathericon3.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth3", nweathericon3width.Value)
-        CasparCGDataCollection.SetData("logoheight3", nweathericon3height.Value)
-        CasparCGDataCollection.SetData("logox3", nweathericon3x.Value)
-        CasparCGDataCollection.SetData("logoy3", nweathericon3y.Value)
-        CasparCGDataCollection.SetData("f3", txtweathericon3.Text)
-
-        CasparCGDataCollection.SetData("logofilename4", Replace(weathericon4.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth4", nweathericon4width.Value)
-        CasparCGDataCollection.SetData("logoheight4", nweathericon4height.Value)
-        CasparCGDataCollection.SetData("logox4", nweathericon4x.Value)
-        CasparCGDataCollection.SetData("logoy4", nweathericon4y.Value)
-        CasparCGDataCollection.SetData("f4", txtweathericon4.Text)
-
+        LoadWeatherTemplateData()
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmbweathericon1videolayer.Text), Int(cmbweathericon1videolayer.Text), CasparCGDataCollection)
-
-
     End Sub
 
     Private Sub cmdweathericon1stop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdweathericon1stop.Click
         On Error Resume Next
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbweathericon1videolayer.Text), Int(cmbweathericon1videolayer.Text))
-
     End Sub
 
     Private Sub cmbweathericonchange(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbweathericon1.SelectedIndexChanged, cmbweathericon2.SelectedIndexChanged, cmbweathericon3.SelectedIndexChanged, cmbweathericon4.SelectedIndexChanged
-
         On Error Resume Next
         weathericon1.Movie = "file:///c:/casparcg/mydata/weather/" & cmbweathericon1.Text
         weathericon2.Movie = "file:///c:/casparcg/mydata/weather/" & cmbweathericon2.Text
         weathericon3.Movie = "file:///c:/casparcg/mydata/weather/" & cmbweathericon3.Text
         weathericon4.Movie = "file:///c:/casparcg/mydata/weather/" & cmbweathericon4.Text
-
     End Sub
 
     Private Sub savetsweather_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
 
     Private Sub opentsweather_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
 
     Sub readfileforweather(ByVal str As String)
@@ -167,8 +120,7 @@ Public Class ucWeather
 
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         On Error Resume Next
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\weather\weather list\"
+        ConfigureWeatherDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             readfileforweather(ofd2.FileName)
             lblweatherfilename.Text = ofd2.FileName
@@ -177,8 +129,7 @@ Public Class ucWeather
 
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         On Error Resume Next
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.InitialDirectory = "c:\casparcg\mydata\weather\weather list\"
+        ConfigureWeatherDialog(osd2)
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Dim i As Integer

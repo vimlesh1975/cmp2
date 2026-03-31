@@ -2,6 +2,21 @@
 Public Class ucVS
     Dim ivs As Integer = 0
     Dim iPauseResumeV As Integer = 0
+    Private Function GetVsLayerNumber() As Integer
+        Return Int(cmblayervs.Text)
+    End Function
+
+    Private Sub UpdateVsData(keyName As String, value As String)
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData(keyName, value)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(GetVsLayerNumber(), GetVsLayerNumber(), CasparCGDataCollection)
+    End Sub
+
+    Private Sub ConfigureVsFileDialog(dialog As FileDialog, Optional fileName As String = "")
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.InitialDirectory = "c:\casparcg\mydata\Verticalscroll\"
+        dialog.FileName = fileName
+    End Sub
 
     Private Sub cmdcolorV_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcolorV.Click
         On Error Resume Next
@@ -15,9 +30,7 @@ Public Class ucVS
             Dim b As String = Hex(cd1.Color.B)
             If b.Substring(1) = "" Then b = "0" & b
             lblcolorV.Text = "0x" & r & g & b
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("color", lblcolorV.Text)
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
+            UpdateVsData("color", lblcolorV.Text)
         End If
     End Sub
     Private Sub cmbalign_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbalign.SelectedIndexChanged
@@ -25,9 +38,7 @@ Public Class ucVS
         If Me.cmbalign.Text = "center" Then Me.txtcrawlv.TextAlign = HorizontalAlignment.Center
         If Me.cmbalign.Text = "left" Then Me.txtcrawlv.TextAlign = HorizontalAlignment.Left
         If Me.cmbalign.Text = "right" Then Me.txtcrawlv.TextAlign = HorizontalAlignment.Right
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("align", cmbalign.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
+        UpdateVsData("align", cmbalign.Text)
 
     End Sub
     Private Sub cmdpausev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpausev.Click
@@ -37,21 +48,18 @@ Public Class ucVS
 
     Sub PauseResumeV()
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
         If iPauseResumeV = 1 Then
-            CasparCGDataCollection.SetData("speed", "0")
+            UpdateVsData("speed", "0")
         Else
-            CasparCGDataCollection.SetData("speed", nspeedV.Value)
+            UpdateVsData("speed", nspeedV.Value)
         End If
         iPauseResumeV = iPauseResumeV + 1
         If iPauseResumeV > 1 Then iPauseResumeV = 0
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
 
     End Sub
     Private Sub cmdfileV_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdfileV.Click
         On Error Resume Next
-        ofd1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd1.InitialDirectory = "c:\casparcg\mydata\Verticalscroll\"
+        ConfigureVsFileDialog(ofd1)
         If (ofd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             If (ofd1.FileName <> "") Then
                 Dim objFileInfo As FileInfo
@@ -178,7 +186,7 @@ Public Class ucVS
         CasparCGDataCollection.SetData("color", lblcolorV.Text)
 
         CasparCGDataCollection.SetData("align", cmbalign.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayervs.Text), Int(cmblayervs.Text), txtvs1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetVsLayerNumber(), GetVsLayerNumber(), txtvs1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
     Private Sub cmdshowcrawlV_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdshowcrawlV.Click
@@ -213,7 +221,7 @@ Public Class ucVS
         CasparCGDataCollection.SetData("align", cmbalign.Text)
 
         CasparCGDataCollection.SetData("bordercolor", lblcolorborderV.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayervs.Text), Int(cmblayervs.Text), txtvs1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetVsLayerNumber(), GetVsLayerNumber(), txtvs1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
         If nspeedV.Value <> 0 Then iPauseResumeV = 1
     End Sub
 
@@ -221,21 +229,17 @@ Public Class ucVS
 
     Private Sub cmdstopcrawlV_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopcrawlV.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayervs.Text), Int(cmblayervs.Text))
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetVsLayerNumber(), GetVsLayerNumber())
     End Sub
 
     Private Sub nsizeV_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nsizeV.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("size", nsizeV.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
+        UpdateVsData("size", nsizeV.Value)
     End Sub
 
     Private Sub nspeedV_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nspeedV.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("speed", nspeedV.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
+        UpdateVsData("speed", nspeedV.Value)
 
         If nspeedV.Value <> 0 Then iPauseResumeV = 1
     End Sub
@@ -243,9 +247,7 @@ Public Class ucVS
     Private Sub cmdfileSaveV_Click(sender As Object, e As EventArgs) Handles cmdfileSaveV.Click
         On Error Resume Next
 
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.InitialDirectory = "c:\casparcg\mydata\VerticalScroll\"
-        osd2.FileName = ""
+        ConfigureVsFileDialog(osd2, "")
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sw As StreamWriter = New StreamWriter(osd2.FileName)
                 sw.WriteLine(txtcrawlv.Text)
@@ -315,9 +317,7 @@ Public Class ucVS
             Dim b As String = Hex(cd1.Color.B)
             If b.Substring(1) = "" Then b = "0" & b
             lblcolorborderV.Text = "0x" & r & g & b
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("bordercolor", lblcolorborderV.Text)
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayervs.Text), Int(cmblayervs.Text), CasparCGDataCollection)
+            UpdateVsData("bordercolor", lblcolorborderV.Text)
         End If
     End Sub
 

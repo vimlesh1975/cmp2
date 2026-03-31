@@ -93,6 +93,18 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucStreamPlayer` | `CasparMediaPlayback/ucStreamPlayer.vb` | Done | External bin command launching and repeated NDI start/stop handling consolidated into shared helpers. |
 | `ucSwfPlayer` | `CasparMediaPlayback/ucSwfPlayer.vb` | Done | SWF layer addressing and selected movie path handling consolidated into shared helpers. |
 | `ucSystemAudio` | `CasparMediaPlayback/ucSystemAudio.vb` | Done | Per-channel add/remove audio toggles consolidated into a shared helper. |
+| `ucTab` | `CasparMediaPlayback/ucTab.vb` | Done | Small shell cleanup: hide action routed through a helper for consistency with other docked utility modules. |
+| `ucUdpChat` | `CasparMediaPlayback/ucUdpChat.vb` | Done | UDP send, receive-start, and receive-stop flows consolidated into shared helpers. |
+| `ucUtility` | `CasparMediaPlayback/ucUtility.vb` | Done | Utility grid row setup and repeated explorer/notepad launch paths consolidated into shared helpers. |
+| `ucTwitter` | `CasparMediaPlayback/ucTwitter.vb` | Done | Twitter HTML play flow and repeated grid reset logic consolidated into shared helpers. |
+| `ucVideoPlayer` | `CasparMediaPlayback/ucVideoPlayer.vb` | Done | Clip-grid load/play command assembly consolidated into shared transport helpers. |
+| `ucVlcStreamTester` | `CasparMediaPlayback/ucVlcStreamTester.vb` | Done | VLC preview stop/restart behavior consolidated into a shared helper. |
+| `ucVTRController` | `CasparMediaPlayback/ucVTRController.vb` | Done | Repeated serial write calls and cue-command building consolidated into shared helpers. |
+| `ucVS` | `CasparMediaPlayback/ucVS.vb` | Done | Vertical-scroll update and file-dialog setup consolidated into shared helpers. |
+| `ucVS2` | `CasparMediaPlayback/ucVS2.vb` | Done | VS2 layer addressing, speed updates, and HTML call routing consolidated into shared helpers. |
+| `ucWaterMarking` | `CasparMediaPlayback/ucWaterMarking.vb` | Done | Watermark mixer layer/value formatting consolidated into shared helpers. |
+| `ucWeather` | `CasparMediaPlayback/ucWeather.vb` | Done | Weather icon data packing and open/save dialog setup consolidated into shared helpers. |
+| `ucWebSocketServer` | `CasparMediaPlayback/ucWebSocketServer.vb` | Done | WebSocket status text, response payload building, and hidden-text updates consolidated into shared helpers. |
 
 ## Repository Cleanup
 

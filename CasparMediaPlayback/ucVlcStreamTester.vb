@@ -1,17 +1,24 @@
-﻿Public Class ucVlcStreamTester
+Public Class ucVlcStreamTester
     Dim isplaying As Boolean = False
+
+    Private Sub StopPreview()
+        vlcpreview.VlcMediaPlayer.Stop()
+        isplaying = False
+    End Sub
+
     Sub PreviewInVlc(aa As String)
         On Error Resume Next
-        If isplaying = True Then vlcpreview.VlcMediaPlayer.Stop()
+        If isplaying = True Then StopPreview()
         vlcpreview.VlcMediaPlayer.SetMedia(New Uri(aa))
         vlcpreview.VlcMediaPlayer.Play()
         isplaying = True
     End Sub
+
     Private Sub cmdremovepreview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremovepreview.Click
         On Error Resume Next
-        vlcpreview.VlcMediaPlayer.Stop()
-        isplaying = False
+        StopPreview()
     End Sub
+
     Private Sub cmdpreview_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpreview.Click
         PreviewInVlc(txtaddress1.Text)
     End Sub

@@ -391,6 +391,48 @@ Public Class ucVideoPlayer
 
     End Sub
 
+    Private Function BuildClipGridTransportCommand(commandName As String, Optional isLoop As Boolean = False, Optional includeLength As Boolean = True) As String
+        Dim selectedFileName = dgvclips.CurrentRow.Cells("File_Name").Value.ToString()
+        Dim commandText As String
+
+        If System.IO.Path.GetExtension(mediafullpath & selectedFileName) = ".txt" Then
+            readsubclip(mediafullpath & selectedFileName)
+            Dim seekValue = clipseek
+            Dim lengthValue = cliplength
+            If ServerVersion > 2.1 Then
+                seekValue = clipseek * 2
+                lengthValue = cliplength * 2
+            End If
+
+            commandText = commandName & " " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """"
+            If isLoop Then commandText &= " loop"
+            commandText &= " seek " & seekValue
+            If includeLength Then
+                commandText &= " length " & lengthValue
+            End If
+            commandText &= deinterlaced
+        Else
+            commandText = commandName & " " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(selectedFileName) & """"
+            If isLoop Then commandText &= " loop"
+            commandText &= deinterlaced
+        End If
+
+        Return commandText
+    End Function
+
+    Private Sub SendClipGridLoad(useNetStream As Boolean, Optional includeLength As Boolean = False)
+        Dim commandText = BuildClipGridTransportCommand("load", False, includeLength)
+        If useNetStream Then
+            SendString(NetStream, commandText & vbCrLf)
+        Else
+            CasparDevice.SendString(commandText)
+        End If
+    End Sub
+
+    Private Sub SendClipGridPlay(Optional isLoop As Boolean = False)
+        CasparDevice.SendString(BuildClipGridTransportCommand("play", isLoop))
+    End Sub
+
     Private Sub cmdcueforclipgrid_Click(sender As Object, e As EventArgs) Handles cmdcueforclipgrid.Click
         On Error Resume Next
         cuefromclipgrid()
@@ -398,21 +440,7 @@ Public Class ucVideoPlayer
     Sub cuefromclipgrid()
         On Error Resume Next
         If dgvclips.CurrentRow.Cells("File_Name").Value = "" Then Exit Sub
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            If ServerVersion > 2.1 Then
-                SendString(NetStream, "load " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & deinterlaced & vbCrLf)
-
-            Else
-                SendString(NetStream, "load " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & deinterlaced & vbCrLf)
-
-            End If
-
-        Else
-            SendString(NetStream, "load " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced + vbCrLf)
-
-        End If
-
+        SendClipGridLoad(True)
         lastclickedbutton(cmdcueforclipgrid)
     End Sub
     Sub lastclickedbutton(sender As Object)
@@ -459,17 +487,7 @@ Public Class ucVideoPlayer
         On Error Resume Next
 
         If dgvclips.CurrentRow.Cells("File_Name").Value = "" Then Exit Sub
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            If ServerVersion > 2.1 Then
-                CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek * 2 & " length " & cliplength * 2 & deinterlaced)
-            Else
-                CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-            End If
-        Else
-            CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
-
+        SendClipGridPlay()
         'tmrduration.Enabled = True
         lastclickedbutton(cmdplayforclipgrid)
     End Sub
@@ -503,12 +521,7 @@ Public Class ucVideoPlayer
             dgvclips.CurrentCell = dgvclips.Rows(i + 1).Cells("File_Name")
         End If
 
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            CasparDevice.SendString("load " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-        Else
-            CasparDevice.SendString("load " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
+        SendClipGridLoad(False, True)
         'tmrduration.Enabled = True
 
         lastclickedbutton(sender)
@@ -524,12 +537,7 @@ Public Class ucVideoPlayer
             dgvclips.CurrentCell = dgvclips.Rows(i + 1).Cells("File_Name")
         End If
 
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-        Else
-            CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
+        SendClipGridPlay()
         'tmrduration.Enabled = True
         'palyloopinsecondchannel()
         lastclickedbutton(sender)
@@ -578,17 +586,7 @@ Public Class ucVideoPlayer
         On Error Resume Next
 
         If dgvclips.CurrentRow.Cells("File_Name").Value = "" Then Exit Sub
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            If ServerVersion > 2.1 Then
-                CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " loop seek " & clipseek * 2 & " length " & cliplength * 2 & deinterlaced)
-            Else
-                CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(masterfilename) & """" + " loop seek " & clipseek & " length " & cliplength & deinterlaced)
-            End If
-        Else
-            CasparDevice.SendString("play " & channelNumber & "-" & layerNumber & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & " loop " & deinterlaced)
-        End If
-
+        SendClipGridPlay(True)
         'tmrduration.Enabled = True
         lastclickedbutton(cmdLoopPlay)
     End Sub

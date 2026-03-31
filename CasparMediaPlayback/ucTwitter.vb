@@ -4,6 +4,22 @@ Imports LinqToTwitter
 Imports TweetSharp
 
 Public Class ucTwitter
+    Private Function GetTwitterLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & cmblayertwitter.Text
+    End Function
+
+    Private Sub PlayTwitterTemplate(templatePath As String)
+        CasparDevice.SendString("play " & GetTwitterLayerAddress() & " [HTML] " & templatePath)
+        CasparDevice.SendString("call " & GetTwitterLayerAddress() & " updatestring('" & replacestring1("ccgf0") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(1).Value) & "')")
+        CasparDevice.SendString("call " & GetTwitterLayerAddress() & " updatestring('" & replacestring1("ccgf1") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(2).Value) & "')")
+        CasparDevice.SendString("call " & GetTwitterLayerAddress() & " updateimage('" & replacestring1("ccgimage1") & "','" & replacestring1(Replace(dgvtwitter.CurrentRow.Cells(3).Value, "_normal", "")) & "')")
+    End Sub
+
+    Private Sub ResetTwitterGrid()
+        dgvtwitter.Rows.Clear()
+        dgvtwitter.RowTemplate.Height = 75
+    End Sub
+
     Private Sub cmdhidetwitter_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
@@ -14,12 +30,7 @@ Public Class ucTwitter
     End Sub
     Private Sub cmdplaytwitter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplaytwitter.Click
         On Error Resume Next
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " [HTML] c:/casparcg/CMP/twitter/twitter1/twitter1.html")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updatestring('" & replacestring1("ccgf0") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(1).Value) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updatestring('" & replacestring1("ccgf1") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(2).Value) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updateimage('" & replacestring1("ccgimage1") & "','" & replacestring1(Replace(dgvtwitter.CurrentRow.Cells(3).Value, "_normal", "")) & "')")
+        PlayTwitterTemplate("c:/casparcg/CMP/twitter/twitter1/twitter1.html")
     End Sub
 
     Private Sub cmdnextsteptwitter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdnextsteptwitter.Click
@@ -33,8 +44,7 @@ Public Class ucTwitter
     End Sub
     Private Sub bwtwitterscreenname_DoWork(sender As Object, e As DoWorkEventArgs) Handles bwtwitterscreenname.DoWork
         ' Try
-        dgvtwitter.Rows.Clear()
-        dgvtwitter.RowTemplate.Height = 75
+        ResetTwitterGrid()
 
         Dim oCredential As New InMemoryCredentials
         oCredential.ConsumerKey = txtConsumerkey.Text
@@ -123,8 +133,7 @@ Public Class ucTwitter
         dgvtwitter.ScrollBars = ScrollBars.Both
     End Sub
     Private Sub cmdtxtsearchbywordtwitter_Click(sender As Object, e As EventArgs) Handles cmdtxtsearchbywordtwitter.Click
-        dgvtwitter.Rows.Clear()
-        dgvtwitter.RowTemplate.Height = 75
+        ResetTwitterGrid()
 
         Dim oCredential As New InMemoryCredentials
         oCredential.ConsumerKey = txtConsumerkey.Text
@@ -232,12 +241,7 @@ Public Class ucTwitter
 
     Private Sub cmdHtmlplay_Click(sender As Object, e As EventArgs) Handles cmdHtmlplay.Click
         On Error Resume Next
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " [HTML] c:/casparcg/CMP/twitter/twitter1fullpage/twitter1.html")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updatestring('" & replacestring1("ccgf0") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(1).Value) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updatestring('" & replacestring1("ccgf1") & "','" & replacestring1(dgvtwitter.CurrentRow.Cells(2).Value) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertwitter.Text & " updateimage('" & replacestring1("ccgimage1") & "','" & replacestring1(Replace(dgvtwitter.CurrentRow.Cells(3).Value, "_normal", "")) & "')")
+        PlayTwitterTemplate("c:/casparcg/CMP/twitter/twitter1fullpage/twitter1.html")
 
     End Sub
 End Class

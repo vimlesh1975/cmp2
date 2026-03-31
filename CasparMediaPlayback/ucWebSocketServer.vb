@@ -5,6 +5,19 @@ Imports System.Net.WebSockets
 Imports System.Text
 Imports System.Threading
 Public Class ucWebSocketServer
+    Private Sub UpdateWebSocketStatus(statusText As String)
+        Label1.Text = statusText
+    End Sub
+    Private Function BuildWebSocketStatusPayload() As Byte()
+        Return System.Text.Encoding.Unicode.GetBytes("file Playing: " & frmmediaplayer.ucCasparcgWindow1.lblplaying.Text & " Time Remaining: " & frmmediaplayer.lblremainintime.Text & " Frames Played: " & ucOSC.dgvosc.Rows(6).Cells(1).Value)
+    End Function
+    Private Sub UpdateHiddenText(receiveBuffer As Byte())
+        Dim aa1 = Split(Encoding.UTF8.GetString(receiveBuffer), vbLf)
+        hiddenText.Text = ""
+        For i = 0 To aa1.Count - 1
+            hiddenText.Text = hiddenText.Text & aa1(i) & vbNewLine
+        Next
+    End Sub
     Private Sub ucWebSocketServer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
     End Sub
@@ -16,7 +29,7 @@ Public Class ucWebSocketServer
         Dim httpListener As HttpListener = New HttpListener()
         httpListener.Prefixes.Add(httpListenerPrefix)
         httpListener.Start()
-        Label1.Text = "listening"
+        UpdateWebSocketStatus("listening")
         While True
             Dim httpListenerContext As HttpListenerContext = Await httpListener.GetContextAsync()
             If httpListenerContext.Request.IsWebSocketRequest Then
@@ -33,29 +46,25 @@ Public Class ucWebSocketServer
         Try
             webSocketContext = Await httpListenerContext.AcceptWebSocketAsync(subProtocol:=Nothing)
             Dim ipAddress As String = httpListenerContext.Request.RemoteEndPoint.Address.ToString()
-            Label1.Text = "Connected to " & ipAddress
+            UpdateWebSocketStatus("Connected to " & ipAddress)
         Catch e As Exception
             httpListenerContext.Response.StatusCode = 500
             httpListenerContext.Response.Close()
-            Label1.Text = e.ToString
+            UpdateWebSocketStatus(e.ToString)
             Return
         End Try
         Dim webSocket As WebSocket = webSocketContext.WebSocket
         Try
             While webSocket.State = WebSocketState.Open
                 Dim receiveBuffer As Byte() = New Byte(10023) {}
-                Dim sendBuffer As Byte() = System.Text.Encoding.Unicode.GetBytes("file Playing: " & frmmediaplayer.ucCasparcgWindow1.lblplaying.Text & " Time Remaining: " & frmmediaplayer.lblremainintime.Text & " Frames Played: " & ucOSC.dgvosc.Rows(6).Cells(1).Value)
+                Dim sendBuffer As Byte() = BuildWebSocketStatusPayload()
                 Dim receiveResult As WebSocketReceiveResult = Await webSocket.ReceiveAsync(New ArraySegment(Of Byte)(receiveBuffer), CancellationToken.None)
 
                 If receiveResult.MessageType = WebSocketMessageType.Close Then
                     Await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None)
                 Else
                     Await webSocket.SendAsync(New ArraySegment(Of Byte)(sendBuffer, 0, sendBuffer.Count), WebSocketMessageType.Text, True, CancellationToken.None)
-                    Dim aa1 = Split(Encoding.UTF8.GetString(receiveBuffer), vbLf)
-                    hiddenText.Text = ""
-                    For i = 0 To aa1.Count - 1
-                        hiddenText.Text = hiddenText.Text & aa1(i) & vbNewLine
-                    Next
+                    UpdateHiddenText(receiveBuffer)
                     If chkSendtoCasparCG.Checked And hiddenText.Text <> "" Then
                         CasparDevice.SendString(hiddenText.Text)
                     End If

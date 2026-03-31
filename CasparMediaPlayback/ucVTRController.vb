@@ -5,6 +5,16 @@ Public Class ucVTRController
     Dim filename As String
     Dim irecorder As Integer = 0
     Dim startingtimeofrecording As DateTime
+    Private Sub SendVtrCommand(commandText As String)
+        sp.WriteLine(commandText)
+    End Sub
+
+    Private Function BuildCueCommand(timecodeText As String) As String
+        Dim aa As Array = Split(timecodeText, ":")
+        Return Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) &
+            Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
+    End Function
+
     Private Sub cmdopenportsvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdopenportsvtr.Click
         On Error Resume Next
         openport()
@@ -20,64 +30,61 @@ Public Class ucVTRController
     End Sub
     Private Sub cmdplayvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplayvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(CInt("&H20")) & Chr(1) & Chr(33))
+        SendVtrCommand(Chr(CInt("&H20")) & Chr(1) & Chr(33))
     End Sub
 
     Private Sub cmdstopvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(0) & Chr(32))
+        SendVtrCommand(Chr(32) & Chr(0) & Chr(32))
     End Sub
 
     Private Sub cmdrewindvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrewindvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(32) & Chr(64))
+        SendVtrCommand(Chr(32) & Chr(32) & Chr(64))
     End Sub
     Private Sub cmdffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(16) & Chr(48))
+        SendVtrCommand(Chr(32) & Chr(16) & Chr(48))
     End Sub
 
     Private Sub cmdinpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(16) & Chr(80))
+        SendVtrCommand(Chr(64) & Chr(16) & Chr(80))
 
         txtinpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdoutpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdoutpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(17) & Chr(81))
+        SendVtrCommand(Chr(64) & Chr(17) & Chr(81))
 
         txtoutpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdPreRollvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdPreRollvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(48) & Chr(80))
+        SendVtrCommand(Chr(32) & Chr(48) & Chr(80))
     End Sub
 
     Private Sub cmdejectvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdejectvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(15) & Chr(47))
+        SendVtrCommand(Chr(32) & Chr(15) & Chr(47))
     End Sub
 
     Private Sub cmdstandbyonvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyonvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(5) & Chr(37))
+        SendVtrCommand(Chr(32) & Chr(5) & Chr(37))
     End Sub
 
     Private Sub cmdstandbyoffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyoffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(4) & Chr(36))
+        SendVtrCommand(Chr(32) & Chr(4) & Chr(36))
     End Sub
 
     Private Sub cmdcuevtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcuevtr.Click
         On Error Resume Next
 
-        Dim aa As Array = Split(dgvcuepointsvtr.CurrentRow.Cells(0).Value, ":")
-        Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) & _
-         Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVtrCommand(BuildCueCommand(dgvcuepointsvtr.CurrentRow.Cells(0).Value))
     End Sub
 
     Private Sub cmdmarkvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdmarkvtr.Click
@@ -126,22 +133,22 @@ Public Class ucVTRController
 
     Private Sub cmdrecordvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrecordvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(2) & Chr(32 + 2))
+        SendVtrCommand(Chr(32) & Chr(2) & Chr(32 + 2))
     End Sub
 
     Private Sub cmdautoeditvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdautoeditvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(66) & Chr(32 + 66))
+        SendVtrCommand(Chr(32) & Chr(66) & Chr(32 + 66))
     End Sub
 
     Private Sub cmdpreviewvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpreviewvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(64) & Chr(32 + 64))
+        SendVtrCommand(Chr(32) & Chr(64) & Chr(32 + 64))
     End Sub
 
     Private Sub cmdReviewvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdReviewvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(65) & Chr(32 + 65))
+        SendVtrCommand(Chr(32) & Chr(65) & Chr(32 + 65))
     End Sub
 
     Private Sub cmdplusoneframevtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplusoneframevtr.Click
@@ -244,19 +251,13 @@ Public Class ucVTRController
     Private Sub cmdCuetoINPoint_Click(sender As Object, e As EventArgs) Handles cmdCuetoINPoint.Click
         On Error Resume Next
 
-        Dim aa As Array = Split(txtinpointvtr.Text, ":")
-        Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) & _
-         Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVtrCommand(BuildCueCommand(txtinpointvtr.Text))
     End Sub
 
     Private Sub cmdCueToOutPoint_Click(sender As Object, e As EventArgs) Handles cmdCueToOutPoint.Click
         On Error Resume Next
 
-        Dim aa As Array = Split(txtoutpointvtr.Text, ":")
-        Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) & _
-         Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVtrCommand(BuildCueCommand(txtoutpointvtr.Text))
     End Sub
 
     Private Sub cmdmarkvtrout_Click(sender As Object, e As EventArgs) Handles cmdmarkvtrout.Click
@@ -269,10 +270,7 @@ Public Class ucVTRController
     Private Sub cmdcuevtrout_Click(sender As Object, e As EventArgs) Handles cmdcuevtrout.Click
         On Error Resume Next
 
-        Dim aa As Array = Split(dgvcuepointsvtr.CurrentRow.Cells(1).Value, ":")
-        Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) &
-         Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVtrCommand(BuildCueCommand(dgvcuepointsvtr.CurrentRow.Cells(1).Value))
     End Sub
 
     Private Sub cmdputinvtr_Click(sender As Object, e As EventArgs) Handles cmdputinvtr.Click
