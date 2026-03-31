@@ -1,40 +1,38 @@
-﻿Public Class ucElement
-    Dim border As String = "vf drawbox=x=y:w=h:color=white:t=20"
+Public Class ucElement
+    Private Const BorderFilter As String = "vf drawbox=x=y:w=h:color=white:t=20"
+    Private Const YoutubeHtmlPath As String = "file:///C:/casparcg/mydata/youtube/youtube.html"
+    Private Const CaptionHtmlPath As String = "c:/casparcg/CMP/Composition/SourceName/gwd_preview_SourceName/index.html"
+    Private Const DecklinkPreviewPath As String = "c:/casparcg/_media/decklink_card.jpg"
+    Private Const BluefishPreviewPath As String = "c:/casparcg/_media/bluefish_card.jpg"
+    Private Const HttpPreviewPath As String = "c:/casparcg/_media/http.png"
+    Private Const YoutubePreviewPath As String = "c:/casparcg/_media/youtube.png"
+    Private Const NdiPreviewPath As String = "c:/casparcg/_media/ndi.jpg"
 
     Private Sub UserControl1_DoubleClick(sender As Object, e As EventArgs) Handles Me.DoubleClick
         On Error Resume Next
-        Dim ss As New OpenFileDialog
-        If ss.ShowDialog = DialogResult.OK Then
 
-            Form1.ElementInfo1.Type1 = "file"
-            Form1.ElementInfo1.url1 = ss.FileName
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            VlcControl1.Play(New Uri(ss.FileName), params)
-            If ServerVersion > 2.1 And IsValidImage(ss.FileName) Then
-                CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [html] " & """" & Replace(ss.FileName, "\", "/") & """")
-            Else
-                CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & """" & Replace(Replace(Split(VlcControl1.VlcMediaPlayer.GetMedia.Mrl, "///")(1), ":/", "://"), "%20", " ") & """" & " loop")
-            End If
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Me.Label1.Text & " fill " & fillcommand(Me)(0))
+        Dim ss As New OpenFileDialog
+        If ss.ShowDialog() <> DialogResult.OK Then
+            Exit Sub
         End If
+
+        SetElementInfo("file", ss.FileName, "")
+        PlayFileSource(ss.FileName)
+        ApplyElementFill(Me)
     End Sub
+
     Private Sub event1(sender As Object, e As EventArgs) Handles Me.LocationChanged, Me.Resize
         On Error Resume Next
         elementmove = True
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Me.Label1.Text & " fill " & fillcommand(sender)(0))
+        ApplyElementFill(sender)
         VlcControl1.Size = New Size(Me.Width - 20, Me.Height - 30)
 
-        Form1.UcMixernew1.cmbvideolayerformixer.Text = Me.Label1.Text
+        Form1.UcMixernew1.cmbvideolayerformixer.Text = Label1.Text
 
-        'Form1.UcMixernew1.nfillx.Value = fillcommand(sender)(1)
-        'Form1.UcMixernew1.nfilly.Value = fillcommand(sender)(2)
-        'Form1.UcMixernew1.nfillwidth.Value = fillcommand(sender)(3)
-        'Form1.UcMixernew1.nfillheight.Value = fillcommand(sender)(4)
         For Each control1 As Control In Me.Controls
             If control1.Name.Contains("media") Then
-                Dim gg = CType(control1, UcCaption)
-                gg.event1(gg, e)
+                Dim captionControl = CType(control1, UcCaption)
+                captionControl.event1(captionControl, e)
             End If
         Next
     End Sub
@@ -42,127 +40,113 @@
     Private Sub UserControl1_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
         On Error Resume Next
 
-        Form1.ElementInfo1.Type1 = "file"
-        Form1.ElementInfo1.url1 = e.Data.GetData(DataFormats.FileDrop)(0)
-        Form1.ElementInfo1.url2 = ""
-        Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-
-        VlcControl1.Play(New Uri(e.Data.GetData(DataFormats.FileDrop)(0)), params)
-        'cd.SendString("play 1-" & Me.Label1.Text)
-        If ServerVersion > 2.1 And IsValidImage(e.Data.GetData(DataFormats.FileDrop)(0)) Then
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [html] " & """" & Replace(e.Data.GetData(DataFormats.FileDrop)(0), "\", "/") & """")
-        Else
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & """" & Replace(Replace(Split(VlcControl1.VlcMediaPlayer.GetMedia.Mrl, "///")(1), ":/", "://"), "%20", " ") & """" & " loop")
-        End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Me.Label1.Text & " fill " & fillcommand(Me)(0))
+        Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+        SetElementInfo("file", droppedFile, "")
+        PlayFileSource(droppedFile)
+        ApplyElementFill(Me)
     End Sub
+
     Private Sub UserControl1_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
         On Error Resume Next
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
         End If
     End Sub
+
     Private Sub Element_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     End Sub
+
     Private Sub cmdClose_Click(sender As Object, e As EventArgs) Handles cmdClose.Click
         On Error Resume Next
-        CasparDevice.SendString("clear " & g_int_ChannelNumber & "-" & Me.Label1.Text)
+        CasparDevice.SendString("clear " & GetLayerAddress())
         Me.Dispose()
     End Sub
 
     Private Sub UriToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UriToolStripMenuItem.Click
         On Error Resume Next
+
         Dim ff As String = InputBox("Change MRL", "", VlcControl1.VlcMediaPlayer.GetMedia.Mrl)
-        If ff <> "" Then
-            Form1.ElementInfo1.Type1 = "file"
-            Form1.ElementInfo1.url1 = ff
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            VlcControl1.Play(New Uri(ff), params)
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & """" & Replace(Replace(Split(VlcControl1.VlcMediaPlayer.GetMedia.Mrl, "///")(1), ":/", "://"), "%20", " ") & """" & " loop")
+        If ff = "" Then
+            Exit Sub
         End If
+
+        SetElementInfo("file", ff, "")
+        VlcControl1.Play(New Uri(ff), params)
+        PlayMediaCommand(GetQuotedMrlPath(), True)
     End Sub
 
     Private Async Sub ghfgh(sender As Object, e As EventArgs) Handles Me.MouseHover
-        'On Error Resume Next
-        'Form1.UcMixernew1.cmbvideolayerformixer.Text = Me.Label1.Text
-        'Form1.UcMixernew1.getstausofmixer()
     End Sub
 
     Private Sub Decklink2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles Decklink2ToolStripMenuItem.Click
         On Error Resume Next
+
         Dim ff = InputBox("decklink card", "", "Decklink 2")
-        If ff <> "" Then
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & ff)
-            Form1.ElementInfo1.Type1 = "decklink"
-            Form1.ElementInfo1.url1 = ff
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            Me.VlcControl1.Play(New Uri("c:/casparcg/_media/decklink_card.jpg"))
+        If ff = "" Then
+            Exit Sub
         End If
+
+        SetElementInfo("decklink", ff, "")
+        CasparDevice.SendString("play " & GetLayerAddress() & " " & ff)
+        PlayPreviewImage(DecklinkPreviewPath)
     End Sub
 
     Private Sub BluefishToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BluefishToolStripMenuItem.Click
         On Error Resume Next
+
         Dim ff = InputBox("bluefish card", "", "Bluefish 2")
-        If ff <> "" Then
-            Form1.ElementInfo1.Type1 = "bluefish"
-            Form1.ElementInfo1.url1 = ff
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & ff)
-            Me.VlcControl1.Play(New Uri("c:/casparcg/_media/bluefish_card.jpg"))
+        If ff = "" Then
+            Exit Sub
         End If
+
+        SetElementInfo("bluefish", ff, "")
+        CasparDevice.SendString("play " & GetLayerAddress() & " " & ff)
+        PlayPreviewImage(BluefishPreviewPath)
     End Sub
 
     Private Sub StreamToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StreamToolStripMenuItem.Click
         On Error Resume Next
+
         Dim ff As String = InputBox("Put Stream Address", "", "udp://@224.0.0.1:5004")
-        If ff <> "" Then
-            Form1.ElementInfo1.Type1 = "stream"
-            Form1.ElementInfo1.url1 = ff
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            VlcControl1.Play(New Uri(ff), params)
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & ff)
+        If ff = "" Then
+            Exit Sub
         End If
+
+        SetElementInfo("stream", ff, "")
+        VlcControl1.Play(New Uri(ff), params)
+        CasparDevice.SendString("play " & GetLayerAddress() & " " & ff)
     End Sub
 
     Private Sub HtmlToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HtmlToolStripMenuItem.Click
         On Error Resume Next
+
         Dim ff As String = InputBox("Put web Address", "", "http://casparcgforum.com")
-        If ff <> "" Then
-            Form1.ElementInfo1.Type1 = "html"
-            Form1.ElementInfo1.url1 = ff
-            Form1.ElementInfo1.url2 = ""
-            Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-            VlcControl1.Play(New Uri("c:/casparcg/_media/http.png"), params)
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [html] " & ff)
+        If ff = "" Then
+            Exit Sub
         End If
+
+        SetElementInfo("html", ff, "")
+        PlayPreviewImage(HttpPreviewPath)
+        CasparDevice.SendString("play " & GetLayerAddress() & " [html] " & ff)
     End Sub
 
     Private Sub YoutubeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles YoutubeToolStripMenuItem.Click
         On Error Resume Next
-        Dim ff, ff1 As String
-        ff = InputBox("Put youtube Video ID", "", "plxV00PcX28")
-        If ff <> "" Then
-            ff1 = InputBox("Put Size of Channel", "", "1024x576")
-            If ff1 <> "" Then
-                Form1.ElementInfo1.Type1 = "youtube"
-                Form1.ElementInfo1.url1 = ff
-                Form1.ElementInfo1.url2 = ff1
-                Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-                VlcControl1.Play(New Uri("c:/casparcg/_media/youtube.png"), params)
-                VlcControl1.Tag = ff
-                CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Label1.Text & " [HTML]  file:///C:/casparcg/mydata/youtube/youtube.html")
-                CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Label1.Text & " opacity 0")
-                Threading.Thread.Sleep(1000)
-                CasparDevice.SendString("Call " & g_int_ChannelNumber & "-" & Label1.Text & " player.loadVideoById('" & ff & "')")
-                CasparDevice.SendString("Call " & g_int_ChannelNumber & "-" & Label1.Text & " player.setSize('" & Split(ff1, "x")(0) & "','" & Split(ff1, "x")(1) & "')")
-                Threading.Thread.Sleep(1000)
-                CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Label1.Text & " opacity 1")
-            End If
+
+        Dim ff As String = InputBox("Put youtube Video ID", "", "plxV00PcX28")
+        If ff = "" Then
+            Exit Sub
         End If
+
+        Dim ff1 As String = InputBox("Put Size of Channel", "", "1024x576")
+        If ff1 = "" Then
+            Exit Sub
+        End If
+
+        SetElementInfo("youtube", ff, ff1)
+        PlayPreviewImage(YoutubePreviewPath)
+        VlcControl1.Tag = ff
+        PlayYoutubeSource(ff, ff1, "")
     End Sub
 
     Private Sub SendToBackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SendToBackToolStripMenuItem.Click
@@ -175,28 +159,29 @@
 
     Private Sub AddCaptionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddCaptionToolStripMenuItem.Click
         Dim ss As String = InputBox("Source name", "", "SOURCE 1")
-        If ss <> "" Then
-            intElements = intElements + 1
-            Dim Media As New UcCaption
-            Me.Controls.Add(Media) 'Form1.Panel1.Controls.Add(Media)
-            Media.Label1.Text = intElements
-            Media.Name = "media" & intElements
-            Form1.UcMixernew1.cmbvideolayerformixer.Text = Media.Label1.Text
-            Media.Location = New Point((Me.Width - Media.Width) / 2, (Me.Height - Media.Height))
-            Dim rs1 = New clsResizeableControlnew(Media)
-
-            Media.Label2.Text = ss
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Media.Label1.Text & " [html] " & """" & "c:/casparcg/CMP/Composition/SourceName/gwd_preview_SourceName/index.html" & """")
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Media.Label1.Text & " updatestring('" & replacestring1("ccgf0") & "','" & replacestring1(ss) & "')")
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Media.Label1.Text & " fill " & fillcommandCaption(Media)(0))
-            Media.BringToFront()
-
-            Form1.ElementInfo1.Type1 = "caption"
-            Form1.ElementInfo1.url1 = ss
-            Form1.ElementInfo1.url2 = Me.Name
-            Media.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
+        If ss = "" Then
+            Exit Sub
         End If
 
+        intElements += 1
+        Dim media As New UcCaption
+        Me.Controls.Add(media)
+        media.Label1.Text = intElements
+        media.Name = "media" & intElements
+        Form1.UcMixernew1.cmbvideolayerformixer.Text = media.Label1.Text
+        media.Location = New Point((Me.Width - media.Width) / 2, (Me.Height - media.Height))
+        Dim rs1 = New clsResizeableControlnew(media)
+
+        media.Label2.Text = ss
+        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & media.Label1.Text & " [html] " & """" & CaptionHtmlPath & """")
+        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & media.Label1.Text & " updatestring('" & replacestring1("ccgf0") & "','" & replacestring1(ss) & "')")
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & media.Label1.Text & " fill " & fillcommandCaption(media)(0))
+        media.BringToFront()
+
+        Form1.ElementInfo1.Type1 = "caption"
+        Form1.ElementInfo1.url1 = ss
+        Form1.ElementInfo1.url2 = Me.Name
+        media.Tag = BuildElementTag(Form1.ElementInfo1.Type1, Form1.ElementInfo1.url1, Form1.ElementInfo1.url2)
     End Sub
 
     Private Sub ucElement_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
@@ -205,48 +190,100 @@
 
     Private Sub NDIToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NDIToolStripMenuItem.Click
         On Error Resume Next
+
         Dim aa As New Form
         Dim bb As New ucNDISource
         aa.Controls.Add(bb)
         aa.ShowDialog()
-        'ndi1 = bb.cmbNDI.Text
-        Form1.ElementInfo1.Type1 = "ndi"
-        Form1.ElementInfo1.url1 = ndi1
-        Form1.ElementInfo1.url2 = ""
-        Me.Tag = Form1.ElementInfo1.Type1 & Chr(3) & Form1.ElementInfo1.url1 & Chr(3) & Form1.ElementInfo1.url2
-        VlcControl1.Play(New Uri("c:/casparcg/_media/ndi.jpg"), params)
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [ndi] " & ndi1)
-        'End If
 
+        SetElementInfo("ndi", ndi1, "")
+        PlayPreviewImage(NdiPreviewPath)
+        CasparDevice.SendString("play " & GetLayerAddress() & " [ndi] " & ndi1)
     End Sub
 
     Private Sub ucElement_Click(sender As Object, e As EventArgs) Handles Me.Click
-        Label2.Text = Me.Tag.split(Chr(3))(1)
+        Label2.Text = Me.Tag.Split(Chr(3))(1)
     End Sub
 
     Private Sub AddBorderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddBorderToolStripMenuItem.Click
-        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & Me.Label1.Text)
-        If Me.Tag.split(Chr(3))(0) = "file" Then
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & """" & Replace(Replace(Me.Tag.split(Chr(3))(1), "\", "/"), ":/", "://") & """" & " " & border)
+        CasparDevice.SendString("stop " & GetLayerAddress())
 
-        ElseIf Me.Tag.split(Chr(3))(0) = "ndi" Then
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [ndi] " & (Me.Tag.split(Chr(3))(1) & " " & border))
+        Select Case GetTagPart(0)
+            Case "file"
+                PlayMediaCommand("""" & Replace(Replace(GetTagPart(1), "\", "/"), ":/", "://") & """", False, BorderFilter)
+            Case "ndi"
+                CasparDevice.SendString("play " & GetLayerAddress() & " [ndi] " & GetTagPart(1) & " " & BorderFilter)
+            Case "html"
+                CasparDevice.SendString("play " & GetLayerAddress() & " [html] " & GetTagPart(1) & " " & BorderFilter)
+            Case "youtube"
+                PlayYoutubeSource(GetTagPart(1), GetTagPart(2), BorderFilter)
+            Case Else
+                CasparDevice.SendString("play " & GetLayerAddress() & " " & GetTagPart(1) & " " & BorderFilter)
+        End Select
+    End Sub
 
-        ElseIf Me.Tag.split(Chr(3))(0) = "html" Then
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " [html] " & (Me.Tag.split(Chr(3))(1) & " " & border))
+    Private Function GetLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & Me.Label1.Text
+    End Function
 
-        ElseIf Me.Tag.split(Chr(3))(0) = "youtube" Then
+    Private Sub SetElementInfo(typeName As String, url1 As String, url2 As String)
+        Form1.ElementInfo1.Type1 = typeName
+        Form1.ElementInfo1.url1 = url1
+        Form1.ElementInfo1.url2 = url2
+        Me.Tag = BuildElementTag(typeName, url1, url2)
+    End Sub
 
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Label1.Text & " [HTML]  file:///C:/casparcg/mydata/youtube/youtube.html" & " " & border)
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Label1.Text & " opacity 0")
-            Threading.Thread.Sleep(1000)
-            CasparDevice.SendString("Call " & g_int_ChannelNumber & "-" & Label1.Text & " player.loadVideoById('" & Me.Tag.split(Chr(3))(1) & "')")
-            CasparDevice.SendString("Call " & g_int_ChannelNumber & "-" & Label1.Text & " player.setSize('" & Split(Me.Tag.split(Chr(3))(2), "x")(0) & "','" & Split(Me.Tag.split(Chr(3))(2), "x")(1) & "')")
-            Threading.Thread.Sleep(1000)
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & Label1.Text & " opacity 1")
+    Private Function BuildElementTag(typeName As String, url1 As String, url2 As String) As String
+        Return typeName & Chr(3) & url1 & Chr(3) & url2
+    End Function
+
+    Private Function GetTagPart(index As Integer) As String
+        Return Me.Tag.Split(Chr(3))(index)
+    End Function
+
+    Private Sub ApplyElementFill(target As Object)
+        CasparDevice.SendString("mixer " & GetLayerAddress() & " fill " & fillcommand(target)(0))
+    End Sub
+
+    Private Sub PlayFileSource(filePath As String)
+        VlcControl1.Play(New Uri(filePath), params)
+
+        If ServerVersion > 2.1 AndAlso IsValidImage(filePath) Then
+            CasparDevice.SendString("play " & GetLayerAddress() & " [html] " & """" & Replace(filePath, "\", "/") & """")
         Else
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Me.Label1.Text & " " & (Me.Tag.split(Chr(3))(1) & " " & border))
+            PlayMediaCommand(GetQuotedMrlPath(), True)
+        End If
+    End Sub
+
+    Private Function GetQuotedMrlPath() As String
+        Return """" & Replace(Replace(Split(VlcControl1.VlcMediaPlayer.GetMedia.Mrl, "///")(1), ":/", "://"), "%20", " ") & """"
+    End Function
+
+    Private Sub PlayMediaCommand(source As String, includeLoop As Boolean, Optional extraArgs As String = "")
+        Dim command As String = "play " & GetLayerAddress() & " " & source
+
+        If includeLoop Then
+            command &= " loop"
         End If
 
+        If extraArgs <> "" Then
+            command &= " " & extraArgs
+        End If
+
+        CasparDevice.SendString(command)
+    End Sub
+
+    Private Sub PlayPreviewImage(previewPath As String)
+        VlcControl1.Play(New Uri(previewPath), params)
+    End Sub
+
+    Private Sub PlayYoutubeSource(videoId As String, sizeText As String, borderSuffix As String)
+        CasparDevice.SendString("play " & GetLayerAddress() & " [HTML]  " & YoutubeHtmlPath & If(borderSuffix <> "", " " & borderSuffix, ""))
+        CasparDevice.SendString("mixer " & GetLayerAddress() & " opacity 0")
+        Threading.Thread.Sleep(1000)
+        CasparDevice.SendString("Call " & GetLayerAddress() & " player.loadVideoById('" & videoId & "')")
+        CasparDevice.SendString("Call " & GetLayerAddress() & " player.setSize('" & Split(sizeText, "x")(0) & "','" & Split(sizeText, "x")(1) & "')")
+        Threading.Thread.Sleep(1000)
+        CasparDevice.SendString("mixer " & GetLayerAddress() & " opacity 1")
     End Sub
 End Class

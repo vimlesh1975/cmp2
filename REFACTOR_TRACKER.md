@@ -23,6 +23,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucTimers` | `CasparMediaPlayback/ucTimers.vb` | Done | Clock/timer template play, stop, clip-countdown update, and shared layer/template helpers consolidated. |
 | `ucLogo` | `CasparMediaPlayback/ucLogo.vb` | Done | Logo data collection, opacity updates, file open/save, and shared layer/template helpers consolidated. |
 | `UcCaption` | `CasparMediaPlayback/UcCaption.vb` | Done | Caption layer-address, fill updates, and resize synchronization centralized into small helpers. |
+| `ucElement` | `CasparMediaPlayback/ucElement.vb` | Done | Media-source setup, layer command building, preview playback, fill updates, and YouTube/file helpers consolidated. |
 
 ## Repository Cleanup
 
