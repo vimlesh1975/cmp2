@@ -1,20 +1,26 @@
-﻿Imports System.IO
+Imports System.IO
+
 Public Class ucHS
+    Private Const CrawlFlashLayer As Integer = 15
+    Private Const MiddleFlashLayer As Integer = 16
+    Private Const RightLogoFlashLayer As Integer = 17
+    Private Const LeftLogoFlashLayer As Integer = 18
+    Private Const LeftLogoTemplate As String = "CMP/left/left"
+    Private Const MiddleTemplate As String = "CMP/middle/middle"
+    Private Const RightLogoTemplate As String = "CMP/right/right"
+    Private Const HorizontalScrollDirectory As String = "c:\casparcg\mydata\HorizontalScroll1\"
+    Private Const FontsDirectory As String = "c:/casparcg/mydata/fonts"
+
     Private Sub cmdresume1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdresume1.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("speed", nspeed.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+        UpdateCrawlData("speed", nspeed.Value)
     End Sub
+
     Private Sub cmbfonths1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbfonths1.SelectedIndexChanged
         On Error Resume Next
-        Dim fontname As String = cmbfonths1.Text
-        Dim fontsize As Integer = frmmediaplayer.nfontsizeforall.Value
-        Dim fs As New Font(fontname, fontsize, FontStyle.Regular)
-        Me.txtcrawl.Font = fs
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("font", cmbfonths1.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+        Dim fs As New Font(cmbfonths1.Text, frmmediaplayer.nfontsizeforall.Value, FontStyle.Regular)
+        txtcrawl.Font = fs
+        UpdateCrawlData("font", cmbfonths1.Text)
     End Sub
 
     Private Sub cmdhidehs1_Click(sender As Object, e As EventArgs)
@@ -23,260 +29,241 @@ Public Class ucHS
 
     Private Sub cmdleftlogoopen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdleftlogoopen.Click
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picleftlogo.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtleftlogo.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picleftlogo, txtleftlogo)
     End Sub
 
     Private Sub cmdleftlogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdleftlogo.Click
         On Error Resume Next
-        leftlogo()
+        PlayLogoTemplate(LeftLogoTemplate, LeftLogoFlashLayer, txtleftlogo.Text)
     End Sub
-    Sub leftlogo()
-        On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("a", Replace(txtleftlogo.Text, "\", "/"))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerhs1.Text), 18, "CMP/left/left", True, CasparCGDataCollection.ToAMCPEscapedXml)
-    End Sub
+
     Private Sub cmdstopleft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopleft.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayerhs1.Text), 18)
+        StopTemplateLayer(LeftLogoFlashLayer)
     End Sub
+
     Private Sub cmdmiddle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdmiddle.Click
         On Error Resume Next
-        middle()
+        PlayLogoTemplate(MiddleTemplate, MiddleFlashLayer, txtmiddle.Text)
     End Sub
-    Sub middle()
-        On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("a", Replace(txtmiddle.Text, "\", "/"))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerhs1.Text), 16, "CMP/middle/middle", True, CasparCGDataCollection.ToAMCPEscapedXml)
 
-    End Sub
     Private Sub cmdstopmiddle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopmiddle.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayerhs1.Text), 16)
+        StopTemplateLayer(MiddleFlashLayer)
     End Sub
 
     Private Sub cmdrightlogoopen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrightlogoopen.Click
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picrightlogo.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtrightlogo.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picrightlogo, txtrightlogo)
     End Sub
 
     Private Sub cmdrightlogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrightlogo.Click
         On Error Resume Next
-        rightlogo()
-    End Sub
-    Sub rightlogo()
-        On Error Resume Next
-
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("a", Replace(txtrightlogo.Text, "\", "/"))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerhs1.Text), 17, "CMP/right/right", True, CasparCGDataCollection.ToAMCPEscapedXml)
-
+        PlayLogoTemplate(RightLogoTemplate, RightLogoFlashLayer, txtrightlogo.Text)
     End Sub
 
     Private Sub cmdstopright_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopright.Click
         On Error Resume Next
-
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayerhs1.Text), 17)
-
+        StopTemplateLayer(RightLogoFlashLayer)
     End Sub
 
     Private Sub cmdfile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdfile.Click
         On Error Resume Next
         ofd1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd1.InitialDirectory = "c:\casparcg\mydata\HorizontalScroll1\"
-        If (ofd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            If (ofd1.FileName <> "") Then
-                Dim objFileInfo As FileInfo
-                objFileInfo = New FileInfo(ofd1.FileName)
+        ofd1.InitialDirectory = HorizontalScrollDirectory
 
-                ReadTextFile(objFileInfo.FullName, txtcrawl)
-            End If
+        If ofd1.ShowDialog() = Windows.Forms.DialogResult.OK AndAlso ofd1.FileName <> "" Then
+            ReadTextFile(New FileInfo(ofd1.FileName).FullName, txtcrawl)
         End If
     End Sub
+
     Private Sub cmdshowcrawl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdshowcrawl.Click
         crawl()
     End Sub
 
     Sub crawl()
         On Error Resume Next
-        Dim a As Array
-        Dim str As String = ""
-        a = Split(txtcrawl.Text, vbCrLf)
-        For ii = LBound(a) To UBound(a)
-            str = str + " ** " + a(ii)
-        Next
-        CasparCGDataCollection.Clear() 'cgData.Clear(   )
-        If chkbas64hs1.Checked Then
-            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(str)
-            CasparCGDataCollection.SetData("base64", System.Convert.ToBase64String(array))
 
-        Else
-            CasparCGDataCollection.SetData("xf0", str)
-            CasparCGDataCollection.SetData("font", cmbfonths1.Text)
-        End If
-        CasparCGDataCollection.SetData("speed", Int(nspeed.Value))
+        SetCrawlMainData()
 
-        CasparCGDataCollection.SetData("size", nsize.Value)
-        CasparCGDataCollection.SetData("color", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-
-        'CasparCGDataCollection.SetData("font", cmbfonths1.Text)
-        CasparCGDataCollection.SetData("y", ny.Text)
-        CasparCGDataCollection.SetData("stripcolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.BackColor.R, cmdstripcolor.BackColor.G, cmdstripcolor.BackColor.B))
-
-
-        CasparCGDataCollection.SetData("opacity", nopacityhs1.Value)
-        If chkclock.Checked Then CasparCGDataCollection.SetData("alfa", 1) Else CasparCGDataCollection.SetData("alfa", 0)
         If chkltrhs1.Checked Then
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerhs1.Text), 15, txths1TemplateLtoR.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
+            AddTemplateLayer(txths1TemplateLtoR.Text, CrawlFlashLayer)
         Else
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerhs1.Text), 15, txths1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
+            AddTemplateLayer(txths1Template.Text, CrawlFlashLayer)
         End If
-
     End Sub
 
     Private Sub cmdpause_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpause.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("speed", "0")
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
-
+        UpdateCrawlData("speed", "0")
     End Sub
 
     Private Sub nopacityhs1_ValueChanged(sender As Object, e As EventArgs) Handles nopacityhs1.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("opacity", nopacityhs1.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
-
+        UpdateCrawlData("opacity", nopacityhs1.Value)
     End Sub
+
     Private Sub cmdstopcrawl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopcrawl.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayerhs1.Text), 15)
+        StopTemplateLayer(CrawlFlashLayer)
     End Sub
 
     Private Sub picleftlogo_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picleftlogo.Enter
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picleftlogo.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtleftlogo.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picleftlogo, txtleftlogo)
     End Sub
 
     Private Sub picmiddle_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picmiddle.Enter
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picmiddle.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtmiddle.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picmiddle, txtmiddle)
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picmiddle.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtmiddle.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picmiddle, txtmiddle)
     End Sub
-
 
     Private Sub picrightlogo_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picrightlogo.Enter
         On Error Resume Next
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            picrightlogo.Movie = "file:///" & Replace(picofd.FileName, "\", "/")
-            txtrightlogo.Text = "file:///" & Replace(picofd.FileName, "\", "/")
-        End If
+        OpenLogoIntoControl(picrightlogo, txtrightlogo)
     End Sub
 
     Private Sub nsize_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nsize.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("size", nsize.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
-
+        UpdateCrawlData("size", nsize.Value)
     End Sub
 
     Private Sub nspeed_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nspeed.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("speed", nspeed.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
-
+        UpdateCrawlData("speed", nspeed.Value)
     End Sub
 
     Private Sub ny_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ny.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("y", ny.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
-
+        UpdateCrawlData("y", ny.Value)
     End Sub
 
     Private Sub cmdcolor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcolor.Click
         On Error Resume Next
-        If (cd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If cd1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdcolor.ForeColor = cd1.Color
             cmdstripcolor.ForeColor = cd1.Color
-
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("color", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+            UpdateCrawlData("color", ColorToCasparHex(cmdstripcolor.ForeColor))
         End If
     End Sub
 
     Private Sub txtcrawl_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtcrawl.TextChanged
         On Error Resume Next
-        Dim a As Array
-        Dim str As String = ""
-        a = Split(txtcrawl.Text, vbCrLf)
-        For ii = LBound(a) To UBound(a)
-            str = str + " " + a(ii)
-        Next
-        CasparCGDataCollection.Clear()
-        If chkbas64hs1.Checked Then
-            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(str)
-            CasparCGDataCollection.SetData("base64", System.Convert.ToBase64String(array))
-
-        Else
-            CasparCGDataCollection.SetData("xf0", str)
-            CasparCGDataCollection.SetData("font", cmbfonths1.Text)
-        End If
-        'CasparCGDataCollection.SetData("xf0", str)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+        SetCrawlTextData(False)
+        UpdateTemplateLayer(CrawlFlashLayer)
     End Sub
 
     Private Sub cmdstripcolor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstripcolor.Click
         On Error Resume Next
-        If (cd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If cd1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdstripcolor.BackColor = cd1.Color
             cmdcolor.BackColor = cd1.Color
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("stripcolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.BackColor.R, cmdstripcolor.BackColor.G, cmdstripcolor.BackColor.B))
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+            UpdateCrawlData("stripcolor", ColorToCasparHex(cmdstripcolor.BackColor))
         End If
     End Sub
+
     Private Sub chkclock_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkclock.CheckedChanged
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        If chkclock.Checked Then CasparCGDataCollection.SetData("alfa", 1) Else CasparCGDataCollection.SetData("alfa", 0)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerhs1.Text), 15, CasparCGDataCollection)
+        UpdateCrawlData("alfa", If(chkclock.Checked, 1, 0))
     End Sub
 
     Sub enumfonts()
         On Error Resume Next
-        For Each Filefound As String In Directory.GetFiles("c:/casparcg/mydata/fonts", "*.swf")
-            Dim stringtocut As Integer = 26
-            Dim filefound1 = Split(Mid(Filefound, stringtocut), ".")
+        For Each fileFound As String In Directory.GetFiles(FontsDirectory, "*.swf")
+            Dim filefound1 = Split(Mid(fileFound, 26), ".")
             cmbfonths1.Items.Add(filefound1(0))
         Next
     End Sub
+
     Private Sub ucHS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         enumfonts()
     End Sub
+
+    Private Function GetChannelLayerNumber() As Integer
+        Return Int(cmblayerhs1.Text)
+    End Function
+
+    Private Sub ClearCrawlData()
+        CasparCGDataCollection.Clear()
+    End Sub
+
+    Private Sub AddTemplateLayer(templatePath As String, flashLayer As Integer)
+        Dim channelLayer As Integer = GetChannelLayerNumber()
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(channelLayer, flashLayer, templatePath, True, CasparCGDataCollection.ToAMCPEscapedXml)
+    End Sub
+
+    Private Sub UpdateTemplateLayer(flashLayer As Integer)
+        Dim channelLayer As Integer = GetChannelLayerNumber()
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(channelLayer, flashLayer, CasparCGDataCollection)
+    End Sub
+
+    Private Sub StopTemplateLayer(flashLayer As Integer)
+        Dim channelLayer As Integer = GetChannelLayerNumber()
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(channelLayer, flashLayer)
+    End Sub
+
+    Private Sub PlayLogoTemplate(templatePath As String, flashLayer As Integer, mediaPath As String)
+        ClearCrawlData()
+        CasparCGDataCollection.SetData("a", Replace(mediaPath, "\", "/"))
+        AddTemplateLayer(templatePath, flashLayer)
+    End Sub
+
+    Private Sub OpenLogoIntoControl(flashControl As AxShockwaveFlashObjects.AxShockwaveFlash, pathTextBox As TextBox)
+        If picofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            Dim moviePath As String = "file:///" & Replace(picofd.FileName, "\", "/")
+            flashControl.Movie = moviePath
+            pathTextBox.Text = moviePath
+        End If
+    End Sub
+
+    Private Sub UpdateCrawlData(key As String, value As Object)
+        ClearCrawlData()
+        CasparCGDataCollection.SetData(key, value)
+        UpdateTemplateLayer(CrawlFlashLayer)
+    End Sub
+
+    Private Sub SetCrawlMainData()
+        ClearCrawlData()
+        SetCrawlTextData(True)
+        CasparCGDataCollection.SetData("speed", Int(nspeed.Value))
+        CasparCGDataCollection.SetData("size", nsize.Value)
+        CasparCGDataCollection.SetData("color", ColorToCasparHex(cmdstripcolor.ForeColor))
+        CasparCGDataCollection.SetData("y", ny.Text)
+        CasparCGDataCollection.SetData("stripcolor", ColorToCasparHex(cmdstripcolor.BackColor))
+        CasparCGDataCollection.SetData("opacity", nopacityhs1.Value)
+        CasparCGDataCollection.SetData("alfa", If(chkclock.Checked, 1, 0))
+    End Sub
+
+    Private Sub SetCrawlTextData(useDoubleSeparator As Boolean)
+        Dim crawlText As String = BuildCrawlText(useDoubleSeparator)
+
+        If chkbas64hs1.Checked Then
+            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(crawlText)
+            CasparCGDataCollection.SetData("base64", System.Convert.ToBase64String(array))
+        Else
+            CasparCGDataCollection.SetData("xf0", crawlText)
+            CasparCGDataCollection.SetData("font", cmbfonths1.Text)
+        End If
+    End Sub
+
+    Private Function BuildCrawlText(useDoubleSeparator As Boolean) As String
+        Dim lines As Array = Split(txtcrawl.Text, vbCrLf)
+        Dim separator As String = If(useDoubleSeparator, " ** ", " ")
+        Dim result As String = ""
+
+        For ii = LBound(lines) To UBound(lines)
+            result &= separator & lines(ii)
+        Next
+
+        Return result
+    End Function
+
+    Private Function ColorToCasparHex(colorValue As Color) As String
+        Return "0x" & String.Format("{0:X2}{1:X2}{2:X2}", colorValue.R, colorValue.G, colorValue.B)
+    End Function
 End Class

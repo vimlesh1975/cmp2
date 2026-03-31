@@ -24,6 +24,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucLogo` | `CasparMediaPlayback/ucLogo.vb` | Done | Logo data collection, opacity updates, file open/save, and shared layer/template helpers consolidated. |
 | `UcCaption` | `CasparMediaPlayback/UcCaption.vb` | Done | Caption layer-address, fill updates, and resize synchronization centralized into small helpers. |
 | `ucElement` | `CasparMediaPlayback/ucElement.vb` | Done | Media-source setup, layer command building, preview playback, fill updates, and YouTube/file helpers consolidated. |
+| `ucHS` | `CasparMediaPlayback/ucHS.vb` | Done | Horizontal-scroll layer helpers, logo open/play/stop logic, color updates, and crawl data building consolidated. |
 
 ## Repository Cleanup
 
