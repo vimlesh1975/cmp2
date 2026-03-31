@@ -31,6 +31,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucCCTV` | `CasparMediaPlayback/ucCCTV.vb` | Done | CCTV RTSP command building, four-camera group playback, timer switching, and camera-list loading consolidated. |
 | `ucdc` | `CasparMediaPlayback/ucdc.vb` | Done | Davis Cup animation routing, layer helpers, scorebug/service data building, and repeated template-play handlers consolidated. |
 | `ucTemplate` | `CasparMediaPlayback/ucTemplate.vb` | Done | Template data building, CG command assembly, rundown file I/O, preview updates, and default loader-row setup consolidated. |
+| `ucHtmlTemplate` | `CasparMediaPlayback/ucHtmlTemplate.vb` | Done | HTML play/call/stop helpers, rundown file I/O, update-row packing, and repeated mixer/layer command building consolidated. |
 
 ## Repository Cleanup
 

@@ -8,6 +8,89 @@ Imports CefSharp
 'Imports System.Drawing
 Public Class ucHtmlTemplate
     Public brundownrowselectedchanged As Boolean = False
+    Private Const HtmlRundownDirectory As String = "c:\casparcg\mydata\rundownHTML\"
+    Private Const FlagDirectory As String = "c:/casparcg/mydata/flag/"
+
+    Private Function PackTemplateValue(value As Object, valueType As Object) As String
+        Return value & "ddddd" & valueType.ToString()
+    End Function
+
+    Private Function NormalizeTemplateText(value As String) As String
+        Dim placeholderString As String = value.Replace(vbCrLf, "|||CRLF|||")
+        Dim replacedLFString As String = placeholderString.Replace(vbLf, "CRLF")
+        Dim replacedCRString As String = replacedLFString.Replace(vbCr, "CRLF")
+        Return replacedCRString.Replace("|||CRLF|||", "CRLF")
+    End Function
+
+    Private Function CurrentTemplatePath(templateName As String) As String
+        Return Replace(templatefullpath, "\", "/") & templateName
+    End Function
+
+    Private Function CurrentTemplateNameWithoutExtension(templateName As String) As String
+        Return templateName.Split(".")(0)
+    End Function
+
+    Private Sub SendHtmlPlay(layer As Object, templateName As String)
+        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & layer & " [HTML] " & """" & CurrentTemplatePath(templateName) & """")
+    End Sub
+
+    Private Sub SendHtmlCall(layer As Object, commandText As String)
+        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & layer & " " & commandText)
+    End Sub
+
+    Private Sub SendHtmlStop(layer As Object)
+        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & layer)
+    End Sub
+
+    Private Sub SendCgAdd(layer As Object, templateName As String)
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & layer & " add " & layer & " " & """" & CurrentTemplateNameWithoutExtension(templateName) & """" & " 1")
+    End Sub
+
+    Private Sub SendLayerMixer(layer As Object, commandText As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & layer & " " & commandText)
+    End Sub
+
+    Private Sub LoadRundownFileFromPath(fileName As String)
+        Using sr As StreamReader = New StreamReader(fileName)
+            dgvrundown.Rows.Clear()
+
+            Dim g As Integer = 0
+            Dim li As String
+            Do Until sr.EndOfStream = True
+                li = sr.ReadLine()
+                dgvrundown.Rows.Add()
+                Dim xyz As Array = Split(li, Chr(2))
+                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
+                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
+                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
+                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
+                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
+                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
+                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
+                g = g + 1
+            Loop
+        End Using
+
+        Me.dgvrundown.Columns(0).HeaderText = fileName
+    End Sub
+
+    Private Sub BuildRundownTemplateData()
+        CasparCGDataCollection.Clear()
+        For ianytemplate = 0 To dgvanytemplate.Rows.Count - 1
+            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, PackTemplateValue(dgvanytemplate.Rows(ianytemplate).Cells(1).Value, dgvanytemplate.Rows(ianytemplate).Cells(3).Value))
+        Next
+    End Sub
+
+    Private Sub UpdateTemplateRows(sendToLayer As Object)
+        For ianytemplate = 1 To dgvanytemplate.Rows.Count - 2
+            If dgvanytemplate.Rows(ianytemplate).Cells(3).Value = 0 Then
+                SendHtmlCall(sendToLayer, "updatestring('" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(0).Value) & "','" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(1).Value) & "')")
+            Else
+                SendHtmlCall(sendToLayer, "updateimage('" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(0).Value) & "','" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(1).Value) & "')")
+            End If
+        Next
+    End Sub
+
     Private Sub cmdadjusttimeofrundown_Click(sender As Object, e As EventArgs) Handles cmdadjusttimeofrundown.Click
         On Error Resume Next
         adjusttimeofrundown()
@@ -29,12 +112,7 @@ Public Class ucHtmlTemplate
         dgvrundown.CurrentRow.Cells(1).Value = lsttemplate.SelectedItem.ToString
         dgvrundown.CurrentRow.Cells(3).Value = cmblayertemplate.Text
 
-        Dim ianytemplate As Integer
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count - 1
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value & "ddddd" & dgvanytemplate.Rows(ianytemplate).Cells(3).Value.ToString)
-
-        Next
+        BuildRundownTemplateData()
         dgvrundown.CurrentRow.Cells(4).Value = CasparCGDataCollection.ToXml
         If dgvrundown.CurrentRow.Index = 0 Then
             dgvrundown.CurrentRow.Cells(5).Value = Now.AddMinutes(1)
@@ -52,14 +130,13 @@ Public Class ucHtmlTemplate
     End Sub
     Sub playfromrundown()
         On Error Resume Next
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " opacity 0")
-
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " [HTML] " & """" & Replace(templatefullpath, "\", "/") & dgvrundown.CurrentRow.Cells(1).Value & """")
+        SendLayerMixer(cmblayertemplate.Text, "opacity 0")
+        SendHtmlPlay(dgvrundown.CurrentRow.Cells(3).Value, dgvrundown.CurrentRow.Cells(1).Value)
 
         System.Threading.Thread.Sleep(Val(txtupdatedelay.Text))
         anytemplateupdatefromrundown()
         System.Threading.Thread.Sleep(Val(txtupdatedelay.Text))
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " opacity 1")
+        SendLayerMixer(cmblayertemplate.Text, "opacity 1")
     End Sub
     Sub playrundownforvideo()
         On Error Resume Next
@@ -73,18 +150,18 @@ Public Class ucHtmlTemplate
 
     Private Sub nexttsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nexttsrundown.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " next()")
+        SendHtmlCall(dgvrundown.CurrentRow.Cells(3).Value, "next()")
     End Sub
     Private Sub stoptsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles stoptsrundown.Click
 
         On Error Resume Next
 
-        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value)
+        SendHtmlStop(dgvrundown.CurrentRow.Cells(3).Value)
 
     End Sub
     Private Sub cmdrundowninvoke_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrundowninvoke.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " " & cmbrundowninvoke.Text)
+        SendHtmlCall(dgvrundown.CurrentRow.Cells(3).Value, cmbrundowninvoke.Text)
     End Sub
     Private Sub newtsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         On Error Resume Next
@@ -104,63 +181,16 @@ Public Class ucHtmlTemplate
     Sub openfilerundown()
         On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\rundownHTML\"
+        ofd2.InitialDirectory = HtmlRundownDirectory
         ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
-
-                dgvrundown.Rows.Clear()
-
-                Dim g As Integer = 0
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvrundown.Rows.Add()
-                    Dim xyz As Array = Split(li, Chr(2))
-                    dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                    dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                    dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                    dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                    dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                    dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                    dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+            LoadRundownFileFromPath(ofd2.FileName)
         End If
     End Sub
 
     Public Sub openfilerundown(filename As String)
         On Error Resume Next
-
-        Using sr As StreamReader = New StreamReader(filename)
-
-            dgvrundown.Rows.Clear()
-
-            Dim g As Integer = 0
-            Dim li As String
-            Do Until sr.EndOfStream = True
-                li = sr.ReadLine()
-                dgvrundown.Rows.Add()
-                Dim xyz As Array = Split(li, Chr(2))
-                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-
-                g = g + 1
-            Loop
-            sr.Close()
-        End Using
-        Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+        LoadRundownFileFromPath(filename)
 
     End Sub
 
@@ -170,7 +200,7 @@ Public Class ucHtmlTemplate
     End Sub
     Sub savefilerundown()
         ' On Error Resume Next
-        osd2.InitialDirectory = "c:\casparcg\mydata\rundownHTML\"
+        osd2.InitialDirectory = HtmlRundownDirectory
         osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -333,24 +363,8 @@ Public Class ucHtmlTemplate
         '        Next
         '20:
 
-        CasparCGDataCollection.Clear()
         For ianytemplate = 1 To dgvanytemplate.Rows.Count - 2
-            'For Each ch As Char In dgvanytemplate.Rows(ianytemplate).Cells(1).Value
-            '    Console.WriteLine("Character: " & ch & " - Numeric Value: " & AscW(ch))
-            'Next
-            'MsgBox(dgvanytemplate.Rows(ianytemplate).Cells(1).Value.Contains(vbLf))
-            ' Replace CRLF with a unique placeholder
-            Dim placeholderString As String = dgvanytemplate.Rows(ianytemplate).Cells(1).Value.Replace(vbCrLf, "|||CRLF|||")
-
-            ' Replace LF with "CRLF"
-            Dim replacedLFString As String = placeholderString.Replace(vbLf, "CRLF")
-
-            ' Replace CR with "CRLF"
-            Dim replacedCRString As String = replacedLFString.Replace(vbCr, "CRLF")
-
-            ' Replace the placeholder with "CRLF"
-            Dim finalString As String = replacedCRString.Replace("|||CRLF|||", "CRLF")
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, finalString)
+            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, NormalizeTemplateText(dgvanytemplate.Rows(ianytemplate).Cells(1).Value))
         Next
         CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " update " & cmblayertemplate.Text & " " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """")
 
@@ -361,14 +375,7 @@ Public Class ucHtmlTemplate
 
     Sub anytemplateupdatefromrundown()
         On Error Resume Next
-        For ianytemplate = 1 To dgvanytemplate.Rows.Count - 2
-            If dgvanytemplate.Rows(ianytemplate).Cells(3).Value = 0 Then '
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " updatestring('" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(0).Value) & "','" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(1).Value) & "')")
-            Else
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " updateimage('" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(0).Value) & "','" & replacestring1(dgvanytemplate.Rows(ianytemplate).Cells(1).Value) & "')")
-            End If
-
-        Next
+        UpdateTemplateRows(dgvrundown.CurrentRow.Cells(3).Value)
     End Sub
 
 
@@ -385,7 +392,7 @@ Public Class ucHtmlTemplate
     End Sub
     Sub anytemplateinvoke()
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " " & cmbinvoke.Text)
+        SendHtmlCall(cmblayertemplate.Text, cmbinvoke.Text)
     End Sub
 
     Private Sub cmdclosegbtemplate_Click(sender As Object, e As EventArgs)
@@ -407,7 +414,7 @@ Public Class ucHtmlTemplate
         If TypeOf senderGrid.Columns(e.ColumnIndex) Is DataGridViewImageColumn AndAlso e.RowIndex >= 0 Then
 
             Dim ofdanytemplate As New OpenFileDialog
-            ofdanytemplate.InitialDirectory = "c:/casparcg/mydata/flag/"
+            ofdanytemplate.InitialDirectory = FlagDirectory
             If (ofdanytemplate.ShowDialog() = Windows.Forms.DialogResult.OK) Then
                 dgvanytemplate.CurrentRow.Cells(1).Value = Replace(ofdanytemplate.FileName, "\", "/")
                 dgvanytemplate.CurrentRow.Cells(2).Value = System.Drawing.Image.FromFile(dgvanytemplate.CurrentRow.Cells(1).Value)
@@ -530,21 +537,21 @@ Public Class ucHtmlTemplate
         On Error Resume Next
         Dim ianytemplate As Integer
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill -1 0 1 1")
+            SendLayerMixer(cmblayertemplate.Text, "fill -1 0 1 1")
         End If
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " add " & cmblayertemplate.Text & " " & """" & (lsttemplate.SelectedItem.ToString).Split(".")(0) & """" & " " & 1)
+        SendCgAdd(cmblayertemplate.Text, lsttemplate.SelectedItem.ToString)
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 0 0 1 1 50 " & "easeoutexpo")
+            SendLayerMixer(cmblayertemplate.Text, "fill 0 0 1 1 50 easeoutexpo")
         End If
 
         If chkLBand.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & frmmediaplayer.cmblayervideo.Text & " " & txtLBand.Text)
+            SendLayerMixer(frmmediaplayer.cmblayervideo.Text, txtLBand.Text)
         End If
     End Sub
 
     Private Sub cmdanytemplatestop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdanytemplatestop.Click
         If chkRCWebAnimatorTemplate.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " " + """" & "sheet.sequence.play({direction:'reverse'})" & """")
+            SendHtmlCall(cmblayertemplate.Text, """" & "sheet.sequence.play({direction:'reverse'})" & """")
             Exit Sub
         End If
         anytemplatestop()
@@ -553,30 +560,30 @@ Public Class ucHtmlTemplate
         On Error Resume Next
 
         If chkLBand.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & frmmediaplayer.cmblayervideo.Text & " fill 0 0 1 1 15 easeinexpo")
+            SendLayerMixer(frmmediaplayer.cmblayervideo.Text, "fill 0 0 1 1 15 easeinexpo")
         End If
 
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 1 0 1 1 50 easeoutexpo")
+            SendLayerMixer(cmblayertemplate.Text, "fill 1 0 1 1 50 easeoutexpo")
             System.Threading.Thread.Sleep(1000)
         End If
-        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & cmblayertemplate.Text)
+        SendHtmlStop(cmblayertemplate.Text)
 
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 0 0 1 1 50 " & "easeoutexpo")
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " opacity 1")
+            SendLayerMixer(cmblayertemplate.Text, "fill 0 0 1 1 50 easeoutexpo")
+            SendLayerMixer(cmblayertemplate.Text, "opacity 1")
         End If
     End Sub
     Private Sub cmdnextframe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdnextframe.Click
         If chkRCWebAnimatorTemplate.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " " + """" & "sheet.sequence.play()" & """")
+            SendHtmlCall(cmblayertemplate.Text, """" & "sheet.sequence.play()" & """")
             Exit Sub
         End If
         anytemplatenextframe()
     End Sub
     Sub anytemplatenextframe()
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " next()")
+        SendHtmlCall(cmblayertemplate.Text, "next()")
     End Sub
 
     Private Sub cmdstopsheduletemplate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopsheduletemplate.Click
@@ -612,10 +619,6 @@ Public Class ucHtmlTemplate
     End Sub
     Private Sub tmrsheduletemplatestart_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmrsheduletemplatestart.Tick
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
         playfromrundown()
         tmrsheduletemplatestart.Enabled = False
 
@@ -625,7 +628,7 @@ Public Class ucHtmlTemplate
 
     Private Sub tmrshedultemplateend_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmrshedultemplateend.Tick
         On Error Resume Next
-        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value)
+        SendHtmlStop(dgvrundown.CurrentRow.Cells(3).Value)
         tmrshedultemplateend.Enabled = False
         sortsheduletemplate()
         tmrsheduletemplatestart.Interval = IntervalTill(CType(dgvrundown.Rows(0).Cells(5).Value, Date).TimeOfDay.ToString)
@@ -634,10 +637,10 @@ Public Class ucHtmlTemplate
     Private Sub cmdanytemplatePause_Click(sender As Object, e As EventArgs) Handles cmdanytemplatePause.Click
         On Error Resume Next
         If chkRCWebAnimatorTemplate.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " " & """" & "sheet.sequence.pause()" & """")
+            SendHtmlCall(cmblayertemplate.Text, """" & "sheet.sequence.pause()" & """")
             Exit Sub
         End If
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " pause()")
+        SendHtmlCall(cmblayertemplate.Text, "pause()")
 
     End Sub
     Private Sub lsttemplate_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lsttemplate.SelectedIndexChanged
@@ -802,19 +805,19 @@ Public Class ucHtmlTemplate
         On Error Resume Next
         Dim ianytemplate As Integer
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill -1 0 1 1")
+            SendLayerMixer(cmblayertemplate.Text, "fill -1 0 1 1")
         End If
         'CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " [HTML] " & """" & Replace(templatefullpath, "\", "/") & lsttemplate.SelectedItem.ToString & """")
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " add " & cmblayertemplate.Text & " " & """" & (lsttemplate.SelectedItem.ToString).Split(".")(0) & """" & " " & 1)
+        SendCgAdd(cmblayertemplate.Text, lsttemplate.SelectedItem.ToString)
 
         System.Threading.Thread.Sleep(Val(txtupdatedelay.Text))
         anytemplateupdate()
         If chkanimatetemplate.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 0 0 1 1 50 " & "easeoutexpo")
+            SendLayerMixer(cmblayertemplate.Text, "fill 0 0 1 1 50 easeoutexpo")
         End If
 
         If chkLBand.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & frmmediaplayer.cmblayervideo.Text & " " & txtLBand.Text)
+            SendLayerMixer(frmmediaplayer.cmblayervideo.Text, txtLBand.Text)
         End If
     End Sub
     Private Sub cmdPutTestdata_Click(sender As Object, e As EventArgs) Handles cmdPutTestdata.Click
@@ -893,7 +896,7 @@ Public Class ucHtmlTemplate
     End Sub
 
     Private Sub cmdStopAnimation_Click(sender As Object, e As EventArgs) Handles cmdStopAnimation.Click
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " outAnimation()")
+        SendHtmlCall(cmblayertemplate.Text, "outAnimation()")
     End Sub
 
     Private Sub chkRCWebAnimatorTemplate_CheckedChanged(sender As Object, e As EventArgs) Handles chkRCWebAnimatorTemplate.CheckedChanged
