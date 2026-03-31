@@ -1,70 +1,104 @@
 ﻿
 Imports Svt.Caspar
 Public Class ucdc
+    Private Const ServiceOnImagePath As String = "C:/casparcg/mydata/games4/tt/serve.png"
+    Private Const ServiceOffImagePath As String = "C:/casparcg/mydata/games4/tt/blk.png"
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
         initialisesetscorett()
     End Sub
+
+    Private ReadOnly Property CurrentLayer As Integer
+        Get
+            Return Int(cmblayergames.Text)
+        End Get
+    End Property
+
+    Private ReadOnly Property InfoLayer As Integer
+        Get
+            Return CurrentLayer + 1
+        End Get
+    End Property
+
+    Private Sub SendMixerCommand(commandSuffix As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " " & commandSuffix)
+    End Sub
+
+    Private Function GetAnimationOffset(isInAnimation As Boolean, ByRef x As Decimal, ByRef y As Decimal) As Boolean
+        If isInAnimation Then
+            If rdoLeftIN.Checked Then
+                x = -1
+                y = 0
+            ElseIf rdoRightIN.Checked Then
+                x = 1
+                y = 0
+            ElseIf rdoUpIN.Checked Then
+                x = 0
+                y = -1
+            ElseIf rdoDownIN.Checked Then
+                x = 0
+                y = -1
+            Else
+                Return False
+            End If
+        Else
+            If rdoleftOut.Checked Then
+                x = -1
+                y = 0
+            ElseIf rdoRightOut.Checked Then
+                x = 1
+                y = 0
+            ElseIf rdoUpOut.Checked Then
+                x = 0
+                y = -1
+            ElseIf rdoDownOut.Checked Then
+                x = 0
+                y = 1
+            Else
+                Return False
+            End If
+        End If
+
+        Return True
+    End Function
+
     Sub animation1()
         Dim x, y As Decimal
-        If rdoLeftIN.Checked Then
-            x = -1
-            y = 0
-        ElseIf rdoRightIN.Checked Then
-            x = 1
-            y = 0
-        ElseIf rdoUpIN.Checked Then
-            x = 0
-            y = -1
-        ElseIf rdoDownIN.Checked Then
-            x = 0
-            y = 1
-            y = -1
-        ElseIf rdoFedIN.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity  0")
-            GoTo 50
+        If rdoFedIN.Checked Then
+            SendMixerCommand("opacity  0")
+            Exit Sub
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
-50:
+
+        If GetAnimationOffset(True, x, y) Then
+            SendMixerCommand("fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        End If
     End Sub
     Sub animationtoscreen()
 
         If rdoFedIN.Checked Or rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity 1 50 easeoutexpo")
+            SendMixerCommand("opacity 1 50 easeoutexpo")
             If chkanimationforhdvan.Checked Then
-                CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill .1 0 .8 1 50 " & "easeoutexpo")
+                SendMixerCommand("fill .1 0 .8 1 50 easeoutexpo")
             End If
-            GoTo 50
+            Exit Sub
         End If
         If chkanimationforhdvan.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill .1 0 .8 1 50 " & "easeoutexpo")
+            SendMixerCommand("fill .1 0 .8 1 50 easeoutexpo")
         Else
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill 0 0 1 1 50 " & "easeoutexpo")
+            SendMixerCommand("fill 0 0 1 1 50 easeoutexpo")
         End If
-50:
     End Sub
     Sub animation2()
         Dim x, y As Decimal
-        If rdoleftOut.Checked Then
-            x = -1
-            y = 0
-        ElseIf rdoRightOut.Checked Then
-            x = 1
-            y = 0
-        ElseIf rdoUpOut.Checked Then
-            x = 0
-            y = -1
-        ElseIf rdoDownOut.Checked Then
-            x = 0
-            y = 1
-        ElseIf rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity 0 50 easeoutexpo")
-            'Threading.Thread.Sleep(2000)
-            'CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity 1")
-            GoTo 50
+        If rdoFedOut.Checked Then
+            SendMixerCommand("opacity 0 50 easeoutexpo")
+            Exit Sub
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
-50:
+
+        If GetAnimationOffset(False, x, y) Then
+            SendMixerCommand("fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        End If
     End Sub
 
     'Sub outccgwindow()
@@ -89,8 +123,21 @@ Public Class ucdc
 
     End Sub
 
-    Private Sub cmdshowscorett_Click(sender As Object, e As EventArgs) Handles cmdshowscorett.Click
-        On Error Resume Next
+    Private Sub PopulateServiceData()
+        If Not chkshowservicett.Checked Then
+            Exit Sub
+        End If
+
+        If rdoservicet1tt.Checked Then
+            CasparCGDataCollection.SetData("loader3", ServiceOnImagePath)
+            CasparCGDataCollection.SetData("loader4", ServiceOffImagePath)
+        Else
+            CasparCGDataCollection.SetData("loader3", ServiceOffImagePath)
+            CasparCGDataCollection.SetData("loader4", ServiceOnImagePath)
+        End If
+    End Sub
+
+    Private Sub PopulateScoreBugData(includeLogoLoaders As Boolean)
         CasparCGDataCollection.Clear()
         CasparCGDataCollection.SetData("t1", txtshortnamet1tt.Text)
         CasparCGDataCollection.SetData("t2", txtshortnamet2tt.Text)
@@ -98,21 +145,37 @@ Public Class ucdc
         CasparCGDataCollection.SetData("g2", txtgamet2tt.Text)
         CasparCGDataCollection.SetData("p1", txtpointt1tt.Text)
         CasparCGDataCollection.SetData("p2", txtpointt2tt.Text)
-
         CasparCGDataCollection.SetData("s1", txtset1tt.Text)
         CasparCGDataCollection.SetData("s2", txtset2tt.Text)
 
-        CasparCGDataCollection.SetData("loader1", pict1tt.ImageLocation)
-        CasparCGDataCollection.SetData("loader2", pict2tt.ImageLocation)
-        If chkshowservicett.Checked Then
-            If rdoservicet1tt.Checked Then
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/serve.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/blk.png")
-            Else
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/blk.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/serve.png")
-            End If
+        If includeLogoLoaders Then
+            CasparCGDataCollection.SetData("loader1", pict1tt.ImageLocation)
+            CasparCGDataCollection.SetData("loader2", pict2tt.ImageLocation)
         End If
+
+        PopulateServiceData()
+    End Sub
+
+    Private Function GetSetScoreCount() As Integer
+        If rdo3settt.Checked Then Return 3
+        If rdo5settt.Checked Then Return 5
+        If rdo7settt.Checked Then Return 7
+        Return 3
+    End Function
+
+    Private Sub ShowStaticTemplate(templateName As String)
+        CasparCGDataCollection.Clear()
+        showtemplate(templateName, CasparCGDataCollection.ToAMCPEscapedXml)
+    End Sub
+
+    Private Sub ShowTemplateOnLayer(templateName As String, layerNumber As Integer, dataCollection As String)
+        On Error Resume Next
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(CurrentLayer, layerNumber, templateName, True, dataCollection)
+    End Sub
+
+    Private Sub cmdshowscorett_Click(sender As Object, e As EventArgs) Handles cmdshowscorett.Click
+        On Error Resume Next
+        PopulateScoreBugData(True)
         showtemplate("CMP/games4/davis_cup/dc_scorebug", CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
@@ -120,33 +183,14 @@ Public Class ucdc
     Sub showtemplate(ByVal templatename As String, ByVal datacollection As String)
         On Error Resume Next
         If chkanimationzym.Checked Then animation1()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), templatename, True, datacollection)
+        ShowTemplateOnLayer(templatename, CurrentLayer, datacollection)
         If chkanimationzym.Checked Then animationtoscreen()
     End Sub
 
     Private Sub cmdupdatescorett_Click(sender As Object, e As EventArgs) Handles cmdupdatescorett.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("t1", txtshortnamet1tt.Text)
-        CasparCGDataCollection.SetData("t2", txtshortnamet2tt.Text)
-        CasparCGDataCollection.SetData("g1", txtgamet1tt.Text)
-        CasparCGDataCollection.SetData("g2", txtgamet2tt.Text)
-        CasparCGDataCollection.SetData("p1", txtpointt1tt.Text)
-        CasparCGDataCollection.SetData("p2", txtpointt2tt.Text)
-
-        CasparCGDataCollection.SetData("s1", txtset1tt.Text)
-        CasparCGDataCollection.SetData("s2", txtset2tt.Text)
-
-        If chkshowservicett.Checked Then
-            If rdoservicet1tt.Checked Then
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/serve.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/blk.png")
-            Else
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/blk.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/serve.png")
-            End If
-        End If
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayergames.Text), Int(cmblayergames.Text), CasparCGDataCollection)
+        PopulateScoreBugData(False)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(CurrentLayer, CurrentLayer, CasparCGDataCollection)
 
     End Sub
 
@@ -313,10 +357,7 @@ Public Class ucdc
         On Error Resume Next
         CasparCGDataCollection.Clear()
 
-        Dim setscore As Integer
-        If rdo3settt.Checked Then setscore = 3
-        If rdo5settt.Checked Then setscore = 5
-        If rdo7settt.Checked Then setscore = 7
+        Dim setscore As Integer = GetSetScoreCount()
 
         If chkShowTime.Checked Then
             For isetscore = 1 To setscore
@@ -342,15 +383,7 @@ Public Class ucdc
         CasparCGDataCollection.SetData("loader1", pict1tt.ImageLocation)
         CasparCGDataCollection.SetData("loader2", pict2tt.ImageLocation)
 
-        If chkshowservicett.Checked Then
-            If rdoservicet1tt.Checked Then
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/serve.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/blk.png")
-            Else
-                CasparCGDataCollection.SetData("loader3", "C:/casparcg/mydata/games4/tt/blk.png")
-                CasparCGDataCollection.SetData("loader4", "C:/casparcg/mydata/games4/tt/serve.png")
-            End If
-        End If
+        PopulateServiceData()
 
         showtemplate("cmp/games4/davis_cup/dc_scorestrap", CasparCGDataCollection.ToAMCPEscapedXml)
 
@@ -371,10 +404,7 @@ Public Class ucdc
     End Sub
     Private Sub cmdw1_Click(sender As Object, e As EventArgs) Handles cmdw1.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/dc_playervsplayer", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        ShowStaticTemplate("cmp/games4/davis_cup/dc_playervsplayer")
     End Sub
 
     Private Sub cmdshowinfo_Click(sender As Object, e As EventArgs) Handles cmdshowinfo.Click
@@ -382,11 +412,11 @@ Public Class ucdc
         CasparCGDataCollection.Clear()
         CasparCGDataCollection.SetData("f0", cmblefttoptt.Text)
         'showtemplate("cmp/games4/davis_cup/dc_info", CasparCGDataCollection.ToAMCPEscapedXml)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text) + 1, "cmp/games4/davis_cup/dc_info", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        ShowTemplateOnLayer("cmp/games4/davis_cup/dc_info", InfoLayer, CasparCGDataCollection.ToAMCPEscapedXml)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayergames.Text), Int(cmblayergames.Text) + 1)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(CurrentLayer, InfoLayer)
 
     End Sub
 
@@ -394,60 +424,44 @@ Public Class ucdc
         On Error Resume Next
         If chkanimationzym.Checked Then animation2()
 
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayergames.Text), Int(cmblayergames.Text))
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(CurrentLayer, CurrentLayer)
         Threading.Thread.Sleep(1000)
         If chkanimationzym.Checked Then animationtoscreen()
     End Sub
     Private Sub cmdDailyHighlights_Click(sender As Object, e As EventArgs) Handles cmdDailyHighlights.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/dc_newshighlights", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        ShowStaticTemplate("cmp/games4/davis_cup/dc_newshighlights")
     End Sub
 
     Private Sub cmdRanking_Click(sender As Object, e As EventArgs) Handles cmdRanking.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/dc_rankings", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        ShowStaticTemplate("cmp/games4/davis_cup/dc_rankings")
     End Sub
 
     Private Sub cmdPlayersRanking_Click(sender As Object, e As EventArgs) Handles cmdPlayersRanking.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/dc_teamboard", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        ShowStaticTemplate("cmp/games4/davis_cup/dc_teamboard")
 
     End Sub
     Private Sub cmdOneliner_Click(sender As Object, e As EventArgs) Handles cmdOneliner.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
         CasparCGDataCollection.Clear()
         CasparCGDataCollection.SetData("f0", txtoneliner1.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/oneliner", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        showtemplate("cmp/games4/davis_cup/oneliner", CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
         CasparCGDataCollection.Clear()
         CasparCGDataCollection.SetData("f0", TextBox1.Text)
         CasparCGDataCollection.SetData("f1", TextBox2.Text)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/twoliner", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        showtemplate("cmp/games4/davis_cup/twoliner", CasparCGDataCollection.ToAMCPEscapedXml)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergames.Text), Int(cmblayergames.Text), "cmp/games4/davis_cup/welcome", True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If chkanimationzym.Checked Then animationtoscreen()
+        ShowStaticTemplate("cmp/games4/davis_cup/welcome")
     End Sub
 
     Private Sub Cmdhide_Click(sender As Object, e As EventArgs) Handles cmdhide.Click
