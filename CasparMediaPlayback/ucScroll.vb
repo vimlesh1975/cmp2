@@ -1,146 +1,91 @@
-﻿Imports System.IO
+Imports System.IO
 
 Public Class ucScroll
+    Private Const ScrollDirectory As String = "c:\casparcg\mydata\scroll\"
+    Private Const DefaultScrollFile As String = "c:\casparcg\mydata\scroll\04.08.17.txt"
+
     Dim tempspeed As Double
     Dim paused As Boolean = False
+
     Sub newdgvscroll()
         On Error Resume Next
         dgvscroll.Rows.Clear()
         dgvscroll.Rows.Add(7)
-        Me.dgvscroll.Columns(0).HeaderText = "new playlist"
+        dgvscroll.Columns(0).HeaderText = "new playlist"
     End Sub
 
     Sub openfilescroll()
         On Error Resume Next
-        Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\scroll\"
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
 
-                dgvscroll.Rows.Clear()
-
-                Dim g As Integer = 0
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvscroll.Rows.Add()
-                    Dim xyz As Array = Split(li, Chr(2))
-                    dgvscroll.Rows(g).Cells(0).Value = Replace(xyz(0), Chr(2), " ") 'xyz(0)
-                    dgvscroll.Rows(g).Cells(1).Value = xyz(1)
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            Me.dgvscroll.Columns(0).HeaderText = ofd2.FileName
+        Dim fileName As String = PromptForScrollFile(False)
+        If String.IsNullOrWhiteSpace(fileName) Then
+            Exit Sub
         End If
+
+        LoadScrollRows(fileName, False)
+        dgvscroll.Columns(0).HeaderText = fileName
     End Sub
+
     Sub insertfilescroll()
         On Error Resume Next
-        Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\scroll\"
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
 
-                'dgvscroll.Rows.Clear()
-
-                Dim g As Integer = dgvscroll.CurrentRow.Index
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvscroll.Rows.Insert(g)
-                    Dim xyz As Array = Split(li, Chr(2))
-                    dgvscroll.Rows(g).Cells(0).Value = Replace(xyz(0), Chr(2), " ")
-                    dgvscroll.Rows(g).Cells(1).Value = xyz(1)
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            'Me.dgvscroll.Columns(0).HeaderText = ofd2.FileName
+        Dim fileName As String = PromptForScrollFile(False)
+        If String.IsNullOrWhiteSpace(fileName) Then
+            Exit Sub
         End If
+
+        LoadScrollRows(fileName, True)
     End Sub
+
     Sub saveasfilescroll()
         On Error Resume Next
-        osd2.InitialDirectory = "c:\casparcg\mydata\scroll\"
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.FileName = ""
-        If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sw As StreamWriter = New StreamWriter(osd2.FileName)
-                If dgvscroll.Rows.Count = 0 Then
-                    sw.Write("")
-                Else
 
-                    Dim f As Integer = 0
-                    Do Until f = dgvscroll.Rows.Count
-                        If dgvscroll.Rows(f).Cells(1).Value = False Then dgvscroll.Rows(f).Cells(1).Value = "0"
-                        'sw.WriteLine(dgvscroll.Rows(f).Cells(0).Value & Chr(2) & dgvscroll.Rows(f).Cells(1).Value)
-                        sw.WriteLine(Replace(Replace(dgvscroll.Rows(f).Cells(0).Value, Chr(2), " "), vbNewLine, "") & Chr(2) & dgvscroll.Rows(f).Cells(1).Value)
-                        f = f + 1
-                    Loop
-                End If
-                sw.Close()
-            End Using
-            Me.dgvscroll.Columns(0).HeaderText = osd2.FileName
+        Dim fileName As String = PromptForScrollFile(True)
+        If String.IsNullOrWhiteSpace(fileName) Then
+            Exit Sub
         End If
+
+        SaveScrollRows(fileName)
+        dgvscroll.Columns(0).HeaderText = fileName
     End Sub
 
     Sub savefilescroll()
         On Error Resume Next
-
-        Using sw As StreamWriter = New StreamWriter(dgvscroll.Columns(0).HeaderText)
-                If dgvscroll.Rows.Count = 0 Then
-                    sw.Write("")
-                Else
-
-                    Dim f As Integer = 0
-                    Do Until f = dgvscroll.Rows.Count
-                        If dgvscroll.Rows(f).Cells(1).Value = False Then dgvscroll.Rows(f).Cells(1).Value = "0"
-                    'sw.WriteLine(Replace(dgvscroll.Rows(f).Cells(0).Value, Chr(2), " ") & Chr(2) & dgvscroll.Rows(f).Cells(1).Value)
-                    sw.WriteLine(Replace(Replace(dgvscroll.Rows(f).Cells(0).Value, Chr(2), " "), vbNewLine, "") & Chr(2) & dgvscroll.Rows(f).Cells(1).Value)
-                    f = f + 1
-                    Loop
-                End If
-                sw.Close()
-            End Using
-        'Me.dgvscroll.Columns(0).HeaderText = osd2.FileName
-        'End If
+        SaveScrollRows(dgvscroll.Columns(0).HeaderText)
     End Sub
+
     Private Sub cuttsscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
+
     Sub deleteclipscroll()
         On Error Resume Next
         dgvscroll.Rows.RemoveAt(dgvscroll.CurrentRow.Index)
     End Sub
 
     Private Sub copytsscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
+
     Sub copyscroll()
-        tempRow = Me.dgvscroll.CurrentRow
+        tempRow = dgvscroll.CurrentRow
     End Sub
 
     Sub insertcopiedscroll()
         On Error Resume Next
-        Dim curRow As Integer = Me.dgvscroll.CurrentCell.RowIndex
+        Dim curRow As Integer = dgvscroll.CurrentCell.RowIndex
         dgvscroll.Rows.Insert(dgvscroll.CurrentRow.Index)
         dgvscroll.CurrentCell = dgvscroll.Rows(curRow).Cells(0)
-        Me.dgvscroll.Item(0, curRow).Value = tempRow.Cells(0).Value
-        Me.dgvscroll.Item(1, curRow).Value = tempRow.Cells(1).Value
+        dgvscroll.Item(0, curRow).Value = tempRow.Cells(0).Value
+        dgvscroll.Item(1, curRow).Value = tempRow.Cells(1).Value
     End Sub
 
     Private Sub cmduptsscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmduptsscroll.Click
         clipmoveupscroll()
     End Sub
+
     Sub clipmoveupscroll()
         On Error Resume Next
-        If Me.dgvscroll.CurrentCell.RowIndex <> 0 Then
-            Dim curRow As Integer = Me.dgvscroll.CurrentCell.RowIndex
-            Dim myRow As DataGridViewRow = Me.dgvscroll.CurrentRow
-            Me.dgvscroll.Rows.Remove(myRow)
-            Me.dgvscroll.Rows.Insert(curRow - 1, myRow)
-            dgvscroll.CurrentCell = dgvscroll.Rows(curRow - 1).Cells(0)
+        If dgvscroll.CurrentCell.RowIndex <> 0 Then
+            MoveCurrentRow(-1)
         End If
     End Sub
 
@@ -148,15 +93,11 @@ Public Class ucScroll
         On Error Resume Next
         clipmovedownscroll()
     End Sub
+
     Sub clipmovedownscroll()
         On Error Resume Next
-        If Me.dgvscroll.CurrentCell.RowIndex <> dgvscroll.Rows.Count - 2 Then
-            Dim curRow As Integer = Me.dgvscroll.CurrentCell.RowIndex
-            Dim myRow As DataGridViewRow = Me.dgvscroll.CurrentRow
-            Me.dgvscroll.Rows.Remove(myRow)
-            Me.dgvscroll.Rows.Insert(curRow + 1, myRow)
-            dgvscroll.CurrentCell = dgvscroll.Rows(curRow + 1).Cells(0)
-
+        If dgvscroll.CurrentCell.RowIndex <> dgvscroll.Rows.Count - 2 Then
+            MoveCurrentRow(1)
         End If
     End Sub
 
@@ -164,6 +105,7 @@ Public Class ucScroll
         On Error Resume Next
         clipinsertscroll()
     End Sub
+
     Sub clipinsertscroll()
         On Error Resume Next
         dgvscroll.Rows.Insert(dgvscroll.CurrentRow.Index)
@@ -180,50 +122,44 @@ Public Class ucScroll
         If nspeedscroll.Value <> 0 Then
             tempspeed = nspeedscroll.Value
         End If
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("speed", nspeedscroll.Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
 
+        UpdateScrollData("speed", nspeedscroll.Value)
     End Sub
+
     Private Sub picscrollbullet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picscrollbullet.Click
         On Error Resume Next
+
         Dim aa As New OpenFileDialog
-        If (aa.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If aa.ShowDialog() = Windows.Forms.DialogResult.OK Then
             picscrollbullet.ImageLocation = aa.FileName
         End If
     End Sub
+
     Private Sub cmdplayscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplayscroll.Click
         On Error Resume Next
-
-
 
         nspeedscroll.Value = tempspeed
         setdataofscroll()
         CasparCGDataCollection.SetData("speed", nspeedscroll.Value)
         CasparCGDataCollection.SetData("division", ndivision.Value)
-
-        CasparCGDataCollection.SetData("bordercolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdbordercolor.BackColor.R, cmdbordercolor.BackColor.G, cmdbordercolor.BackColor.B))
-        CasparCGDataCollection.SetData("stripcolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.BackColor.R, cmdstripcolor.BackColor.G, cmdstripcolor.BackColor.B))
-        CasparCGDataCollection.SetData("fontcolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-
-
+        CasparCGDataCollection.SetData("bordercolor", ColorToCasparHex(cmdbordercolor.BackColor))
+        CasparCGDataCollection.SetData("stripcolor", ColorToCasparHex(cmdstripcolor.BackColor))
+        CasparCGDataCollection.SetData("fontcolor", ColorToCasparHex(cmdstripcolor.ForeColor))
 
         If chkCapitalise.Checked Then
             CasparCGDataCollection.SetData("scrolldatacapitalised", "")
         End If
+
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), txtScrollTemplate.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
         tmrshowdatascroll.Enabled = True
         paused = False
 
-        ' below code is important to set font color at start
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("fontcolor1", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
-
+        UpdateScrollData("fontcolor1", ColorToCasparHex(cmdstripcolor.ForeColor))
     End Sub
 
     Private Sub cmdpausescroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdpausescroll.Click
         On Error Resume Next
+
         If paused = False Then
             If nspeedscroll.Value <> 0 Then
                 tempspeed = nspeedscroll.Value
@@ -231,60 +167,40 @@ Public Class ucScroll
             nspeedscroll.Value = 0
             paused = True
         Else
-            On Error Resume Next
             nspeedscroll.Value = tempspeed
-
-            CasparCGDataCollection.Clear()
-            CasparCGDataCollection.SetData("speed", nspeedscroll.Value)
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
+            UpdateScrollData("speed", nspeedscroll.Value)
             paused = False
         End If
-
     End Sub
 
     Private Sub cmdresumescroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
+
     Private Sub cmdselectallforscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdselectallforscroll.Click
         On Error Resume Next
-        Dim iscrollselectall As Integer
-        For iscrollselectall = 0 To dgvscroll.RowCount - 1
-            dgvscroll.Rows(iscrollselectall).Cells(1).Value = 1
-        Next
+        SetAllRowSelectionValues(1)
     End Sub
 
     Private Sub cmddeselectallforscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmddeselectallforscroll.Click
         On Error Resume Next
-        Dim iscrolldeselectall As Integer
-        For iscrolldeselectall = 0 To dgvscroll.RowCount - 1
-            dgvscroll.Rows(iscrolldeselectall).Cells(1).Value = 0
-        Next
+        SetAllRowSelectionValues(0)
     End Sub
+
     Sub setdataofscroll()
         On Error Resume Next
 
-        'Dim str As String = ""
-        'For jscroll = 0 To dgvscroll.Rows.Count - 1
-        '    If dgvscroll.Rows(jscroll).Cells(1).Value = 1 Then str = str + Replace(dgvscroll.Rows(jscroll).Cells(0).Value, vbLf, vbNullString) + txtdelemeterforscroll.Text
-        'Next
-
         CasparCGDataCollection.Clear()
-
 
         Dim ff As Integer = 0
         For jscroll = 0 To dgvscroll.Rows.Count - 1
-            If dgvscroll.Rows(jscroll).Cells(1).Value = 1 And dgvscroll.Rows(jscroll).Cells(0).Value <> "" Then
-                CasparCGDataCollection.SetData("scrolldata" & ff, Replace(dgvscroll.Rows(jscroll).Cells(0).Value, vbNewLine, vbNullString) + txtdelemeterforscroll.Text)
-                ff = ff + 1
+            If RowIsSelected(jscroll) AndAlso RowHasContent(jscroll) Then
+                CasparCGDataCollection.SetData("scrolldata" & ff, CleanScrollText(dgvscroll.Rows(jscroll).Cells(0).Value) & txtdelemeterforscroll.Text)
+                ff += 1
             End If
         Next
+
         CasparCGDataCollection.SetData("n", ff)
-
         CasparCGDataCollection.SetData("loader1", picscrollbullet.ImageLocation)
-        'CasparCGDataCollection.SetData("fontcolor1", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-        'CasparCGDataCollection.SetData("bordercolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdbordercolor.BackColor.R, cmdbordercolor.BackColor.G, cmdbordercolor.BackColor.B))
-
-
     End Sub
 
     Private Sub cmdstopscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopscroll.Click
@@ -292,47 +208,26 @@ Public Class ucScroll
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text))
         tmrshowdatascroll.Enabled = False
     End Sub
+
     Private Sub tmrshowdatascroll_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrshowdatascroll.Tick
         On Error Resume Next
         updatedatascroll()
     End Sub
+
     Sub updatedatascroll()
         setdataofscroll()
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
     End Sub
 
-
-
-
-
-
-
     Private Sub ucScroll_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         initialisescrolldata()
         tempspeed = nspeedscroll.Value
     End Sub
+
     Sub initialisescrolldata()
-
         On Error Resume Next
-
-        Using sr As StreamReader = New StreamReader("c:\casparcg\mydata\scroll\04.08.17.txt")
-
-            dgvscroll.Rows.Clear()
-
-            Dim g As Integer = 0
-            Dim li As String
-            Do Until sr.EndOfStream = True
-                li = sr.ReadLine()
-                dgvscroll.Rows.Add()
-                Dim xyz As Array = Split(li, Chr(2))
-                dgvscroll.Rows(g).Cells(0).Value = xyz(0)
-                dgvscroll.Rows(g).Cells(1).Value = xyz(1)
-                g = g + 1
-            Loop
-            sr.Close()
-        End Using
-        Me.dgvscroll.Columns(0).HeaderText = "c:\casparcg\mydata\scroll\04.08.17.txt"
-
+        LoadScrollRows(DefaultScrollFile, False)
+        dgvscroll.Columns(0).HeaderText = DefaultScrollFile
     End Sub
 
     Private Sub cmdhidegbscrollandclock_Click(sender As Object, e As EventArgs) Handles cmdhidegbscrollandclock.Click
@@ -340,7 +235,6 @@ Public Class ucScroll
     End Sub
 
     Private Sub chkCapitalise_CheckedChanged(sender As Object, e As EventArgs) Handles chkCapitalise.CheckedChanged
-
     End Sub
 
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
@@ -385,7 +279,6 @@ Public Class ucScroll
     End Sub
 
     Private Sub Dgvscroll_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvscroll.CellContentClick
-
     End Sub
 
     Private Sub dgvscroll_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvscroll.DataError
@@ -394,41 +287,28 @@ Public Class ucScroll
 
     Private Sub cmdstripcolor_Click(sender As Object, e As EventArgs) Handles cmdstripcolor.Click
         On Error Resume Next
-        If (cd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If cd1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdstripcolor.BackColor = cd1.Color
             cmdcolor.BackColor = cd1.Color
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("stripcolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.BackColor.R, cmdstripcolor.BackColor.G, cmdstripcolor.BackColor.B))
-
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
+            UpdateScrollData("stripcolor", ColorToCasparHex(cmdstripcolor.BackColor))
         End If
     End Sub
 
     Private Sub cmdcolor_Click(sender As Object, e As EventArgs) Handles cmdcolor.Click
         On Error Resume Next
-        If (cd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If cd1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdcolor.ForeColor = cd1.Color
             cmdstripcolor.ForeColor = cd1.Color
-
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("fontcolor1", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cmdstripcolor.ForeColor.R, cmdstripcolor.ForeColor.G, cmdstripcolor.ForeColor.B))
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
-
+            UpdateScrollData("fontcolor1", ColorToCasparHex(cmdstripcolor.ForeColor))
         End If
     End Sub
 
     Private Sub cmdbordercolor_Click(sender As Object, e As EventArgs) Handles cmdbordercolor.Click
-        If (cd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            'cmdcolor.ForeColor = cd1.Color
+        If cd1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdbordercolor.BackColor = cd1.Color
-
-            CasparCGDataCollection.Clear() 'cgData.Clear()
-            CasparCGDataCollection.SetData("bordercolor", "0x" & String.Format("{0:X2}{1:X2}{2:X2}", cd1.Color.R, cd1.Color.G, cd1.Color.B))
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
-
+            UpdateScrollData("bordercolor", ColorToCasparHex(cd1.Color))
         End If
     End Sub
-
 
     Private Sub dgvscroll_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvscroll.RowsAdded
         updaterownumber()
@@ -437,11 +317,113 @@ Public Class ucScroll
     Private Sub dgvscroll_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles dgvscroll.RowsRemoved
         updaterownumber()
     End Sub
+
     Sub updaterownumber()
         On Error Resume Next
         For irownumberupdate = 0 To dgvscroll.Rows.Count - 1
-            dgvscroll.Rows(irownumberupdate).HeaderCell.Value = irownumberupdate.ToString
+            dgvscroll.Rows(irownumberupdate).HeaderCell.Value = irownumberupdate.ToString()
         Next
     End Sub
 
+    Private Function PromptForScrollFile(forSave As Boolean) As String
+        If forSave Then
+            osd2.InitialDirectory = ScrollDirectory
+            osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+            osd2.FileName = ""
+            If osd2.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                Return osd2.FileName
+            End If
+        Else
+            Dim ofd2 As New OpenFileDialog
+            ofd2.InitialDirectory = ScrollDirectory
+            ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+            If ofd2.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                Return ofd2.FileName
+            End If
+        End If
+
+        Return String.Empty
+    End Function
+
+    Private Sub LoadScrollRows(fileName As String, insertAtCurrentRow As Boolean)
+        Using sr As New StreamReader(fileName)
+            If Not insertAtCurrentRow Then
+                dgvscroll.Rows.Clear()
+            End If
+
+            Dim rowIndex As Integer = If(insertAtCurrentRow AndAlso dgvscroll.CurrentRow IsNot Nothing, dgvscroll.CurrentRow.Index, 0)
+            Dim currentLine As String
+
+            Do Until sr.EndOfStream = True
+                currentLine = sr.ReadLine()
+                Dim xyz As Array = Split(currentLine, Chr(2))
+
+                If insertAtCurrentRow Then
+                    dgvscroll.Rows.Insert(rowIndex)
+                Else
+                    dgvscroll.Rows.Add()
+                End If
+
+                dgvscroll.Rows(rowIndex).Cells(0).Value = CleanScrollText(xyz(0))
+                dgvscroll.Rows(rowIndex).Cells(1).Value = xyz(1)
+                rowIndex += 1
+            Loop
+        End Using
+    End Sub
+
+    Private Sub SaveScrollRows(fileName As String)
+        Using sw As New StreamWriter(fileName)
+            If dgvscroll.Rows.Count = 0 Then
+                sw.Write("")
+                Exit Sub
+            End If
+
+            For rowIndex As Integer = 0 To dgvscroll.Rows.Count - 1
+                NormalizeSelectionCell(rowIndex)
+                sw.WriteLine(CleanScrollText(dgvscroll.Rows(rowIndex).Cells(0).Value) & Chr(2) & dgvscroll.Rows(rowIndex).Cells(1).Value)
+            Next
+        End Using
+    End Sub
+
+    Private Sub MoveCurrentRow(direction As Integer)
+        Dim curRow As Integer = dgvscroll.CurrentCell.RowIndex
+        Dim myRow As DataGridViewRow = dgvscroll.CurrentRow
+        dgvscroll.Rows.Remove(myRow)
+        dgvscroll.Rows.Insert(curRow + direction, myRow)
+        dgvscroll.CurrentCell = dgvscroll.Rows(curRow + direction).Cells(0)
+    End Sub
+
+    Private Sub SetAllRowSelectionValues(value As Integer)
+        For rowIndex As Integer = 0 To dgvscroll.RowCount - 1
+            dgvscroll.Rows(rowIndex).Cells(1).Value = value
+        Next
+    End Sub
+
+    Private Function RowIsSelected(rowIndex As Integer) As Boolean
+        Return dgvscroll.Rows(rowIndex).Cells(1).Value = 1
+    End Function
+
+    Private Function RowHasContent(rowIndex As Integer) As Boolean
+        Return dgvscroll.Rows(rowIndex).Cells(0).Value <> ""
+    End Function
+
+    Private Sub NormalizeSelectionCell(rowIndex As Integer)
+        If dgvscroll.Rows(rowIndex).Cells(1).Value = False Then
+            dgvscroll.Rows(rowIndex).Cells(1).Value = "0"
+        End If
+    End Sub
+
+    Private Function CleanScrollText(value As Object) As String
+        Return Replace(Replace(CStr(value), Chr(2), " "), vbNewLine, "")
+    End Function
+
+    Private Function ColorToCasparHex(colorValue As Color) As String
+        Return "0x" & String.Format("{0:X2}{1:X2}{2:X2}", colorValue.R, colorValue.G, colorValue.B)
+    End Function
+
+    Private Sub UpdateScrollData(key As String, value As Object)
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData(key, value)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmblayerscroll.Text), Int(cmblayerscroll.Text), CasparCGDataCollection)
+    End Sub
 End Class
