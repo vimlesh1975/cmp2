@@ -56,7 +56,7 @@ Public Class ucHTML
 
     Private Function GetYoutubeLiveStreamUrl(liveYoutubeUrl As String) As String
         Dim oProcess As New Process()
-        Dim oStartInfo As New ProcessStartInfo("c:/casparcg/mydata/ffmpeg/youtube-dl", " -g " & liveYoutubeUrl)
+        Dim oStartInfo As New ProcessStartInfo("c:/casparcg/mydata/ffmpeg/yt-dlp.exe", " -g " & liveYoutubeUrl)
         oStartInfo.UseShellExecute = False
         oStartInfo.RedirectStandardOutput = True
         oProcess.StartInfo = oStartInfo
