@@ -131,7 +131,7 @@ Public Class ucHtmlTemplate
     Sub playfromrundown()
         On Error Resume Next
         SendLayerMixer(cmblayertemplate.Text, "opacity 0")
-        SendHtmlPlay(dgvrundown.CurrentRow.Cells(3).Value, dgvrundown.CurrentRow.Cells(1).Value)
+        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(3).Value & " [HTML] " & """" & CurrentTemplatePath(dgvrundown.CurrentRow.Cells(1).Value) & """")
 
         System.Threading.Thread.Sleep(Val(txtupdatedelay.Text))
         anytemplateupdatefromrundown()
@@ -539,7 +539,7 @@ Public Class ucHtmlTemplate
         If chkanimatetemplate.Checked Then
             SendLayerMixer(cmblayertemplate.Text, "fill -1 0 1 1")
         End If
-        SendCgAdd(cmblayertemplate.Text, lsttemplate.SelectedItem.ToString)
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " add " & cmblayertemplate.Text & " " & """" & CurrentTemplateNameWithoutExtension(lsttemplate.SelectedItem.ToString) & """" & " 1")
         If chkanimatetemplate.Checked Then
             SendLayerMixer(cmblayertemplate.Text, "fill 0 0 1 1 50 easeoutexpo")
         End If
@@ -808,7 +808,7 @@ Public Class ucHtmlTemplate
             SendLayerMixer(cmblayertemplate.Text, "fill -1 0 1 1")
         End If
         'CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " [HTML] " & """" & Replace(templatefullpath, "\", "/") & lsttemplate.SelectedItem.ToString & """")
-        SendCgAdd(cmblayertemplate.Text, lsttemplate.SelectedItem.ToString)
+        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " add " & cmblayertemplate.Text & " " & """" & CurrentTemplateNameWithoutExtension(lsttemplate.SelectedItem.ToString) & """" & " 1")
 
         System.Threading.Thread.Sleep(Val(txtupdatedelay.Text))
         anytemplateupdate()
