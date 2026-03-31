@@ -5,22 +5,80 @@ Imports Google.Cloud.Translation.V2
 Imports System
 Public Class ucFullPageCaption
     Dim client As TranslationClient
+    Private Const FullPageCaptionFolder As String = "c:\casparcg\mydata\fullpagecaption\"
+
+    Private Function GetFullPageLayer() As Integer
+        Return Int(cmblayeronelinesuper.Text)
+    End Function
+
+    Private Sub UpdateCaptionHeader(fileName As String)
+        Me.dgvFullPageCaption.Columns(0).HeaderText = fileName
+    End Sub
+
+    Private Sub ResetCaptionGrid(headerText As String)
+        dgvFullPageCaption.Rows.Clear()
+        UpdateCaptionHeader(headerText)
+    End Sub
+
+    Private Sub SetCaptionTemplateData(sourceGrid As DataGridView)
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData("xf0", sourceGrid.CurrentRow.Cells(0).Value)
+        CasparCGDataCollection.SetData("xf1", sourceGrid.CurrentRow.Cells(1).Value)
+    End Sub
+
+    Private Sub PlayCaptionTemplate(sourceGrid As DataGridView)
+        SetCaptionTemplateData(sourceGrid)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetFullPageLayer(), GetFullPageLayer(), cmbTemplateOneliner.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
+    End Sub
+
+    Private Sub SendFullPageHtmlCall(functionName As String, value As String)
+        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & GetFullPageLayer() & " " & functionName & "('" & value & "')")
+    End Sub
+
+    Private Function GetActiveFullPageText() As String
+        If chkPlayFromTraslatedGrigHTML.Checked Then
+            Return dgvonelinesuperTranslated.CurrentRow.Cells(0).Value
+        End If
+
+        Return dgvFullPageCaption.CurrentRow.Cells(0).Value
+    End Function
+
+    Private Sub SendFullPageMarqueeText(textValue As String)
+        If chkbase64htmloneliner.Checked Then
+            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(replacestring(textValue))
+            SendFullPageHtmlCall("marqueedatabase64", System.Convert.ToBase64String(array))
+        Else
+            SendFullPageHtmlCall("marqueedata", replacestring1(textValue))
+        End If
+    End Sub
+
+    Private Sub SendFullPageHtmlStyle()
+        SendFullPageHtmlCall("stripy", nyhtmloneliner.Value & "%")
+        SendFullPageHtmlCall("Tickery", nyhtmltextoneliner.Value & "%")
+        SendFullPageHtmlCall("fontsize", nsizehtmloneliner.Value)
+        SendFullPageHtmlCall("font", Replace(cmbfonthtmloneliner.Text, " ", Chr(2)))
+        SendFullPageHtmlCall("fontitalic", If(chkitalic.Checked, "italic", "normal"))
+        SendFullPageHtmlCall("fontbold", If(chkBold.Checked, "bold", "normal"))
+        SendFullPageHtmlCall("fontcolor", ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.ForeColor))
+        SendFullPageHtmlCall("stripcolor", ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.BackColor))
+        SendFullPageHtmlCall("stripheight", nheighthtmloneliner.Value)
+    End Sub
+
     Sub newdgvoneliner()
         On Error Resume Next
-        dgvFullPageCaption.Rows.Clear()
+        ResetCaptionGrid("new playlist")
         dgvFullPageCaption.Rows.Add(7)
-        Me.dgvFullPageCaption.Columns(0).HeaderText = "new playlist"
     End Sub
     Private Sub opentsoneliner_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
     End Sub
     Sub openfileoneliner()
         On Error Resume Next
-        ofd2.InitialDirectory = "c:\casparcg\mydata\fullpagecaption\"
+        ofd2.InitialDirectory = FullPageCaptionFolder
         ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sr As StreamReader = New StreamReader(ofd2.FileName)
 
-                dgvFullPageCaption.Rows.Clear()
+                ResetCaptionGrid(ofd2.FileName)
 
                 Dim g As Integer = 0
                 Dim li As String
@@ -34,7 +92,6 @@ Public Class ucFullPageCaption
                 Loop
                 sr.Close()
             End Using
-            Me.dgvFullPageCaption.Columns(0).HeaderText = ofd2.FileName
         End If
     End Sub
 
@@ -43,7 +100,7 @@ Public Class ucFullPageCaption
     End Sub
     Sub savefileoneliner()
         On Error Resume Next
-        osd2.InitialDirectory = "c:\casparcg\mydata\fullpagecaption\"
+        osd2.InitialDirectory = FullPageCaptionFolder
         osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -60,7 +117,7 @@ Public Class ucFullPageCaption
                 End If
                 sw.Close()
             End Using
-            Me.dgvFullPageCaption.Columns(0).HeaderText = osd2.FileName
+            UpdateCaptionHeader(osd2.FileName)
         End If
     End Sub
     Sub deletecliponeliner()
@@ -150,10 +207,7 @@ Public Class ucFullPageCaption
     End Sub
     Private Sub cmdonelinesuperplay_Click(sender As Object, e As EventArgs) Handles cmdonelinesuperplay.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("xf0", dgvFullPageCaption.CurrentRow.Cells(0).Value)
-        CasparCGDataCollection.SetData("xf1", dgvFullPageCaption.CurrentRow.Cells(1).Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayeronelinesuper.Text), Int(cmblayeronelinesuper.Text), (cmbTemplateOneliner.Text), True, CasparCGDataCollection.ToAMCPEscapedXml)
+        PlayCaptionTemplate(dgvFullPageCaption)
     End Sub
     Private Sub ucOneLiner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         initialiseonelinerdata()
@@ -223,89 +277,44 @@ Public Class ucFullPageCaption
     Private Sub cmdonelinesuperplayhtml_Click(sender As Object, e As EventArgs) Handles cmdonelinesuperplayhtml.Click
         On Error Resume Next
 
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " [HTML] " & """" & "file:///C:/casparcg/mydata/html/oneliner.html" & """")
-
-        If chkPlayFromTraslatedGrigHTML.Checked Then
-            If chkbase64htmloneliner.Checked Then
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes((replacestring(dgvonelinesuperTranslated.CurrentRow.Cells(0).Value)))
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
-            Else
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedata('" & (replacestring1(dgvonelinesuperTranslated.CurrentRow.Cells(0).Value)) & "')")
-            End If
-        Else
-            If chkbase64htmloneliner.Checked Then
-                Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes((replacestring(dgvFullPageCaption.CurrentRow.Cells(0).Value)))
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
-            Else
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedata('" & (replacestring1(dgvFullPageCaption.CurrentRow.Cells(0).Value)) & "')")
-            End If
-        End If
-
-
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripy('" & nyhtmloneliner.Value & "%')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " Tickery('" & nyhtmltextoneliner.Value & "%')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontsize('" & nsizehtmloneliner.Value & "')")
-        'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " font('" & Replace(cmbfonthtmloneliner.Text, " ", Chr(2)) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " font('" & Replace(cmbfonthtmloneliner.Text, " ", Chr(2)) & "')")
-
-
-        If chkitalic.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontitalic('" & "italic" & "')")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontitalic('" & "normal" & "')")
-        End If
-
-
-        If chkBold.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontbold('" & "bold" & "')")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontbold('" & "normal" & "')")
-        End If
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.ForeColor) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.BackColor) & "')")
-
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripheight('" & nheighthtmloneliner.Value & "')")
-
-
+        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & GetFullPageLayer() & " [HTML] " & """" & "file:///C:/casparcg/mydata/html/oneliner.html" & """")
+        SendFullPageMarqueeText(GetActiveFullPageText())
+        SendFullPageHtmlStyle()
     End Sub
 
 
     Private Sub nyhtmloneliner_ValueChanged(sender As Object, e As EventArgs) Handles nyhtmloneliner.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripy('" & nyhtmloneliner.Value & "%')")
+        SendFullPageHtmlCall("stripy", nyhtmloneliner.Value & "%")
 
     End Sub
 
     Private Sub nyhtmltextoneliner_ValueChanged(sender As Object, e As EventArgs) Handles nyhtmltextoneliner.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " Tickery('" & nyhtmltextoneliner.Value & "%')")
+        SendFullPageHtmlCall("Tickery", nyhtmltextoneliner.Value & "%")
 
     End Sub
 
     Private Sub nsizehtmloneliner_ValueChanged(sender As Object, e As EventArgs) Handles nsizehtmloneliner.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontsize('" & nsizehtmloneliner.Value & "')")
+        SendFullPageHtmlCall("fontsize", nsizehtmloneliner.Value)
 
 
     End Sub
 
     Private Sub cmbfonthtmloneliner_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbfonthtmloneliner.SelectedIndexChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " font('" & Replace(cmbfonthtmloneliner.Text, " ", Chr(2)) & "')")
+        SendFullPageHtmlCall("font", Replace(cmbfonthtmloneliner.Text, " ", Chr(2)))
 
     End Sub
 
     Private Sub chkitalic_CheckedChanged(sender As Object, e As EventArgs) Handles chkitalic.CheckedChanged
         On Error Resume Next
         If chkitalic.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontitalic('" & "italic" & "')")
+            SendFullPageHtmlCall("fontitalic", "italic")
 
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontitalic('" & "normal" & "')")
+            SendFullPageHtmlCall("fontitalic", "normal")
 
         End If
 
@@ -314,9 +323,9 @@ Public Class ucFullPageCaption
     Private Sub chkBold_CheckedChanged(sender As Object, e As EventArgs) Handles chkBold.CheckedChanged
         On Error Resume Next
         If chkBold.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontbold('" & "bold" & "')")
+            SendFullPageHtmlCall("fontbold", "bold")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontbold('" & "normal" & "')")
+            SendFullPageHtmlCall("fontbold", "normal")
         End If
     End Sub
 
@@ -328,7 +337,7 @@ Public Class ucFullPageCaption
             cmdcolorhtmloneliner.ForeColor = aa.Color
             cmdstripcolorhtmloneliner.ForeColor = aa.Color
 
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.ForeColor) & "')")
+            SendFullPageHtmlCall("fontcolor", ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.ForeColor))
         End If
     End Sub
 
@@ -340,24 +349,19 @@ Public Class ucFullPageCaption
             cmdcolorhtmloneliner.BackColor = aa.Color
             cmdstripcolorhtmloneliner.BackColor = aa.Color
 
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.BackColor) & "')")
+            SendFullPageHtmlCall("stripcolor", ColorTranslator.ToHtml(cmdstripcolorhtmloneliner.BackColor))
         End If
     End Sub
 
     Private Sub nheighthtmloneliner_ValueChanged(sender As Object, e As EventArgs) Handles nheighthtmloneliner.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " stripheight('" & nheighthtmloneliner.Value & "')")
+        SendFullPageHtmlCall("stripheight", nheighthtmloneliner.Value)
 
     End Sub
 
     Private Sub chkbase64htmloneliner_CheckedChanged(sender As Object, e As EventArgs) Handles chkbase64htmloneliner.CheckedChanged
         On Error Resume Next
-        If chkbase64htmloneliner.Checked Then
-            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvFullPageCaption.CurrentRow.Cells(0).Value)
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text) & " marqueedata('" & WebUtility.HtmlEncode(dgvFullPageCaption.CurrentRow.Cells(0).Value) & "')")
-        End If
+        SendFullPageMarqueeText(dgvFullPageCaption.CurrentRow.Cells(0).Value)
     End Sub
 
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
@@ -421,10 +425,7 @@ Public Class ucFullPageCaption
 
     Private Sub CmdonelinesuperplayfromTranslatedGrid_Click(sender As Object, e As EventArgs) Handles cmdonelinesuperplayfromTranslatedGrid.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("xf0", dgvonelinesuperTranslated.CurrentRow.Cells(0).Value)
-        CasparCGDataCollection.SetData("xf1", dgvonelinesuperTranslated.CurrentRow.Cells(1).Value)
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayeronelinesuper.Text), Int(cmblayeronelinesuper.Text), (cmbTemplateOneliner.Text), True, CasparCGDataCollection.ToAMCPEscapedXml)
+        PlayCaptionTemplate(dgvonelinesuperTranslated)
 
     End Sub
 

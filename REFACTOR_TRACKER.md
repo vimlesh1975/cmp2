@@ -47,6 +47,10 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucEyeDropper` | `CasparMediaPlayback/ucEyeDropper.vb` | Done | Load/init flow consolidated, cursor resource loading extracted, and repeated color-pick finish logic centralized into shared helpers. |
 | `ucFaceBook` | `CasparMediaPlayback/ucFaceBook.vb` | Done | Facebook graph query building, row population, template play actions, and key-file token loading consolidated into shared helpers. |
 | `ucFourChannelPreview` | `CasparMediaPlayback/ucFourChannelPreview.vb` | Done | Four preview-control multicast/channel setup consolidated into shared preview-list helpers. |
+| `ucFullPageCaption` | `CasparMediaPlayback/ucFullPageCaption.vb` | Done | Full-page caption file/grid reset, template play, and HTML marquee/style update flows consolidated into shared helpers. |
+| `ucHTML` | `CasparMediaPlayback/ucHTML.vb` | Done | HTML layer-address, play/call/mixer helpers, Facebook URL building, and YouTube/live-stream helper flows consolidated. |
+| `ucHtmlScroller` | `CasparMediaPlayback/ucHtmlScroller.vb` | Done | Already refactored; retained shared scroller helper structure from earlier cleanup pass. |
+| `ucImageScroll` | `CasparMediaPlayback/ucImageScroll.vb` | Done | Image-scroll layer addressing, play/call option toggles, and pause/resume command selection consolidated into shared helpers. |
 
 ## Repository Cleanup
 
