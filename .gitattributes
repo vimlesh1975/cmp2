@@ -7,7 +7,6 @@
 *.sln text eol=crlf
 *.resx text eol=crlf
 *.config text eol=crlf
-
 # Set default behavior for command prompt diff.
 #
 # This is need for earlier builds of msysgit that does not have it on by
