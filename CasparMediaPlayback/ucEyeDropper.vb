@@ -5,9 +5,9 @@ Imports System.Runtime.InteropServices
 
 #Region "gEyeDropper"
 
-<ToolboxItem(True), ToolboxBitmap(GetType(ucEyeDropper), "ColorPickerLib.gEyeDropper.bmp")> _
-<Designer(GetType(ucEyedropperDesigner))> _
-<DefaultEvent("SelectedColorChanged")> _
+<ToolboxItem(True), ToolboxBitmap(GetType(ucEyeDropper), "ColorPickerLib.gEyeDropper.bmp")>
+<Designer(GetType(ucEyedropperDesigner))>
+<DefaultEvent("SelectedColorChanged")>
 Public Class ucEyeDropper
     Inherits UserControl
 
@@ -42,20 +42,27 @@ Public Class ucEyeDropper
 
     End Sub
 
-    Private Sub gEyeDropper_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
-        RecalcScreenShotSize()
-        'get the blank cursor to make the it dissapear when dragging
+    Private Sub LoadDropperCursor()
         Dim assem As Reflection.Assembly = Me.GetType().Assembly
         Dim my_namespace As String = assem.GetName().Name
-        Dim mystream As IO.Stream
-        Try
-            mystream = assem.GetManifestResourceStream(my_namespace & ".Dropper.cur")
-            DropperCursor = New Cursor(mystream)
 
+        Try
+            Using mystream As IO.Stream = assem.GetManifestResourceStream(my_namespace & ".Dropper.cur")
+                DropperCursor = New Cursor(mystream)
+            End Using
         Catch ex As Exception
             DropperCursor = Cursors.Cross
         End Try
+    End Sub
+
+    Private Sub InitializeEyeDropper()
+        RecalcScreenShotSize()
+        LoadDropperCursor()
         DrawDropper(Color.Blue)
+    End Sub
+
+    Private Sub ucEyeDropper_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitializeEyeDropper()
     End Sub
 
 #End Region 'Initialize
@@ -63,8 +70,8 @@ Public Class ucEyeDropper
 #Region "Properties"
 
     Private _SelectedColor As Color
-    <Category("Appearance EyeDropper")> _
-    <Description("Current Color at the Cursor Location")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Current Color at the Cursor Location")>
     Public Property SelectedColor() As Color
         Get
             Return _SelectedColor
@@ -78,8 +85,8 @@ Public Class ucEyeDropper
     End Property
 
     Private _BorderColor As Color = Color.Blue
-    <Category("Appearance EyeDropper")> _
-    <Description("Color of the Border")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Color of the Border")>
     Public Property BorderColor() As Color
         Get
             Return _BorderColor
@@ -91,8 +98,8 @@ Public Class ucEyeDropper
     End Property
 
     Private _ButtonColor As Color = Color.White
-    <Category("Appearance EyeDropper")> _
-    <Description("Background Color for the Button")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Background Color for the Button")>
     Public Property ButtonColor() As Color
         Get
             Return _ButtonColor
@@ -108,8 +115,8 @@ Public Class ucEyeDropper
         Level2 = 10
     End Enum
     Private _zoomLevel As eZoomLevel = eZoomLevel.Level1
-    <Category("Appearance EyeDropper")> _
-    <Description("Level of Zoom for the Eye Dropper Window (1-13)")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Level of Zoom for the Eye Dropper Window (1-13)")>
     Public Property ZoomLevel() As eZoomLevel
         Get
             Return _zoomLevel
@@ -126,8 +133,8 @@ Public Class ucEyeDropper
     End Enum
 
     Private _zoomWindowType As eZoomWindowType = eZoomWindowType.ShowOnCursor
-    <Category("Appearance EyeDropper")> _
-    <Description("Set if the Zoom window expands in place or becomes the cursor")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Set if the Zoom window expands in place or becomes the cursor")>
     Public Property ZoomWindowType() As eZoomWindowType
         Get
             Return _zoomWindowType
@@ -138,8 +145,8 @@ Public Class ucEyeDropper
     End Property
 
     Private _showSelectedSwatch As Boolean = True
-    <Category("Appearance EyeDropper")> _
-    <Description("Get or Set if the SelectedColor is displayed")> _
+    <Category("Appearance EyeDropper")>
+    <Description("Get or Set if the SelectedColor is displayed")>
     Public Property ShowSelectedSwatch() As Boolean
         Get
             Return _showSelectedSwatch
@@ -162,15 +169,15 @@ Public Class ucEyeDropper
         Public hbmColor As IntPtr
     End Structure
 
-    <DllImport("user32.dll", EntryPoint:="CreateIconIndirect")> _
+    <DllImport("user32.dll", EntryPoint:="CreateIconIndirect")>
     Private Shared Function CreateIconIndirect(ByVal iconInfo As IntPtr) As IntPtr
     End Function
 
-    <DllImport("user32.dll", CharSet:=CharSet.Auto)> _
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
     Private Shared Function DestroyIcon(ByVal handle As IntPtr) As Boolean
     End Function
 
-    <DllImport("gdi32.dll")> _
+    <DllImport("gdi32.dll")>
     Private Shared Function DeleteObject(ByVal hObject As IntPtr) As Boolean
     End Function
 
@@ -181,8 +188,8 @@ Public Class ucEyeDropper
             DestroyIcon(curPtr)
         End If
 
-        Using bmp As New Bitmap(120, 120), _
-           g As Graphics = Graphics.FromImage(bmp), _
+        Using bmp As New Bitmap(120, 120),
+           g As Graphics = Graphics.FromImage(bmp),
            pn As Pen = New Pen(_BorderColor)
 
             'Make the zoomed in Bitmap of the 
@@ -205,12 +212,9 @@ Public Class ucEyeDropper
             Cursor.Current = New Cursor(curPtr)
 
             'Clean Up
-            If pnt <> IntPtr.Zero Then DestroyIcon(pnt)
-            pnt = Nothing
+            If pnt <> IntPtr.Zero Then Marshal.FreeHGlobal(pnt)
             If tmp.hbmMask <> IntPtr.Zero Then DeleteObject(tmp.hbmMask)
             If tmp.hbmColor <> IntPtr.Zero Then DeleteObject(tmp.hbmColor)
-            tmp = Nothing
-
         End Using
     End Sub
 
@@ -220,19 +224,19 @@ Public Class ucEyeDropper
             With g
                 .InterpolationMode = InterpolationMode.NearestNeighbor
                 .SmoothingMode = SmoothingMode.None
-                Dim centerrect As Rectangle = New Rectangle( _
-                    CInt(((szZoomWindowSize.Width - _zoomLevel) / 2) + _zoomWindowType + 1), _
-                    CInt(((szZoomWindowSize.Height - _zoomLevel) / 2) + _zoomWindowType + 1), _
-                    CInt(_zoomLevel), _
+                Dim centerrect As Rectangle = New Rectangle(
+                    CInt(((szZoomWindowSize.Width - _zoomLevel) / 2) + _zoomWindowType + 1),
+                    CInt(((szZoomWindowSize.Height - _zoomLevel) / 2) + _zoomWindowType + 1),
+                    CInt(_zoomLevel),
                     CInt(_zoomLevel))
 
                 'Draw the Zoomed piece of the screenshot
-                .FillRectangle(Brushes.White, _zoomWindowType, _zoomWindowType, _
+                .FillRectangle(Brushes.White, _zoomWindowType, _zoomWindowType,
                     szZoomWindowSize.Width, szZoomWindowSize.Height)
-                .DrawImage(bmpScreenShot, _
-                    _zoomLevel \ 4 + _zoomWindowType, _
-                    _zoomLevel \ 4 + _zoomWindowType, _
-                    szZoomWindowSize.Width - 1, _
+                .DrawImage(bmpScreenShot,
+                    _zoomLevel \ 4 + _zoomWindowType,
+                    _zoomLevel \ 4 + _zoomWindowType,
+                    szZoomWindowSize.Width - 1,
                     szZoomWindowSize.Height - 1)
 
                 'Draw the center pixel box
@@ -241,11 +245,11 @@ Public Class ucEyeDropper
                 'Draw The Border
                 pn.Width = 3
                 pn.Alignment = PenAlignment.Inset
-                .DrawRectangle(pn, _zoomWindowType, _zoomWindowType, _
-                    szZoomWindowSize.Width - 0, _
+                .DrawRectangle(pn, _zoomWindowType, _zoomWindowType,
+                    szZoomWindowSize.Width - 0,
                     szZoomWindowSize.Height - 0)
-                .DrawRectangle(Pens.White, _zoomWindowType + 1, _zoomWindowType + 1, _
-                    szZoomWindowSize.Width - 3, _
+                .DrawRectangle(Pens.White, _zoomWindowType + 1, _zoomWindowType + 1,
+                    szZoomWindowSize.Width - 3,
                     szZoomWindowSize.Height - 3)
 
                 'Draw the CrossHair and Swatch if requested
@@ -302,15 +306,17 @@ Public Class ucEyeDropper
         End If
     End Sub
 
-    Private Sub EyeDropScreen_MouseUp(ByVal sender As Object, ByVal e As MouseEventArgs) Handles Me.MouseUp
+    Private Sub FinishColorPick()
         Cursor = Cursors.Default
         blnGettingPixelColor = False
         Size = szDownSize
         DrawDropper(_SelectedColor)
-
         RaiseEvent SelectedColorChanged(Me, _SelectedColor)
-
         Invalidate()
+    End Sub
+
+    Private Sub EyeDropScreen_MouseUp(ByVal sender As Object, ByVal e As MouseEventArgs) Handles Me.MouseUp
+        FinishColorPick()
     End Sub
 
 #End Region 'Mouse Events
@@ -322,7 +328,7 @@ Public Class ucEyeDropper
             bmpScreenShot.Dispose()
         End If
         'Determine the size of the screenshot to put in the zoom box
-        bmpScreenShot = New Bitmap(CInt(szZoomWindowSize.Width / _zoomLevel), _
+        bmpScreenShot = New Bitmap(CInt(szZoomWindowSize.Width / _zoomLevel),
             CInt(szZoomWindowSize.Height / _zoomLevel))
     End Sub
 
@@ -341,8 +347,8 @@ Public Class ucEyeDropper
         End Using
 
         'Determine the color of the pixel in the center of the box
-        SelectedColor = bmpScreenShot.GetPixel( _
-            CInt(bmpScreenShot.Size.Width / 2), _
+        SelectedColor = bmpScreenShot.GetPixel(
+            CInt(bmpScreenShot.Size.Width / 2),
             CInt(bmpScreenShot.Size.Height / 2))
 
     End Sub
@@ -362,14 +368,14 @@ Public Class ucEyeDropper
                             MakeZoom(e.Graphics)
                         Else
                             .SmoothingMode = SmoothingMode.AntiAlias
-                            .FillRectangle(New SolidBrush(BackColor), _
+                            .FillRectangle(New SolidBrush(BackColor),
                                 New Rectangle(New Point(0, 0), szDownSize))
-                            .FillPath(New SolidBrush(_ButtonColor), _
-                                GetRectPath(New Rectangle(0, 0, _
+                            .FillPath(New SolidBrush(_ButtonColor),
+                                GetRectPath(New Rectangle(0, 0,
                                 szDownSize.Width, szDownSize.Height), 3))
                             .DrawImage(bmpButtonImage, 3, 3)
-                            .DrawPath(pn, _
-                                GetRectPath(New Rectangle(0, 0, _
+                            .DrawPath(pn,
+                                GetRectPath(New Rectangle(0, 0,
                                 szDownSize.Width, szDownSize.Height), 3))
                         End If
 
@@ -382,7 +388,7 @@ Public Class ucEyeDropper
 
     Private Sub DrawDropper(ByVal TipColor As Color)
         bmpButtonImage = New Bitmap(16, 16)
-        Using g As Graphics = Graphics.FromImage(bmpButtonImage), _
+        Using g As Graphics = Graphics.FromImage(bmpButtonImage),
           pnTip As Pen = New Pen(TipColor)
             g.SmoothingMode = SmoothingMode.AntiAlias
             'Tube Border
@@ -428,7 +434,7 @@ Public Class ucEyeDropper
             MyPath.AddRectangle(BorderRect)
         Else
             With MyPath
-                ArcRect = New RectangleF(BorderRect.Location, _
+                ArcRect = New RectangleF(BorderRect.Location,
                     New SizeF(CornerRadius * 2, CornerRadius * 2))
                 ' top left arc
                 .AddArc(ArcRect, 180, 90)
@@ -460,10 +466,6 @@ Public Class ucEyeDropper
         '
         Me.Name = "ucEyeDropper"
         Me.ResumeLayout(False)
-
-    End Sub
-
-    Private Sub ucEyeDropper_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
 
