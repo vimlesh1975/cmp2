@@ -135,6 +135,37 @@ Public Class ucPlaylist
         SendString(NetStream, commandName & " " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & commandTarget & vbCrLf)
     End Sub
 
+    Private Sub SelectNextClipGridRow()
+        Dim nextIndex As Integer = dgvclips.CurrentRow.Index + 1
+        If nextIndex > dgvclips.Rows.Count - 1 Then
+            nextIndex = 0
+        End If
+
+        dgvclips.CurrentCell = dgvclips.Rows(nextIndex).Cells(PlaylistClipNameColumn)
+    End Sub
+
+    Private Sub SendNextClipGridTransport(commandName As String)
+        SelectNextClipGridRow()
+        SendClipGridTransport(commandName, GetClipGridCommandTarget(dgvclips.CurrentRow.Cells(PlaylistClipNameColumn).Value.ToString()))
+        tmrduration.Enabled = True
+        palyloopinsecondchannel()
+    End Sub
+
+    Private Sub SetCurrentPlaylistFilter(legacyFilter As String, Optional modernFilter As String = "")
+        If ServerVersion > 2.1 AndAlso modernFilter <> "" Then
+            dgv1.CurrentRow.Cells("clmFilter").Value = modernFilter
+            Return
+        End If
+
+        dgv1.CurrentRow.Cells("clmFilter").Value = legacyFilter
+    End Sub
+
+    Private Sub SetCurrentPlaylistScaleMode(scaleMode As String)
+        If ServerVersion > 2.0 Then
+            dgv1.CurrentRow.Cells("clmFilter").Value = "SCALE_MODE " & scaleMode
+        End If
+    End Sub
+
     Private Sub dgvclips_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvclips.CellContentClick
     End Sub
     Private Sub cmdrefreshtvclips_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrefreshtvclips.Click
@@ -2400,43 +2431,12 @@ Public Class ucPlaylist
     End Sub
     Private Sub cmdcuenextforclipgrid_Click(sender As Object, e As EventArgs) Handles cmdcuenextforclipgrid.Click
         On Error Resume Next
-        Dim i As Integer
-        i = dgvclips.CurrentRow.Index
-        If i = (dgvclips.Rows.Count - 1) Then
-            dgvclips.CurrentCell = dgvclips.Rows(0).Cells("File_Name")
-        Else
-            dgvclips.CurrentCell = dgvclips.Rows(i + 1).Cells("File_Name")
-        End If
-
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            CasparDevice.SendString("load " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-        Else
-            CasparDevice.SendString("load " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
-        tmrduration.Enabled = True
-        palyloopinsecondchannel()
-
+        SendNextClipGridTransport("load")
         lastclickedbutton(sender)
     End Sub
     Private Sub cmdplaynextforclipgrid_Click(sender As Object, e As EventArgs) Handles cmdplaynextforclipgrid.Click
         On Error Resume Next
-        Dim i As Integer
-        i = dgvclips.CurrentRow.Index
-        If i = (dgvclips.Rows.Count - 1) Then
-            dgvclips.CurrentCell = dgvclips.Rows(0).Cells("File_Name")
-        Else
-            dgvclips.CurrentCell = dgvclips.Rows(i + 1).Cells("File_Name")
-        End If
-
-        If System.IO.Path.GetExtension(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString) = ".txt" Then
-            readsubclip(mediafullpath & dgvclips.CurrentRow.Cells("File_Name").Value.ToString)
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(masterfilename) & """" + " seek " & clipseek & " length " & cliplength & deinterlaced)
-        Else
-            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " " & """" & ModifyFilename(dgvclips.CurrentRow.Cells("File_Name").Value) & """" & deinterlaced)
-        End If
-        tmrduration.Enabled = True
-        palyloopinsecondchannel()
+        SendNextClipGridTransport("play")
         lastclickedbutton(sender)
     End Sub
     Private Sub dgvclips_DragEnter(sender As Object, e As DragEventArgs) Handles dgvclips.DragEnter
@@ -2473,91 +2473,50 @@ Public Class ucPlaylist
     End Sub
 
     Private Sub ForIMXFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForIMXFileToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "vf crop=720:576:0:32"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "filter crop=720:576:0:32"
-        End If
+        SetCurrentPlaylistFilter("filter crop=720:576:0:32", "vf crop=720:576:0:32")
     End Sub
 
     Private Sub LToBothToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LToBothToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "af pan=stereo|c0=c0|c1=c0"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "Channel_Layout L_To_Both"
-        End If
+        SetCurrentPlaylistFilter("Channel_Layout L_To_Both", "af pan=stereo|c0=c0|c1=c0")
     End Sub
 
     Private Sub RToBothToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RToBothToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "af pan=stereo|c0=c1|c1=c1"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "Channel_Layout R_To_Both"
-        End If
+        SetCurrentPlaylistFilter("Channel_Layout R_To_Both", "af pan=stereo|c0=c1|c1=c1")
     End Sub
 
     Private Sub MixToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles MixToolStripMenuItem1.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "af pan=stereo|c0=0.7c0+0.7c1|c1=0.7c0+0.7c1"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "Channel_Layout Mix"
-        End If
+        SetCurrentPlaylistFilter("Channel_Layout Mix", "af pan=stereo|c0=0.7c0+0.7c1|c1=0.7c0+0.7c1")
     End Sub
 
     Private Sub OnlyLToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OnlyLToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "af pan=stereo|c0=c0|c1=0c1"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "Channel_Layout Only_L"
-        End If
+        SetCurrentPlaylistFilter("Channel_Layout Only_L", "af pan=stereo|c0=c0|c1=0c1")
     End Sub
 
     Private Sub OnlyRToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OnlyRToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "af pan=stereo|c0=0c0|c1=c1"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "Channel_Layout Only_R"
-        End If
+        SetCurrentPlaylistFilter("Channel_Layout Only_R", "af pan=stereo|c0=0c0|c1=c1")
     End Sub
 
     Private Sub Yadif10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles Yadif10ToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "vf yadif=1:0"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "filter yadif=1:0"
-        End If
+        SetCurrentPlaylistFilter("filter yadif=1:0", "vf yadif=1:0")
     End Sub
 
     Private Sub Yadif11ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles Yadif11ToolStripMenuItem.Click
-        If ServerVersion > 2.1 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "vf yadif=1:1"
-        Else
-            dgv1.CurrentRow.Cells("clmFilter").Value = "filter yadif=1:1"
-        End If
+        SetCurrentPlaylistFilter("filter yadif=1:1", "vf yadif=1:1")
     End Sub
 
     Private Sub STRETCHToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles STRETCHToolStripMenuItem.Click
-        If ServerVersion > 2.0 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "SCALE_MODE STRETCH"
-        End If
-
+        SetCurrentPlaylistScaleMode("STRETCH")
     End Sub
 
     Private Sub FITToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FITToolStripMenuItem.Click
-        If ServerVersion > 2.0 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "SCALE_MODE FIT"
-        End If
+        SetCurrentPlaylistScaleMode("FIT")
     End Sub
 
     Private Sub FILLToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FILLToolStripMenuItem.Click
-        If ServerVersion > 2.0 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "SCALE_MODE FILL"
-        End If
+        SetCurrentPlaylistScaleMode("FILL")
     End Sub
 
     Private Sub ORIGINALToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ORIGINALToolStripMenuItem.Click
-        If ServerVersion > 2.0 Then
-            dgv1.CurrentRow.Cells("clmFilter").Value = "SCALE_MODE ORIGINAL"
-        End If
+        SetCurrentPlaylistScaleMode("ORIGINAL")
     End Sub
 End Class

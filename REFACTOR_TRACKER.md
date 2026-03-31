@@ -68,6 +68,10 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucOSC` | `CasparMediaPlayback/ucOSC.vb` | Done | OSC grid row population for message, bundle, and packet events consolidated into a shared row-update helper. |
 | `ucOSD` | `CasparMediaPlayback/ucOSD.vb` | Done | OSD layer addressing, call sending, and selected-color routing consolidated into shared helpers. |
 | `ucPlayers` | `CasparMediaPlayback/ucPlayers.vb` | Done | Player photo/flag picking and repeated Davis Cup template play flow consolidated into shared helpers. |
+| `ucPlayFromAnyWhere` | `CasparMediaPlayback/ucPlayFromAnyWhere.vb` | Done | File-tree refresh, media-path normalization, and play/cue transport command building consolidated into shared helpers. |
+| `UcPlaylistScheduler` | `CasparMediaPlayback/UcPlaylistScheduler.vb` | Done | Scheduler file open/save, next-run calculation, status updates, and scheduled playlist launch flow consolidated into shared helpers. |
+| `ucPlaylistSetting` | `CasparMediaPlayback/ucPlaylistSetting.vb` | Done | Playlist channel/OSC selection, clip-source routing, and resize-mode mapping consolidated into shared helpers. |
+| `ucPositionAndSize` | `CasparMediaPlayback/ucPositionAndSize.vb` | Done | Mixer fill layer addressing and value formatting consolidated into shared helpers. |
 
 ## Repository Cleanup
 
@@ -83,6 +87,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
 | `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Likely another data-driven graphics module with repeated list/template handling. |
+| `ucTemplate` follow-up | `CasparMediaPlayback/ucTemplate.vb` | Pending | Worth a focused second pass to reduce remaining `On Error Resume Next` and strengthen play/update safety. |
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
 
 ## How To Update
