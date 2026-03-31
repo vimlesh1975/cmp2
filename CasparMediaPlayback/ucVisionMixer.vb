@@ -1,103 +1,86 @@
 ﻿Imports System.Xml
 Public Class ucVisionMixer
+    Private Function BuildVisionTransition() As String
+        Return cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text
+    End Function
+
+    Private Sub PlayVisionRoute(targetLayer As String, sourceIndex As Integer, targetLabel As Label, Optional shouldLoop As Boolean = False)
+        Dim commandText = "play " & targetLayer & " route://1-" & sourceIndex & " " & BuildVisionTransition()
+        If shouldLoop Then commandText &= " loop"
+        CasparDevice.SendString(commandText)
+        targetLabel.Text = sourceIndex
+    End Sub
+
+    Private Sub PlayVisionColor(colorName As String)
+        If rdoColorPGM.Checked Then
+            CasparDevice.SendString("play 1-21 " & colorName & " " & cmbtransition.Text & " " & ntransitionduration.Value)
+            lblPGMSource.Text = colorName
+        Else
+            CasparDevice.SendString("play 2-21 " & colorName & " " & cmbtransition.Text & " " & ntransitionduration.Value)
+            lblpreviewSource.Text = colorName
+        End If
+    End Sub
     Private Sub cmdsource1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsource1.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-1 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-        lblPGMSource.Text = 1
+        PlayVisionRoute("1-21", 1, lblPGMSource)
     End Sub
 
     Private Sub cmdsource2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsource2.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-2 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-
-        lblPGMSource.Text = 2
+        PlayVisionRoute("1-21", 2, lblPGMSource)
     End Sub
 
     Private Sub cmdsource3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsource3.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-3 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-        lblPGMSource.Text = 3
+        PlayVisionRoute("1-21", 3, lblPGMSource)
     End Sub
 
     Private Sub cmdsource4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsource4.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-4 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-        lblPGMSource.Text = 4
+        PlayVisionRoute("1-21", 4, lblPGMSource)
     End Sub
     Private Sub cmdsource5_Click(sender As Object, e As EventArgs) Handles cmdsource5.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-5 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-
-        lblPGMSource.Text = 5
+        PlayVisionRoute("1-21", 5, lblPGMSource)
     End Sub
 
     Private Sub cmdsource6_Click(sender As Object, e As EventArgs) Handles cmdsource6.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-6 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-
-        lblPGMSource.Text = 6
+        PlayVisionRoute("1-21", 6, lblPGMSource)
     End Sub
 
     Private Sub cmdsource7_Click(sender As Object, e As EventArgs) Handles cmdsource7.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-7 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-
-        lblPGMSource.Text = 7
+        PlayVisionRoute("1-21", 7, lblPGMSource)
     End Sub
 
     Private Sub cmdsource8_Click(sender As Object, e As EventArgs) Handles cmdsource8.Click
         On Error Resume Next
-        CasparDevice.SendString("play 1-21 route://1-8 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text)
-
-        lblPGMSource.Text = 8
+        PlayVisionRoute("1-21", 8, lblPGMSource)
     End Sub
     Private Sub cmdred_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdred.Click
         On Error Resume Next
 
-        If rdoColorPGM.Checked Then
-            CasparDevice.SendString("play 1-21 red " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblPGMSource.Text = "red"
-        Else
-            CasparDevice.SendString("play 2-21 red " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblpreviewSource.Text = "red"
-        End If
+        PlayVisionColor("red")
     End Sub
 
     Private Sub cmdgreen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgreen.Click
         On Error Resume Next
-        If rdoColorPGM.Checked Then
-            CasparDevice.SendString("play 1-21 green " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblPGMSource.Text = "green"
-        Else
-            CasparDevice.SendString("play 2-21 green " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblpreviewSource.Text = "green"
-        End If
+        PlayVisionColor("green")
 
     End Sub
 
     Private Sub cmdblue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdblue.Click
 
         On Error Resume Next
-        If rdoColorPGM.Checked Then
-            CasparDevice.SendString("play 1-21 blue " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblPGMSource.Text = "blue"
-        Else
-            CasparDevice.SendString("play 2-21 blue " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblpreviewSource.Text = "blue"
-        End If
+        PlayVisionColor("blue")
 
     End Sub
 
     Private Sub cmdblack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdblack.Click
 
         On Error Resume Next
-        If rdoColorPGM.Checked Then
-            CasparDevice.SendString("play 1-21 black " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblPGMSource.Text = "black"
-        Else
-            CasparDevice.SendString("play 2-21 black " & cmbtransition.Text & " " & ntransitionduration.Value)
-            lblpreviewSource.Text = "black"
-        End If
+        PlayVisionColor("black")
 
     End Sub
 
@@ -216,53 +199,42 @@ Public Class ucVisionMixer
 
     Private Sub cmdsource1pvw_Click(sender As Object, e As EventArgs) Handles cmdsource1pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-1 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-
-        lblpreviewSource.Text = 1
+        PlayVisionRoute("2-21", 1, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource2pvw_Click(sender As Object, e As EventArgs) Handles cmdsource2pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-2 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-
-        lblpreviewSource.Text = 2
+        PlayVisionRoute("2-21", 2, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource3pvw_Click(sender As Object, e As EventArgs) Handles cmdsource3pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-3 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-
-        lblpreviewSource.Text = 3
+        PlayVisionRoute("2-21", 3, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource4pvw_Click(sender As Object, e As EventArgs) Handles cmdsource4pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-4 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-        lblpreviewSource.Text = 4
+        PlayVisionRoute("2-21", 4, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource5pvw_Click(sender As Object, e As EventArgs) Handles cmdsource5pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-5 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-        lblpreviewSource.Text = 5
+        PlayVisionRoute("2-21", 5, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource6pvw_Click(sender As Object, e As EventArgs) Handles cmdsource6pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-6 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-        lblpreviewSource.Text = 6
+        PlayVisionRoute("2-21", 6, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource7pvw_Click(sender As Object, e As EventArgs) Handles cmdsource7pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-7 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-        lblpreviewSource.Text = 7
+        PlayVisionRoute("2-21", 7, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdsource8pvw_Click(sender As Object, e As EventArgs) Handles cmdsource8pvw.Click
         On Error Resume Next
-        CasparDevice.SendString("play 2-21 route://1-8 " & cmbtransition.Text & " " & ntransitionduration.Value & " " & cmbtweentype.Text & " " & cmbdirection.Text & " loop")
-        lblpreviewSource.Text = 8
+        PlayVisionRoute("2-21", 8, lblpreviewSource, True)
     End Sub
 
     Private Sub cmdCut_Click(sender As Object, e As EventArgs) Handles cmdCut.Click

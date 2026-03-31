@@ -1,6 +1,60 @@
 ﻿Imports System.IO
 
 Public Class ucTemplatePlaylist
+    Private Function BuildRundownTemplateData() As String
+        CasparCGDataCollection.Clear()
+        For ianytemplate = 0 To dgvanytemplate.Rows.Count
+            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
+        Next
+        CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
+        Return CasparCGDataCollection.ToXml
+    End Function
+
+    Private Sub ConfigureRundownDialog(dialog As FileDialog, Optional fileName As String = "")
+        dialog.InitialDirectory = "c:\casparcg\mydata\rundown\"
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.FileName = fileName
+    End Sub
+
+    Private Sub LoadRundownFromFile(fileName As String)
+        Using sr As StreamReader = New StreamReader(fileName)
+            dgvrundown.Rows.Clear()
+            Dim g As Integer = 0
+            Dim li As String
+            Do Until sr.EndOfStream = True
+                li = sr.ReadLine()
+                dgvrundown.Rows.Add()
+                Dim xyz As Array = Split(li, Chr(2))
+                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
+                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
+                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
+                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
+                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
+                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
+                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
+                dgvrundown.Rows(g).Cells(8).Value = (xyz(7) = "True")
+                g = g + 1
+            Loop
+            sr.Close()
+        End Using
+        Me.dgvrundown.Columns(0).HeaderText = fileName
+    End Sub
+
+    Private Sub SaveRundownToFile(fileName As String)
+        Using sw As StreamWriter = New StreamWriter(fileName)
+            If dgvrundown.Rows.Count = 0 Then
+                sw.Write("")
+            Else
+                Dim f As Integer = 0
+                Do Until f = dgvrundown.Rows.Count
+                    sw.WriteLine(dgvrundown.Rows(f).Cells(0).Value & Chr(2) & dgvrundown.Rows(f).Cells(1).Value & Chr(2) & dgvrundown.Rows(f).Cells(2).Value & Chr(2) & dgvrundown.Rows(f).Cells(3).Value & Chr(2) & Replace(dgvrundown.Rows(f).Cells(4).Value, vbNewLine, "vbnewline") & Chr(2) & Format(CType(dgvrundown.Rows(f).Cells(5).Value, DateTime), "H:mm:ss") & Chr(2) & dgvrundown.Rows(f).Cells(6).Value & Chr(2) & dgvrundown.Rows(f).Cells(8).Value)
+                    f = f + 1
+                Loop
+            End If
+            sw.Close()
+        End Using
+    End Sub
+
     Private Sub cmdadjusttimeofrundown_Click(sender As Object, e As EventArgs) Handles cmdadjusttimeofrundown.Click
         On Error Resume Next
         adjusttimeofrundown()
@@ -21,14 +75,7 @@ Public Class ucTemplatePlaylist
         On Error Resume Next
         dgvrundown.Rows.Insert(dgvrundown.Rows.Count - 1)
 
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-
-        Dim ianytemplate As Integer
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
-
+        BuildRundownTemplateData()
         dgvrundown.CurrentRow.Cells(0).Value = dgvanytemplate.Rows(0).Cells(1).Value
         dgvrundown.CurrentRow.Cells(1).Value = lsttemplate.SelectedItem.ToString
 
@@ -51,19 +98,13 @@ Public Class ucTemplatePlaylist
     End Sub
     Private Sub playtsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles playtsrundown.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
+        BuildRundownTemplateData()
         CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " add " & dgvrundown.CurrentRow.Cells(3).Value & " " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """")
 
     End Sub
     Sub playrundownforvideo()
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
+        BuildRundownTemplateData()
         CasparDevice.SendString("cg " & g_int_ChannelNumber & "-21 add 21 " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """" & vbCrLf)
         dgvrundown.CurrentCell = dgvrundown.Rows(dgvrundown.CurrentRow.Index + 1).Cells(0)
     End Sub
@@ -100,72 +141,16 @@ Public Class ucTemplatePlaylist
     Sub openfilerundown()
         'On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\rundown\"
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        ConfigureRundownDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
-
-                dgvrundown.Rows.Clear()
-
-                Dim g As Integer = 0
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvrundown.Rows.Add()
-                    Dim xyz As Array = Split(li, Chr(2))
-                    dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                    dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                    dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                    dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                    dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                    dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                    dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-                    If xyz(7) = "True" Then
-                        dgvrundown.Rows(g).Cells(8).Value = True
-                    Else
-                        dgvrundown.Rows(g).Cells(8).Value = False
-                    End If
-
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+            LoadRundownFromFile(ofd2.FileName)
         End If
     End Sub
 
     Public Sub openfilerundown(filename As String)
         On Error Resume Next
 
-        Using sr As StreamReader = New StreamReader(filename)
-
-            dgvrundown.Rows.Clear()
-
-            Dim g As Integer = 0
-            Dim li As String
-            Do Until sr.EndOfStream = True
-                li = sr.ReadLine()
-                dgvrundown.Rows.Add()
-                Dim xyz As Array = Split(li, Chr(2))
-                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-                If xyz(7) = "True" Then
-                    dgvrundown.Rows(g).Cells(8).Value = True
-                Else
-                    dgvrundown.Rows(g).Cells(8).Value = False
-                End If
-                g = g + 1
-            Loop
-            sr.Close()
-        End Using
-        Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+        LoadRundownFromFile(filename)
 
     End Sub
 
@@ -174,40 +159,13 @@ Public Class ucTemplatePlaylist
     End Sub
     Sub savefilerundown()
         On Error Resume Next
-        Using sw As StreamWriter = New StreamWriter(dgvrundown.Columns(0).HeaderText)
-            If dgvrundown.Rows.Count = 0 Then
-                sw.Write("")
-            Else
-
-                Dim f As Integer = 0
-                Do Until f = dgvrundown.Rows.Count
-                    sw.WriteLine(dgvrundown.Rows(f).Cells(0).Value & Chr(2) & dgvrundown.Rows(f).Cells(1).Value & Chr(2) & dgvrundown.Rows(f).Cells(2).Value & Chr(2) & dgvrundown.Rows(f).Cells(3).Value & Chr(2) & Replace(dgvrundown.Rows(f).Cells(4).Value, vbNewLine, "vbnewline") & Chr(2) & Format(CType(dgvrundown.Rows(f).Cells(5).Value, DateTime), "H:mm:ss") & Chr(2) & dgvrundown.Rows(f).Cells(6).Value & Chr(2) & dgvrundown.Rows(f).Cells(8).Value)
-                    f = f + 1
-                Loop
-            End If
-            sw.Close()
-        End Using
+        SaveRundownToFile(dgvrundown.Columns(0).HeaderText)
     End Sub
     Sub saveasfilerundown()
         On Error Resume Next
-        osd2.InitialDirectory = "c:\casparcg\mydata\rundown\"
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.FileName = ""
+        ConfigureRundownDialog(osd2, "")
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sw As StreamWriter = New StreamWriter(osd2.FileName)
-                If dgvrundown.Rows.Count = 0 Then
-                    sw.Write("")
-                Else
-
-                    Dim f As Integer = 0
-                    Do Until f = dgvrundown.Rows.Count
-                        sw.WriteLine(dgvrundown.Rows(f).Cells(0).Value & Chr(2) & dgvrundown.Rows(f).Cells(1).Value & Chr(2) & dgvrundown.Rows(f).Cells(2).Value & Chr(2) & dgvrundown.Rows(f).Cells(3).Value & Chr(2) & Replace(dgvrundown.Rows(f).Cells(4).Value, vbNewLine, "vbnewline") & Chr(2) & Format(CType(dgvrundown.Rows(f).Cells(5).Value, DateTime), "H:mm:ss") & Chr(2) & dgvrundown.Rows(f).Cells(6).Value & Chr(2) & dgvrundown.Rows(f).Cells(8).Value)
-                        'sw.WriteLine(dgvrundown.Rows(f).Cells(0).Value & Chr(2))
-                        f = f + 1
-                    Loop
-                End If
-                sw.Close()
-            End Using
+            SaveRundownToFile(osd2.FileName)
             Me.dgvrundown.Columns(0).HeaderText = osd2.FileName
         End If
     End Sub

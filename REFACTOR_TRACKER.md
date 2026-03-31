@@ -109,6 +109,16 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucWaterMarking` | `CasparMediaPlayback/ucWaterMarking.vb` | Done | Watermark mixer layer/value formatting consolidated into shared helpers. |
 | `ucWeather` | `CasparMediaPlayback/ucWeather.vb` | Done | Weather icon data packing and open/save dialog setup consolidated into shared helpers. |
 | `ucWebSocketServer` | `CasparMediaPlayback/ucWebSocketServer.vb` | Done | WebSocket status text, response payload building, and hidden-text updates consolidated into shared helpers. |
+| `ucTemplatePlaylist` | `CasparMediaPlayback/ucTemplatePlaylist.vb` | Done | Rundown template-data packing and rundown file open/save flows consolidated into shared helpers. |
+| `ucTranscodingProfile` | `CasparMediaPlayback/ucTranscodingProfile.vb` | Done | Codec-list loading and transcoding extension selection consolidated into shared helpers. |
+| `ucTrimmer` | `CasparMediaPlayback/ucTrimmer.vb` | Done | Trim in/out command building and export save-dialog setup consolidated into shared helpers. |
+| `ucTwoLiner` | `CasparMediaPlayback/ucTwoLiner.vb` | Done | Two-liner file dialogs, template data packing, and HTML call routing consolidated into shared helpers. |
+| `ucVDCPController` | `CasparMediaPlayback/ucVDCPController.vb` | Done | Remote TCP state handling and repeated VDCP serial/cue command sending consolidated into shared helpers. |
+| `ucVisionMixer` | `CasparMediaPlayback/ucVisionMixer.vb` | Done | Vision route/color command assembly consolidated into shared transition helpers. |
+| `ucWeightLifting` | `CasparMediaPlayback/ucWeightLifting.vb` | Done | Weightlifting country-loader paths and shared game/event logo data consolidated into helpers. |
+| `ucXdcamController` | `CasparMediaPlayback/ucXdcamController.vb` | Done | XDCAM clip-grid population consolidated into a shared helper. |
+| `ucXdcamSoapClient` | `CasparMediaPlayback/ucXdcamSoapClient.vb` | Done | SOAP XDCAM clip-grid population consolidated into a shared helper. |
+| `ucytlive` | `CasparMediaPlayback/ucytlive.vb` | Done | YouTube Live timezone-offset calculation and scheduler default-row setup consolidated into shared helpers. |
 
 ## Repository Cleanup
 
@@ -123,9 +133,9 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
-| `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Likely another data-driven graphics module with repeated list/template handling. |
-| `ucTemplate` follow-up | `CasparMediaPlayback/ucTemplate.vb` | Pending | Worth a focused second pass to reduce remaining `On Error Resume Next` and strengthen play/update safety. |
-| `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
+| `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Still worth a graphics-module cleanup pass similar to `ucScroll` and `ucTwoLiner`. |
+| `frmROI` | `CasparMediaPlayback/frmROI.vb` | Pending | Small form, likely quick cleanup if needed. |
+| `VolumeMixer` | `CasparMediaPlayback/VolumeMixer.vb` | Pending | Utility/helper file not yet tracked in the refactor pass. |
 
 ## How To Update
 

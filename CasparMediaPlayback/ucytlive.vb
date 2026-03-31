@@ -18,6 +18,23 @@ Public Class ucytlive
 
     ReadOnly ofd2 As New OpenFileDialog
     ReadOnly osd2 As New SaveFileDialog
+    Private Function GetCurrentOffsetString() As String
+        Dim localZone As TimeZone = TimeZone.CurrentTimeZone
+        Dim currentDate As DateTime = DateTime.Now
+        Dim currentOffset As TimeSpan = localZone.GetUtcOffset(currentDate)
+        If Mid(currentOffset.ToString, 1, 1) = "-" Then
+            Return Mid(currentOffset.ToString, 1, 5)
+        End If
+        Return "+" & Mid(currentOffset.ToString, 1, 5)
+    End Function
+
+    Private Sub AddSchedulerRow(startTime As DateTime, durationMinutes As String)
+        dgvscheduler.Rows.Add(1)
+        dgvscheduler.Rows(dgvscheduler.Rows.Count - 2).Cells(0).Value = startTime
+        dgvscheduler.Rows(dgvscheduler.Rows.Count - 2).Cells(2).Value = ""
+        dgvscheduler.Rows(dgvscheduler.Rows.Count - 2).Cells(3).Value = ""
+        dgvscheduler.Rows(dgvscheduler.Rows.Count - 2).Cells(4).Value = durationMinutes
+    End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -25,18 +42,7 @@ Public Class ucytlive
         DateTimePicker1.Format = DateTimePickerFormat.Custom
         DateTimePicker1.CustomFormat = "dd/MMM/yyyy HH:mm:ss"
 
-
-        Dim localZone As TimeZone = TimeZone.CurrentTimeZone
-        Dim currentDate As DateTime = DateTime.Now
-        Dim currentUTC As DateTime = localZone.ToUniversalTime(currentDate)
-        Dim currentOffset As TimeSpan = localZone.GetUtcOffset(currentDate)
-
-
-        If Mid(currentOffset.ToString, 1, 1) = "-" Then
-            ofst = Mid(currentOffset.ToString, 1, 5)
-        Else
-            ofst = "+" & Mid(currentOffset.ToString, 1, 5)
-        End If
+        ofst = GetCurrentOffsetString()
 
         cmdCreateytobject.PerformClick()
 
@@ -80,36 +86,16 @@ Public Class ucytlive
             col3.Frozen = True
             col3.ReadOnly = True
             col3.Width = 0
-            .Rows.Add(1)
-            .Rows(0).Cells(0).Value = Now.AddSeconds(60)
-            .Rows(0).Cells(2).Value = ""
-            .Rows(0).Cells(3).Value = ""
-            .Rows(0).Cells(4).Value = "1"
-
-            .Rows(1).Cells(0).Value = Now.AddSeconds(120)
-            .Rows(1).Cells(2).Value = ""
-            .Rows(1).Cells(3).Value = ""
-            .Rows(1).Cells(4).Value = "1"
-
-
         End With
+        AddSchedulerRow(Now.AddSeconds(60), "1")
+        AddSchedulerRow(Now.AddSeconds(120), "1")
 
     End Sub
     Private Async Sub cmdCreate_Click(sender As Object, e As EventArgs) Handles cmdCreate.Click
         Try
 
             lblCreate.Text = "Wait"
-            Dim localZone As TimeZone = TimeZone.CurrentTimeZone
-            Dim currentDate As DateTime = DateTime.Now
-            Dim currentUTC As DateTime = localZone.ToUniversalTime(currentDate)
-            Dim currentOffset As TimeSpan = localZone.GetUtcOffset(currentDate)
-
-            Dim ofst As String
-            If Mid(currentOffset.ToString, 1, 1) = "-" Then
-                ofst = Mid(currentOffset.ToString, 1, 5)
-            Else
-                ofst = "+" & Mid(currentOffset.ToString, 1, 5)
-            End If
+            Dim ofst As String = GetCurrentOffsetString()
 
             Dim lb As New LiveBroadcast
             Dim lbs As New LiveBroadcastStatus

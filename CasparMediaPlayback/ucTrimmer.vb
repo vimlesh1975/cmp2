@@ -6,13 +6,20 @@ Public Class ucTrimmer
 
     Dim iclipsavetrimer As Integer = 1
     Dim openlogoforexport As New OpenFileDialog
+    Private Function BuildTrimInOut() As String
+        Return " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
+    End Function
+
+    Private Sub ConfigureTrimmerSaveDialog(fileSuffix As String, filterIndex As Integer, filterText As String)
+        UcnewTrimmer11.osdcutfilename.InitialDirectory = Replace(mediafullpath, "/", "\")
+        UcnewTrimmer11.osdcutfilename.FileName = System.IO.Path.GetFileNameWithoutExtension(UcnewTrimmer11.ofdtrimmer.FileName) & fileSuffix
+        UcnewTrimmer11.osdcutfilename.FilterIndex = filterIndex
+        UcnewTrimmer11.osdcutfilename.Filter = filterText
+    End Sub
     Private Sub cmdffmbcexport_Click(sender As Object, e As EventArgs) Handles cmdffmbcexport.Click
         On Error Resume Next
-        Dim strinout = " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
-        UcnewTrimmer11.osdcutfilename.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media\"
-        UcnewTrimmer11.osdcutfilename.FileName = System.IO.Path.GetFileNameWithoutExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "_ffmbc"
-        UcnewTrimmer11.osdcutfilename.FilterIndex = 3
-        UcnewTrimmer11.osdcutfilename.Filter = "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*"
+        Dim strinout = BuildTrimInOut()
+        ConfigureTrimmerSaveDialog("_ffmbc", 3, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Process.Start("CMD", "/K " & "C:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -threads 4 -tff -target xdcamhd422 -f mxf -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionsffmbc.Text)
         End If
@@ -66,10 +73,7 @@ Public Class ucTrimmer
     Private Sub cmdclipcuttrimmer1_Click(sender As Object, e As EventArgs) Handles cmdclipcuttrimmer1.Click
 
         On Error Resume Next
-        UcnewTrimmer11.osdcutfilename.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media\"
-        UcnewTrimmer11.osdcutfilename.FileName = System.IO.Path.GetFileNameWithoutExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "_proxy"
-        UcnewTrimmer11.osdcutfilename.FilterIndex = 2
-        UcnewTrimmer11.osdcutfilename.Filter = "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|avi files (*.avi)|*.avi|All files (*.*)|*.*"
+        ConfigureTrimmerSaveDialog("_proxy", 2, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             cmdclipcuttrimmer1.Enabled = False
             'Process.Start("CMD", "/K " & "C:/casparcg/mydata/ffmpeg/ffmpeg.exe -y -i " & """" & ofdtrimmer.FileName & """" & " -ss " & FToHMSms(txtmarkintrimmer.Text) & " -to " & FToHMSms(txtmarkouttrimmer.Text) & " -c copy " & """" & osdcutfilename.FileName & """")
@@ -78,7 +82,7 @@ Public Class ucTrimmer
 
     End Sub
     Sub exportclip1()
-        Dim strinout = " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
+        Dim strinout = BuildTrimInOut()
 
         Control.CheckForIllegalCrossThreadCalls = False
         Dim proc As New Process
@@ -111,7 +115,7 @@ Public Class ucTrimmer
     End Sub
 
     Sub exportclip2()
-        Dim strinout = " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
+        Dim strinout = BuildTrimInOut()
         Control.CheckForIllegalCrossThreadCalls = False
         Dim proc As New Process
         Dim startinfo As New System.Diagnostics.ProcessStartInfo
@@ -174,7 +178,7 @@ Public Class ucTrimmer
     End Sub
 
     Sub exportclip4()
-        Dim strinout = " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
+        Dim strinout = BuildTrimInOut()
         Control.CheckForIllegalCrossThreadCalls = False
         Dim proc As New Process
         Dim startinfo As New System.Diagnostics.ProcessStartInfo
@@ -218,10 +222,7 @@ Public Class ucTrimmer
 
     Private Sub cmdclipcuttrimmer2_Click(sender As Object, e As EventArgs) Handles cmdclipcuttrimmer2.Click
         On Error Resume Next
-        UcnewTrimmer11.osdcutfilename.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media\"
-        UcnewTrimmer11.osdcutfilename.FileName = System.IO.Path.GetFileNameWithoutExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "_proxy"
-        UcnewTrimmer11.osdcutfilename.FilterIndex = 2
-        UcnewTrimmer11.osdcutfilename.Filter = "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|avi files (*.avi)|*.avi|All files (*.*)|*.*"
+        ConfigureTrimmerSaveDialog("_proxy", 2, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             cmdclipcuttrimmer2.Enabled = False
             bwforexportclip2.RunWorkerAsync()
@@ -242,13 +243,10 @@ Public Class ucTrimmer
 
 
     Private Sub cmdclipcuttrimmer3_Click(sender As Object, e As EventArgs) Handles cmdclipcuttrimmer3.Click
-        Dim strinout = " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text)
+        Dim strinout = BuildTrimInOut()
 
         On Error Resume Next
-        UcnewTrimmer11.osdcutfilename.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media\"
-        UcnewTrimmer11.osdcutfilename.FileName = System.IO.Path.GetFileNameWithoutExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "_ffmbc"
-        UcnewTrimmer11.osdcutfilename.FilterIndex = 3
-        UcnewTrimmer11.osdcutfilename.Filter = "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*"
+        ConfigureTrimmerSaveDialog("_ffmbc", 3, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Process.Start("CMD", "/K " & "c:\casparcg\mydata\ffmpeg\ffmpeg.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1  -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe" & """" & " -i - -threads 4 -tff -target xdcamhd422 -f mxf -y -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionstrimmer3.Text)
 

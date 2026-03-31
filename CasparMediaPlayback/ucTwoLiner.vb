@@ -4,6 +4,25 @@ Imports Newtonsoft.Json
 
 Public Class ucTwoLiner
     Dim client1 As New WebClient()
+    Private Sub ConfigureTwoLinerDialog(dialog As FileDialog, Optional saveFileName As String = "")
+        dialog.InitialDirectory = "c:\casparcg\mydata\twoliner\"
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.FileName = saveFileName
+    End Sub
+
+    Private Sub SetTwoLinerTemplateData(variableName As String, value As String)
+        Dim arrayValue() As Byte = System.Text.Encoding.UTF8.GetBytes(value)
+        If value = "" Then
+            CasparCGDataCollection.SetData("x" & variableName, "")
+        Else
+            CasparCGDataCollection.SetData("x" & variableName, System.Convert.ToBase64String(arrayValue))
+        End If
+        CasparCGDataCollection.SetData(variableName, value)
+    End Sub
+
+    Private Sub SendTwoLinerHtmlCall(callText As String)
+        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " " & callText)
+    End Sub
 
     Sub newdgvtwoliner()
         On Error Resume Next
@@ -15,8 +34,7 @@ Public Class ucTwoLiner
     Sub openfiletwoliner()
         On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\twoliner\"
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        ConfigureTwoLinerDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sr As StreamReader = New StreamReader(ofd2.FileName)
 
@@ -44,9 +62,7 @@ Public Class ucTwoLiner
     Sub savefiletwoliner()
         On Error Resume Next
 
-        osd2.InitialDirectory = "c:\casparcg\mydata\twoliner\"
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.FileName = ""
+        ConfigureTwoLinerDialog(osd2, "")
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sw As StreamWriter = New StreamWriter(osd2.FileName)
                 If dgvtwolinesuper.Rows.Count = 0 Then
@@ -172,28 +188,8 @@ Public Class ucTwoLiner
     Private Sub cmdtwolinesuperplay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdtwolinesuperplay.Click
         On Error Resume Next
         CasparCGDataCollection.Clear()
-
-        Dim array1() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvtwolinesuper.CurrentRow.Cells(0).Value)
-        If dgvtwolinesuper.CurrentRow.Cells(0).Value = "" Then
-            CasparCGDataCollection.SetData("x" & txtvariable1.Text, "")
-        Else
-            CasparCGDataCollection.SetData("x" & txtvariable1.Text, System.Convert.ToBase64String(array1))
-        End If
-
-
-        CasparCGDataCollection.SetData(txtvariable1.Text, dgvtwolinesuper.CurrentRow.Cells(0).Value)
-
-
-        Dim array2() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvtwolinesuper.Rows(dgvtwolinesuper.CurrentRow.Index + 1).Cells(0).Value)
-
-        If dgvtwolinesuper.Rows(dgvtwolinesuper.CurrentRow.Index + 1).Cells(0).Value = "" Then
-            CasparCGDataCollection.SetData("x" & txtvariable2.Text, "")
-        Else
-            CasparCGDataCollection.SetData("x" & txtvariable2.Text, System.Convert.ToBase64String(array2))
-        End If
-
-
-        CasparCGDataCollection.SetData(txtvariable2.Text, dgvtwolinesuper.Rows(dgvtwolinesuper.CurrentRow.Index + 1).Cells(0).Value)
+        SetTwoLinerTemplateData(txtvariable1.Text, dgvtwolinesuper.CurrentRow.Cells(0).Value)
+        SetTwoLinerTemplateData(txtvariable2.Text, dgvtwolinesuper.Rows(dgvtwolinesuper.CurrentRow.Index + 1).Cells(0).Value)
 
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayertwolinesuper.Text), Int(cmblayertwolinesuper.Text), (cmbTemplateTwoliner.Text), True, CasparCGDataCollection.ToAMCPEscapedXml)
 
@@ -224,37 +220,33 @@ Public Class ucTwoLiner
 
         If chkbase64htmloneliner.Checked Then
             Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(replacestring(dgvtwolinesuper.CurrentRow.Cells(0).Value))
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
+            SendTwoLinerHtmlCall("marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " marqueedata('" & (replacestring1(dgvtwolinesuper.CurrentRow.Cells(0).Value)) & "')")
+            SendTwoLinerHtmlCall("marqueedata('" & (replacestring1(dgvtwolinesuper.CurrentRow.Cells(0).Value)) & "')")
         End If
 
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " stripy('" & nyhtmloneliner.Value & "%')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " Tickery('" & nyhtmltextoneliner.Value & "%')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontsize('" & nsizehtmloneliner.Value & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " font('" & Replace(cmbfonthtmloneliner.Text, " ", Chr(2)) & "')")
+        SendTwoLinerHtmlCall("stripy('" & nyhtmloneliner.Value & "%')")
+        SendTwoLinerHtmlCall("Tickery('" & nyhtmltextoneliner.Value & "%')")
+        SendTwoLinerHtmlCall("fontsize('" & nsizehtmloneliner.Value & "')")
+        SendTwoLinerHtmlCall("font('" & Replace(cmbfonthtmloneliner.Text, " ", Chr(2)) & "')")
 
 
         If chkitalic.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontitalic('" & "italic" & "')")
+            SendTwoLinerHtmlCall("fontitalic('" & "italic" & "')")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontitalic('" & "normal" & "')")
+            SendTwoLinerHtmlCall("fontitalic('" & "normal" & "')")
         End If
 
 
         If chkBold.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontbold('" & "bold" & "')")
+            SendTwoLinerHtmlCall("fontbold('" & "bold" & "')")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontbold('" & "normal" & "')")
+            SendTwoLinerHtmlCall("fontbold('" & "normal" & "')")
         End If
 
-
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " fontcolor('" & ColorTranslator.ToHtml(cmdcolorhtmloneliner.ForeColor) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " stripcolor('" & ColorTranslator.ToHtml(cmdcolorhtmloneliner.BackColor) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & Int(cmblayertwolinesuper.Text) & " stripheight('" & nheighthtmloneliner.Value & "')")
+        SendTwoLinerHtmlCall("fontcolor('" & ColorTranslator.ToHtml(cmdcolorhtmloneliner.ForeColor) & "')")
+        SendTwoLinerHtmlCall("stripcolor('" & ColorTranslator.ToHtml(cmdcolorhtmloneliner.BackColor) & "')")
+        SendTwoLinerHtmlCall("stripheight('" & nheighthtmloneliner.Value & "')")
 
 
         '2nd line

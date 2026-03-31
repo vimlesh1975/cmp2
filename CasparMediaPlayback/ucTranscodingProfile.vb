@@ -11,14 +11,23 @@ Public Class ucTranscodingProfile
 
     Public startinfofilename As String
     Dim openlogoforexport As New OpenFileDialog
+    Private Sub LoadCodecList(combo As ComboBox, fileName As String)
+        combo.Items.AddRange(System.IO.File.ReadAllLines(fileName))
+    End Sub
+
+    Private Function BuildTranscodeExtension(enabled As Boolean, extensionValue As String) As String
+        If enabled Then
+            Return extensionValue
+        End If
+        Return strFileExtension
+    End Function
     Private Sub ucTranscodingProfile_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
         getnumberofprocessors()
-        cmbvideocodec.Items.AddRange(System.IO.File.ReadAllLines("C:\casparcg\mydata\ffmpeg\video_codecs.txt"))
-        cmbaudiocodec.Items.AddRange(System.IO.File.ReadAllLines("C:\casparcg\mydata\ffmpeg\audio_codecs.txt"))
-
-        cmbvideocodec5.Items.AddRange(System.IO.File.ReadAllLines("C:\casparcg\mydata\ffmpeg\video_codecs.txt"))
-        cmbaudiocodec5.Items.AddRange(System.IO.File.ReadAllLines("C:\casparcg\mydata\ffmpeg\audio_codecs.txt"))
+        LoadCodecList(cmbvideocodec, "C:\casparcg\mydata\ffmpeg\video_codecs.txt")
+        LoadCodecList(cmbaudiocodec, "C:\casparcg\mydata\ffmpeg\audio_codecs.txt")
+        LoadCodecList(cmbvideocodec5, "C:\casparcg\mydata\ffmpeg\video_codecs.txt")
+        LoadCodecList(cmbaudiocodec5, "C:\casparcg\mydata\ffmpeg\audio_codecs.txt")
 
         openlogoforexport.FileName = "c:\casparcg\_media\sd_frame.png"
 
@@ -38,65 +47,23 @@ Public Class ucTranscodingProfile
     End Sub
     Sub getextensionfortranscoding()
         On Error Resume Next
-        If rdoSDtoXDcamHD422Mxf.Checked Then
-            strFileExtension = "_SDtoXdcam.mxf"
-        End If
-
-        If rdoanytoAnamorphicXDcamHD422Mxf.Checked Then
-            strFileExtension = "_AnamorphicXdcam.mxf"
-        End If
-
-        If rdoHD1920x1080tosdCenterCutmxf.Checked Then
-            strFileExtension = "_HDtocentercutSD.mxf"
-        End If
-        If rdoHDtoXDCAMHD422mxfwithFFMBC.Checked Then
-            strFileExtension = "_HDtoXdcam.mxf"
-        End If
-        If rdoNX5CameraMTSHDtoCenterCutSDmpg.Checked Then
-            strFileExtension = "_NX5HDtoCentercut.mpg"
-        End If
-
-        If rdoTrancodemp4.Checked Then
-            strFileExtension = "_toMP4.mp4"
-        End If
-
-        If rdoTrancodemp4hevc.Checked Then
-            strFileExtension = "_toMP4HEVC.mp4"
-        End If
-
-        If rdoHDtoCenterCutSDmov.Checked Then
-            strFileExtension = "_HDtoCenterCutSD" & cmbextensionhdtocentercutdv.Text
-        End If
-        If rdoHDtoLetterBoxSDmov.Checked Then
-            strFileExtension = "_HDtoLetterBoxSD" & cmbextensionhdtoLetterBoxdv.Text
-        End If
-
-        If rdoHDtoAnamorphicmov.Checked Then
-            strFileExtension = "_HDtoAnamorphic" & cmbextensionhdtoAnamprphicdv.Text
-        End If
-
-        If rdodvcpro50dv.Checked Then
-            strFileExtension = "_SDtoDV" & cmbextensiondvcpro50.Text
-        End If
-
-        If rdoCodecBased.Checked Then
-            strFileExtension = "_" & cmbvideocodec.Text & "_" & cmbaudiocodec.Text & cmbextensioncodecbased.Text
-        End If
-
-        If rdoTranscodeWithLogo.Checked Then
-            strFileExtension = "_" & cmbvideocodec5.Text & "_" & cmbaudiocodec5.Text & "_with_logo" & cmbextension5.Text
-        End If
-
-        If rdoCustomTranscode.Checked Then
-            strFileExtension = "_CustomTranscoded" & cmbextensioncustom.Text
-        End If
-
-        If rdoSDtoSDoverBlurVideo.Checked Then
-            strFileExtension = "_VideoOverBlurred.mp4"
-        End If
-        If rdoHDblacktoHDoverBlurVideo.Checked Then
-            strFileExtension = "_VideoOverBlurred.mp4"
-        End If
+        strFileExtension = ""
+        strFileExtension = BuildTranscodeExtension(rdoSDtoXDcamHD422Mxf.Checked, "_SDtoXdcam.mxf")
+        strFileExtension = BuildTranscodeExtension(rdoanytoAnamorphicXDcamHD422Mxf.Checked, "_AnamorphicXdcam.mxf")
+        strFileExtension = BuildTranscodeExtension(rdoHD1920x1080tosdCenterCutmxf.Checked, "_HDtocentercutSD.mxf")
+        strFileExtension = BuildTranscodeExtension(rdoHDtoXDCAMHD422mxfwithFFMBC.Checked, "_HDtoXdcam.mxf")
+        strFileExtension = BuildTranscodeExtension(rdoNX5CameraMTSHDtoCenterCutSDmpg.Checked, "_NX5HDtoCentercut.mpg")
+        strFileExtension = BuildTranscodeExtension(rdoTrancodemp4.Checked, "_toMP4.mp4")
+        strFileExtension = BuildTranscodeExtension(rdoTrancodemp4hevc.Checked, "_toMP4HEVC.mp4")
+        strFileExtension = BuildTranscodeExtension(rdoHDtoCenterCutSDmov.Checked, "_HDtoCenterCutSD" & cmbextensionhdtocentercutdv.Text)
+        strFileExtension = BuildTranscodeExtension(rdoHDtoLetterBoxSDmov.Checked, "_HDtoLetterBoxSD" & cmbextensionhdtoLetterBoxdv.Text)
+        strFileExtension = BuildTranscodeExtension(rdoHDtoAnamorphicmov.Checked, "_HDtoAnamorphic" & cmbextensionhdtoAnamprphicdv.Text)
+        strFileExtension = BuildTranscodeExtension(rdodvcpro50dv.Checked, "_SDtoDV" & cmbextensiondvcpro50.Text)
+        strFileExtension = BuildTranscodeExtension(rdoCodecBased.Checked, "_" & cmbvideocodec.Text & "_" & cmbaudiocodec.Text & cmbextensioncodecbased.Text)
+        strFileExtension = BuildTranscodeExtension(rdoTranscodeWithLogo.Checked, "_" & cmbvideocodec5.Text & "_" & cmbaudiocodec5.Text & "_with_logo" & cmbextension5.Text)
+        strFileExtension = BuildTranscodeExtension(rdoCustomTranscode.Checked, "_CustomTranscoded" & cmbextensioncustom.Text)
+        strFileExtension = BuildTranscodeExtension(rdoSDtoSDoverBlurVideo.Checked, "_VideoOverBlurred.mp4")
+        strFileExtension = BuildTranscodeExtension(rdoHDblacktoHDoverBlurVideo.Checked, "_VideoOverBlurred.mp4")
 
         If ckkUseSuffix.Checked = False Then
             strFileExtension = "." + strFileExtension.Split(".")(1)

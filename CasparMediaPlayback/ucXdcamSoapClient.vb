@@ -12,6 +12,22 @@ Public Class ucXdcamSoapClient
 
     Dim appdate As String
     Dim changeoverframe As Integer = 15
+    Private Sub PopulateXdcamClipGrid(result As ClipInfo())
+        dgvclips.Rows.Clear()
+        Dim iclips As Integer = 0
+        For Each info As ClipInfo In result
+            If UCase(info.ClipName) Like "*" & UCase(txtSearch.Text) & "*" Then
+                dgvclips.Rows.Add()
+                dgvclips.Rows(iclips).Cells(0).Value = info.ClipName
+                dgvclips.Rows(iclips).Cells(1).Value = FToHMSF(info.TotalFrames)
+                dgvclips.Rows(iclips).Cells(2).Value = bytetostring(info.UMID)
+                dgvclips.Rows(iclips).Cells(3).Value = timecodetohmsf(info.StartTimeCode)
+                iclips = iclips + 1
+            End If
+        Next
+        dgvclips.Sort(dgvclips.Columns(0), System.ComponentModel.ListSortDirection.Ascending)
+        lblClips.Text = dgvclips.RowCount - 1
+    End Sub
 
     Private Sub cmdgetclipnames_Click(sender As Object, e As EventArgs) Handles cmdgetclipnames.Click
         On Error Resume Next
@@ -30,22 +46,7 @@ Public Class ucXdcamSoapClient
     End Sub
     Private Sub aa_GetClipListCompleted(sender As Object, e As GetClipListCompletedEventArgs) Handles aa.GetClipListCompleted
         On Error Resume Next
-        dgvclips.Rows.Clear()
-        Dim iclips As Integer = 0
-        For Each info As ClipInfo In e.Result
-
-            If UCase(info.ClipName) Like "*" & UCase(txtSearch.Text) & "*" Then
-                dgvclips.Rows.Add()
-                dgvclips.Rows(iclips).Cells(0).Value = info.ClipName
-                dgvclips.Rows(iclips).Cells(1).Value = FToHMSF(info.TotalFrames)
-                dgvclips.Rows(iclips).Cells(2).Value = bytetostring(info.UMID)
-                dgvclips.Rows(iclips).Cells(3).Value = timecodetohmsf(info.StartTimeCode)
-                iclips = iclips + 1
-            End If
-        Next
-
-        dgvclips.Sort(dgvclips.Columns(0), System.ComponentModel.ListSortDirection.Ascending)
-        lblClips.Text = dgvclips.RowCount - 1 'e.Result.Count
+        PopulateXdcamClipGrid(e.Result)
         If chkThumbnail.Checked Then
             thumbnailRowindex = 0
             getthumbanail(cmbClipDrive.Text, dgvclips.Rows(0).Cells(0).Value)

@@ -15,6 +15,25 @@ Public Class ucVDCPController
 
     Dim currrow As Integer
     Dim tempRow As DataGridViewRow
+    Private Sub SetRemoteLoggingState(isConnected As Boolean)
+        cmdConnectRemoteLogging.Enabled = Not isConnected
+        cmddisConnectRemoteLogging.Enabled = isConnected
+    End Sub
+
+    Private Sub SendRemoteText(commandText As String)
+        Dim byData As [Byte]() = System.Text.Encoding.ASCII.GetBytes(commandText + vbCrLf)
+        m_socClient.Send(byData)
+    End Sub
+
+    Private Sub SendVdcpSerial(commandText As String)
+        sp.WriteLine(commandText)
+    End Sub
+
+    Private Function BuildVdcpCueCommand(timecodeText As String) As String
+        Dim aa As Array = Split(timecodeText, ":")
+        Return Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) &
+            Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
+    End Function
 
     Public Class CSocketPacket
         Public thisSocket As System.Net.Sockets.Socket
@@ -43,9 +62,7 @@ Public Class ucVDCPController
         m_socClient.Connect(cmbhost.Text, cmbportgbRemoteLogging.Text)
 
         If m_socClient.Connected Then
-            cmdConnectRemoteLogging.Enabled = False
-            cmddisConnectRemoteLogging.Enabled = True
-
+            SetRemoteLoggingState(True)
             WaitForData()
         Else
             m_socClient = Nothing
@@ -58,8 +75,7 @@ Public Class ucVDCPController
             m_socClient.Dispose()
             m_socClient.Close()
             m_socClient = Nothing
-            cmdConnectRemoteLogging.Enabled = True
-            cmddisConnectRemoteLogging.Enabled = False
+            SetRemoteLoggingState(False)
         End If
     End Sub
     Public Sub WaitForData()
@@ -75,8 +91,7 @@ Public Class ucVDCPController
     End Sub
     Private Sub cmdtcpsend_Click(sender As Object, e As EventArgs) Handles cmdtcpsend.Click
         On Error Resume Next
-        Dim byData As [Byte]() = System.Text.Encoding.ASCII.GetBytes(txttcpsend.Text + vbCrLf)
-        m_socClient.Send(byData)
+        SendRemoteText(txttcpsend.Text)
 
     End Sub
     Sub SendString(ByVal Stream As NetworkStream, ByVal Data As String)
@@ -128,7 +143,7 @@ Public Class ucVDCPController
     End Sub
     Private Sub tmrgettc_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrgettc.Tick
         On Error Resume Next
-        sp.WriteLine(Chr(97) & Chr(12) & Chr(1) & Chr(110))
+        SendVdcpSerial(Chr(97) & Chr(12) & Chr(1) & Chr(110))
         Threading.Thread.Sleep(15)
 
         Dim timecode As String = ""
@@ -150,62 +165,59 @@ Public Class ucVDCPController
 
     Private Sub cmdplayvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplayvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(CInt("&H20")) & Chr(1) & Chr(33))
+        SendVdcpSerial(Chr(CInt("&H20")) & Chr(1) & Chr(33))
     End Sub
 
     Private Sub cmdstopvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(0) & Chr(32))
+        SendVdcpSerial(Chr(32) & Chr(0) & Chr(32))
     End Sub
 
     Private Sub cmdrewindvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrewindvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(32) & Chr(64))
+        SendVdcpSerial(Chr(32) & Chr(32) & Chr(64))
     End Sub
     Private Sub cmdffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(16) & Chr(48))
+        SendVdcpSerial(Chr(32) & Chr(16) & Chr(48))
     End Sub
 
     Private Sub cmdinpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(16) & Chr(80))
+        SendVdcpSerial(Chr(64) & Chr(16) & Chr(80))
         lblinpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdoutpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdoutpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(17) & Chr(81))
+        SendVdcpSerial(Chr(64) & Chr(17) & Chr(81))
         lbloutpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdPreRollvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdPreRollvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(48) & Chr(80))
+        SendVdcpSerial(Chr(32) & Chr(48) & Chr(80))
     End Sub
 
     Private Sub cmdejectvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdejectvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(15) & Chr(47))
+        SendVdcpSerial(Chr(32) & Chr(15) & Chr(47))
     End Sub
 
     Private Sub cmdstandbyonvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyonvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(5) & Chr(37))
+        SendVdcpSerial(Chr(32) & Chr(5) & Chr(37))
     End Sub
 
     Private Sub cmdstandbyoffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyoffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(4) & Chr(36))
+        SendVdcpSerial(Chr(32) & Chr(4) & Chr(36))
     End Sub
 
     Private Sub cmdcuevtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcuevtr.Click
         On Error Resume Next
 
-        Dim aa As Array = Split(dgvcuepointsvtr.CurrentRow.Cells(0).Value, ":")
-        Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) &
-         Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVdcpSerial(BuildVdcpCueCommand(dgvcuepointsvtr.CurrentRow.Cells(0).Value))
     End Sub
 
     Private Sub cmdmarkvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdmarkvtr.Click

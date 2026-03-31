@@ -7,6 +7,14 @@ Public Class ucWeightLifting
     Private currentRow As Integer
     Private currentColumn As Integer
     Dim judge As Integer
+    Private Function GetWeightLiftingCountryLoader(countryCode As String) As String
+        Return "C:/casparcg/mydata/games2/country/WithName/" & countryCode & ".png"
+    End Function
+
+    Private Sub SetWeightLiftingCommonLogos()
+        CasparCGDataCollection.SetData("loader51", gamelogo.ImageLocation)
+        CasparCGDataCollection.SetData("loader52", eventlogo.ImageLocation)
+    End Sub
 
     Private Sub NG_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         On Error Resume Next
@@ -49,11 +57,10 @@ Public Class ucWeightLifting
             If dgv1.Rows(i).Cells(0).Value <> "" Then
                 CasparCGDataCollection.SetData("name" & i + 1, dgv1.Rows(i).Cells(1).Value)
                 CasparCGDataCollection.SetData("value" & i + 1, dgv1.Rows(i).Cells(3).Value & "Kg")
-                CasparCGDataCollection.SetData("loader" & i + 1, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(2).Value & ".png")
+                CasparCGDataCollection.SetData("loader" & i + 1, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(2).Value))
             End If
         Next
-        CasparCGDataCollection.SetData("loader51", gamelogo.ImageLocation)
-        CasparCGDataCollection.SetData("loader52", eventlogo.ImageLocation)
+        SetWeightLiftingCommonLogos()
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergymnastics.Text), Int(cmblayergymnastics.Text), "cmp/games2/wl/startlist1", True, CasparCGDataCollection.ToAMCPEscapedXml)
 
         If chkanimationzym.Checked Then animationtoscreen()
@@ -73,12 +80,11 @@ Public Class ucWeightLifting
             If dgv1.Rows(i).Cells(0).Value <> "" Then
                 CasparCGDataCollection.SetData("name" & i - 7, dgv1.Rows(i).Cells(1).Value)
                 CasparCGDataCollection.SetData("value" & i - 7, dgv1.Rows(i).Cells(3).Value & "Kg")
-                CasparCGDataCollection.SetData("loader" & i - 7, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(2).Value & ".png")
+                CasparCGDataCollection.SetData("loader" & i - 7, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(2).Value))
             End If
 
         Next
-        CasparCGDataCollection.SetData("loader51", gamelogo.ImageLocation)
-        CasparCGDataCollection.SetData("loader52", eventlogo.ImageLocation)
+        SetWeightLiftingCommonLogos()
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergymnastics.Text), Int(cmblayergymnastics.Text), "cmp/games2/wl/startlist1", True, CasparCGDataCollection.ToAMCPEscapedXml)
         If chkanimationzym.Checked Then animationtoscreen()
 
@@ -95,20 +101,19 @@ Public Class ucWeightLifting
 
             If dgv1.Rows(i).Cells(0).Value <> "" Then
                 CasparCGDataCollection.SetData("sn" & i + 1, dgv1.Rows(i).Cells(19).Value)
-                CasparCGDataCollection.SetData("loader" & i + 1, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(2).Value & ".png")
+                CasparCGDataCollection.SetData("loader" & i + 1, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(2).Value))
                 CasparCGDataCollection.SetData("name" & i + 1, dgv1.Rows(i).Cells(1).Value)
                 CasparCGDataCollection.SetData("value" & i + 1, dgv1.Rows(i).Cells(3).Value)
                 CasparCGDataCollection.SetData("s1" & i + 1, dgv1.Rows(i).Cells(4).Value)
                 CasparCGDataCollection.SetData("s2" & i + 1, dgv1.Rows(i).Cells(6).Value)
                 CasparCGDataCollection.SetData("s3" & i + 1, dgv1.Rows(i).Cells(8).Value)
-                CasparCGDataCollection.SetData("loaders1" & i + 1, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(5).Value & ".png")
-                CasparCGDataCollection.SetData("loaders2" & i + 1, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(7).Value & ".png")
-                CasparCGDataCollection.SetData("loaders3" & i + 1, "C:/casparcg/mydata/games2/country/WithName/" & dgv1.Rows(i).Cells(9).Value & ".png")
+                CasparCGDataCollection.SetData("loaders1" & i + 1, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(5).Value))
+                CasparCGDataCollection.SetData("loaders2" & i + 1, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(7).Value))
+                CasparCGDataCollection.SetData("loaders3" & i + 1, GetWeightLiftingCountryLoader(dgv1.Rows(i).Cells(9).Value))
             End If
 
         Next
-        CasparCGDataCollection.SetData("loader51", gamelogo.ImageLocation)
-        CasparCGDataCollection.SetData("loader52", eventlogo.ImageLocation)
+        SetWeightLiftingCommonLogos()
 
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergymnastics.Text), Int(cmblayergymnastics.Text), "cmp/games2/wl/snatch_Result1", True, CasparCGDataCollection.ToAMCPEscapedXml)
         If chkanimationzym.Checked Then animationtoscreen()
@@ -124,10 +129,8 @@ Public Class ucWeightLifting
         CasparCGDataCollection.SetData("f0", dgv1.CurrentRow.Cells(0).Value)
         CasparCGDataCollection.SetData("f1", dgv1.CurrentRow.Cells(1).Value)
 
-        CasparCGDataCollection.SetData("loader1", "C:/casparcg/mydata/games2/country/WithName/" & dgv1.CurrentRow.Cells(2).Value & ".png")
-
-        CasparCGDataCollection.SetData("loader51", gamelogo.ImageLocation)
-        CasparCGDataCollection.SetData("loader52", eventlogo.ImageLocation)
+        CasparCGDataCollection.SetData("loader1", GetWeightLiftingCountryLoader(dgv1.CurrentRow.Cells(2).Value))
+        SetWeightLiftingCommonLogos()
 
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayergymnastics.Text), Int(cmblayergymnastics.Text), "cmp/games2/wl/player_id", True, CasparCGDataCollection.ToAMCPEscapedXml)
         If chkanimationzym.Checked Then animationtoscreen()
