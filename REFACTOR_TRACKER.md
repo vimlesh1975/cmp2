@@ -27,6 +27,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucHS` | `CasparMediaPlayback/ucHS.vb` | Done | Horizontal-scroll layer helpers, logo open/play/stop logic, color updates, and crawl data building consolidated. |
 | `ucHS2` | `CasparMediaPlayback/ucHS2.vb` | Done | Secondary horizontal-scroll layer helpers, crawl text/data building, and color/font updates consolidated. |
 | `ucHtmlScroller` | `CasparMediaPlayback/ucHtmlScroller.vb` | Done | HTML scroller call helpers, text preparation, start/cue routines, and repeated styling updates consolidated. |
+| `ucNDISource` | `CasparMediaPlayback/ucNDISource.vb` | Done | NDI list fetching, response parsing, and dialog-close handling centralized into small helpers. |
 
 ## Repository Cleanup
 
