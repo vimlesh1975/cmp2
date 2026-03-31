@@ -1,38 +1,41 @@
-﻿Imports System.IO
+Imports System.IO
+
 Public Class ucHtmlScroller
     Dim iPauseResumeV As Integer = 0
+
     Private Sub cmdhidegbhtmlscroller_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
+
     Private Sub cmbfonthtmlscroll_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbfonthtmlscroll.SelectedIndexChanged
         On Error Resume Next
         txtcrawlhtmlscroll.Font = New Font(cmbfonthtmlscroll.Text, frmmediaplayer.nfontsizeforall.Value)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
-
+        SendScrollerCall("font", Replace(cmbfonthtmlscroll.Text, " ", Chr(2)))
     End Sub
+
     Private Sub nsizehtmlscroll_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nsizehtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontsize('" & nsizehtmlscroll.Value & "')")
-
+        SendScrollerCall("fontsize", nsizehtmlscroll.Value)
     End Sub
 
     Private Sub nspeedhtmlscroll_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nspeedhtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+        SendScrollerCall("speed", nspeedhtmlscroll.Value)
     End Sub
 
     Private Sub nyhtmlscroll_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nyhtmlscroll.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " stripy('" & nyhtmlscroll.Value & "')")
+        SendScrollerCall("stripy", nyhtmlscroll.Value)
     End Sub
+
     Private Sub cmdcolorhtmlscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcolorhtmlscroll.Click
         On Error Resume Next
 
         Dim aa As New ColorDialog
-        If (aa.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If aa.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdcolorhtmlscroll.ForeColor = aa.Color
             cmdstripcolorhtmlscroll.ForeColor = aa.Color
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
+            SendScrollerCall("fontcolor", ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor))
         End If
     End Sub
 
@@ -40,50 +43,43 @@ Public Class ucHtmlScroller
         On Error Resume Next
 
         Dim aa As New ColorDialog
-        If (aa.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If aa.ShowDialog() = Windows.Forms.DialogResult.OK Then
             cmdstripcolorhtmlscroll.BackColor = aa.Color
             cmdcolorhtmlscroll.BackColor = aa.Color
-
-
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
+            SendScrollerCall("stripcolor", ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor))
         End If
     End Sub
+
     Private Sub cmdstopcrawlhtmlscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopcrawlhtmlscroll.Click
         On Error Resume Next
-        'CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text)
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " empty mix 20")
+        CasparDevice.SendString("play " & GetScrollerLayerAddress() & " empty mix 20")
     End Sub
-
 
     Private Sub chkltrhtmlscroll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkltrhtmlscroll.CheckedChanged
         If chkltrhtmlscroll.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start2()")
+            SendScrollerCommand("start2()")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start1()")
+            SendScrollerCommand("start1()")
         End If
     End Sub
+
     Private Sub cmdfilehtmlscroll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdfilehtmlscroll.Click
         On Error Resume Next
 
         ofd1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         ofd1.InitialDirectory = "C:\casparcg\mydata\html_scroll\"
-        If (ofd1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            If (ofd1.FileName <> "") Then
-                Dim objFileInfo As FileInfo
-                objFileInfo = New FileInfo(ofd1.FileName)
-
-                ReadTextFile(objFileInfo.FullName, txtcrawlhtmlscroll)
-            End If
+        If ofd1.ShowDialog() = Windows.Forms.DialogResult.OK AndAlso ofd1.FileName <> "" Then
+            ReadTextFile(New FileInfo(ofd1.FileName).FullName, txtcrawlhtmlscroll)
         End If
     End Sub
+
     Private Sub pichtmlscroller_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pichtmlscroller.Click
         On Error Resume Next
         Dim aa As New OpenFileDialog
 
-        If (aa.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If aa.ShowDialog() = Windows.Forms.DialogResult.OK Then
             pichtmlscroller.ImageLocation = aa.FileName
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " bullet('" & Replace(pichtmlscroller.ImageLocation, "\", "/") & "')")
-
+            SendScrollerCall("bullet", Replace(pichtmlscroller.ImageLocation, "\", "/"))
         End If
     End Sub
 
@@ -91,61 +87,27 @@ Public Class ucHtmlScroller
         On Error Resume Next
         iPauseResumeV = 0
 
-        Dim xx As String = Replace(txtcrawlhtmlscroll.Text, vbCrLf, "")
-        'xx = Replace(xx, " ", Chr(2))
-        'xx = Replace(xx, "\", Chr(5))
-        xx = replacestring1(xx)
-
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " [HTML] " & """" & txthtmlscollerTemplate.Text & """" & " mix 40")
-        'Threading.Thread.Sleep(100)
-        If chkbase64htmlscroller.Checked Then
-            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " marqueedata('" & xx & "')")
-        End If
-        'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " bullet('" & Replace(pichtmlscroller.ImageLocation, "\", "/") & "')")
-
-        'Threading.Thread.Sleep(100)
-        If chkltrhtmlscroll.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start2()")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start1()")
-        End If
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " stripcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor) & "')")
-
-        'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " stripy('" & nyhtmlscroll.Value & "')")
-        ' Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontsize('" & nsizehtmlscroll.Value & "')")
-
-        'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
-
-        'Threading.Thread.Sleep(100)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " Tickery('" & nyhtmlscrollticker.Value & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
-
+        CasparDevice.SendString("play " & GetScrollerLayerAddress() & " [HTML] " & """" & txthtmlscollerTemplate.Text & """" & " mix 40")
+        SendScrollerText(GetScrollerText(txtcrawlhtmlscroll.Text, False))
+        SendHorizontalScrollerSettings()
     End Sub
 
     Private Sub nyhtmlscrollticker_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nyhtmlscrollticker.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " Tickery('" & nyhtmlscrollticker.Value & "')")
+        SendScrollerCall("Tickery", nyhtmlscrollticker.Value)
     End Sub
+
     Sub enumeratefontsforall()
         On Error Resume Next
-        Dim InstalledFonts As New Drawing.Text.InstalledFontCollection
-        Dim fontfamilies() As FontFamily = InstalledFonts.Families()
-        For Each fontFamily As FontFamily In fontfamilies
+        Dim installedFonts As New Drawing.Text.InstalledFontCollection
+        For Each fontFamily As FontFamily In installedFonts.Families()
             cmbfonthtmlscroll.Items.Add(fontFamily.Name)
         Next
     End Sub
+
     Private Sub ucHtmlScroller_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         enumeratefontsforall()
     End Sub
-
 
     Private Sub cmdupodateverticalscroll_Click(sender As Object, e As EventArgs) Handles cmdupodateverticalscroll.Click
         Finaltextforverticalscroll()
@@ -153,134 +115,95 @@ Public Class ucHtmlScroller
 
     Sub Finaltextforverticalscroll()
         On Error Resume Next
-        Dim str As String
-        If txtcrawlhtmlscroll.SelectedText = "" Then
-            str = txtcrawlhtmlscroll.Text
-        Else
-            str = txtcrawlhtmlscroll.SelectedText
-        End If
-
-        'Dim xx As String = Replace(str, vbCrLf, "<br />")
-        'xx = Replace(xx, " ", Chr(2))
-        'xx = Replace(xx, "'", Chr(3))
-        'xx = Replace(xx, """", Chr(4))
-        'xx = Replace(xx, "\", Chr(5))
-        Dim xx = replacestring1(str)
-
-        If chkbase64htmlscroller.Checked Then
-
-            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(xx)
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " marqueedatabase64('" & System.Convert.ToBase64String(array) & "')")
-
-        Else
-            If chkwebutility.Checked Then
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " marqueedata('" & xx & "')")
-
-            Else
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " marqueedata('" & xx & "')")
-
-            End If
-        End If
+        Dim sourceText As String = If(txtcrawlhtmlscroll.SelectedText = "", txtcrawlhtmlscroll.Text, txtcrawlhtmlscroll.SelectedText)
+        SendScrollerText(GetScrollerText(sourceText, True))
     End Sub
+
     Private Sub txtcrawlhtmlscroll_TextChanged(sender As Object, e As EventArgs) Handles txtcrawlhtmlscroll.TextChanged
-
     End Sub
+
     Private Sub txtcrawlhtmlscroll_DoubleClick(sender As Object, e As EventArgs) Handles txtcrawlhtmlscroll.DoubleClick
         txtcrawlhtmlscroll.SelectionStart = txtcrawlhtmlscroll.GetFirstCharIndexOfCurrentLine
         txtcrawlhtmlscroll.SelectionLength = txtcrawlhtmlscroll.Text.Length
     End Sub
+
     Private Sub cmdpauseresumehtmlscroller_Click(sender As Object, e As EventArgs) Handles cmdpauseresumehtmlscroller.Click
         pauseresumev()
-
     End Sub
+
     Sub pauseresumev()
-        iPauseResumeV = iPauseResumeV + 1
+        iPauseResumeV += 1
         If iPauseResumeV = 1 Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " pause()")
+            SendScrollerCommand("pause()")
         Else
-            'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " resume()")
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+            SendScrollerCall("speed", nspeedhtmlscroll.Value)
             iPauseResumeV = 0
         End If
     End Sub
+
     Sub pauseresumeh()
-        iPauseResumeV = iPauseResumeV + 1
+        iPauseResumeV += 1
         If iPauseResumeV = 1 Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " pause()")
+            SendScrollerCommand("pause()")
         Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " resume()")
-            'CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+            SendScrollerCommand("resume()")
             iPauseResumeV = 0
         End If
     End Sub
+
     Sub senddata()
-
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " [HTML] " & """" & txthtmlscollerTemplatevertical.Text & """")
-        'Threading.Thread.Sleep(100)
+        CasparDevice.SendString("play " & GetScrollerLayerAddress() & " [HTML] " & """" & txthtmlscollerTemplatevertical.Text & """")
         Finaltextforverticalscroll()
-
-        If chkltrhtmlscroll.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start2()")
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " start1()")
-        End If
-
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontcolor('" & ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " font('" & Replace(cmbfonthtmlscroll.Text, " ", Chr(2)) & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fontsize('" & nsizehtmlscroll.Value & "')")
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & nspeedhtmlscroll.Value & "')")
+        SendVerticalScrollerSettings()
     End Sub
+
     Private Sub cmdCueFromButtom_Click(sender As Object, e As EventArgs) Handles cmdCueFromButtom.Click
         On Error Resume Next
-
         iPauseResumeV = 1
         senddata()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " pause()")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " cuefrombuttom()")
-
+        SendScrollerCommand("pause()")
+        SendScrollerCommand("cuefrombuttom()")
     End Sub
 
     Private Sub cmdCueFromMiddle_Click(sender As Object, e As EventArgs) Handles cmdCueFromMiddle.Click
-
         iPauseResumeV = 1
         senddata()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " pause()")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " cuefrommiddle()")
+        SendScrollerCommand("pause()")
+        SendScrollerCommand("cuefrommiddle()")
     End Sub
+
     Private Sub cmdStartFromButtom_Click(sender As Object, e As EventArgs) Handles cmdStartFromButtom.Click
         On Error Resume Next
         iPauseResumeV = 0
         senddata()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " cuefrombuttom()")
+        SendScrollerCommand("cuefrombuttom()")
     End Sub
+
     Private Sub cmdstartFromMiddle_Click(sender As Object, e As EventArgs) Handles cmdstartFromMiddle.Click
         On Error Resume Next
         iPauseResumeV = 0
         senddata()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " cuefrommiddle()")
+        SendScrollerCommand("cuefrommiddle()")
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
         shuttleproRotate()
     End Sub
+
     Sub shuttleproRotate()
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & TrackBar1.Value & "')")
+        SendScrollerCall("speed", TrackBar1.Value)
     End Sub
 
     Private Sub TrackBar1_MouseUp(sender As Object, e As MouseEventArgs) Handles TrackBar1.MouseUp
         On Error Resume Next
         TrackBar1.Value = 0
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & 0 & "')")
-
+        SendScrollerCall("speed", 0)
     End Sub
+
     Private Sub GroupBox2_Enter(sender As Object, e As EventArgs) Handles GroupBox2.Enter
-
     End Sub
+
     Private Sub cmdpauseresumehtmlscrollerhorizontal_Click(sender As Object, e As EventArgs) Handles cmdpauseresumehtmlscrollerhorizontal.Click
         pauseresumeh()
     End Sub
@@ -300,61 +223,97 @@ Public Class ucHtmlScroller
     End Sub
 
     Private Sub chkShuttlePro_CheckedChanged(sender As Object, e As EventArgs) Handles chkShuttlePro.CheckedChanged
-
     End Sub
 
     Private Sub ucHtmlScroller_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If chkShuttlePro.Checked Then
-            If e.KeyCode = Keys.F7 Then 'speed 0
-                CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " speed('" & 0 & "')")
+            If e.KeyCode = Keys.F7 Then
+                SendScrollerCall("speed", 0)
             End If
             If e.KeyCode = Keys.F14 Then
-                cmdCueFromMiddle.PerformClick()  ' start
+                cmdCueFromMiddle.PerformClick()
             End If
             If e.KeyCode = Keys.F15 Then
                 pauseresumev()
             End If
-
-            If e.KeyCode = Keys.F16 Then
-                nspeedhtmlscroll.Value = 3
-            End If
-            If e.KeyCode = Keys.F17 Then
-                nspeedhtmlscroll.Value = 4
-            End If
-            If e.KeyCode = Keys.F18 Then
-                nspeedhtmlscroll.Value = 5
-            End If
-            If e.KeyCode = Keys.F19 Then
-                nspeedhtmlscroll.Value = 6
-            End If
-            If e.KeyCode = Keys.F20 Then
-                nspeedhtmlscroll.Value = 10
-            End If
-
-            If e.KeyCode = Keys.F21 Then
-                nspeedhtmlscroll.Value = -3
-            End If
-            If e.KeyCode = Keys.F22 Then
-                nspeedhtmlscroll.Value = -4
-            End If
-            If e.KeyCode = Keys.F23 Then
-                nspeedhtmlscroll.Value = -5
-            End If
-            If e.KeyCode = Keys.F24 Then
-                nspeedhtmlscroll.Value = -10
-            End If
+            If e.KeyCode = Keys.F16 Then nspeedhtmlscroll.Value = 3
+            If e.KeyCode = Keys.F17 Then nspeedhtmlscroll.Value = 4
+            If e.KeyCode = Keys.F18 Then nspeedhtmlscroll.Value = 5
+            If e.KeyCode = Keys.F19 Then nspeedhtmlscroll.Value = 6
+            If e.KeyCode = Keys.F20 Then nspeedhtmlscroll.Value = 10
+            If e.KeyCode = Keys.F21 Then nspeedhtmlscroll.Value = -3
+            If e.KeyCode = Keys.F22 Then nspeedhtmlscroll.Value = -4
+            If e.KeyCode = Keys.F23 Then nspeedhtmlscroll.Value = -5
+            If e.KeyCode = Keys.F24 Then nspeedhtmlscroll.Value = -10
         End If
     End Sub
 
     Private Sub nscalexfromCenter_ValueChanged(sender As Object, e As EventArgs) Handles nscalexfromCenter.ValueChanged, nscaleyfromCenter.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text & " fill " & Replace(((1 - nscalexfromCenter.Value) / 2), ",", ".") & " " & Replace(((1 - nscaleyfromCenter.Value) / 2), ",", ".") & " " & Replace(nscalexfromCenter.Value, ",", ".") & " " & Replace(nscaleyfromCenter.Value, ",", "."))
-
+        CasparDevice.SendString("mixer " & GetScrollerLayerAddress() & " fill " &
+                                ((1 - nscalexfromCenter.Value) / 2).ToString(System.Globalization.CultureInfo.InvariantCulture) & " " &
+                                ((1 - nscaleyfromCenter.Value) / 2).ToString(System.Globalization.CultureInfo.InvariantCulture) & " " &
+                                nscalexfromCenter.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) & " " &
+                                nscaleyfromCenter.Value.ToString(System.Globalization.CultureInfo.InvariantCulture))
     End Sub
 
     Private Sub cmdResetScalefromCenter_Click(sender As Object, e As EventArgs) Handles cmdResetScalefromCenter.Click
         On Error Resume Next
         nscalexfromCenter.Value = 1
         nscaleyfromCenter.Value = 1
+    End Sub
+
+    Private Function GetScrollerLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & cmblayerhtmlscroll.Text
+    End Function
+
+    Private Sub SendScrollerCommand(commandText As String)
+        CasparDevice.SendString("call " & GetScrollerLayerAddress() & " " & commandText)
+    End Sub
+
+    Private Sub SendScrollerCall(functionName As String, value As Object)
+        SendScrollerCommand(functionName & "('" & value.ToString() & "')")
+    End Sub
+
+    Private Function GetScrollerText(sourceText As String, preserveLineBreaks As Boolean) As String
+        Dim preparedText As String = If(preserveLineBreaks, sourceText, Replace(sourceText, vbCrLf, ""))
+        Return replacestring1(preparedText)
+    End Function
+
+    Private Sub SendScrollerText(preparedText As String)
+        If chkbase64htmlscroller.Checked Then
+            Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(preparedText)
+            SendScrollerCall("marqueedatabase64", System.Convert.ToBase64String(array))
+        Else
+            SendScrollerCall("marqueedata", preparedText)
+        End If
+    End Sub
+
+    Private Sub SendScrollerStartDirection()
+        If chkltrhtmlscroll.Checked Then
+            SendScrollerCommand("start2()")
+        Else
+            SendScrollerCommand("start1()")
+        End If
+    End Sub
+
+    Private Sub SendHorizontalScrollerSettings()
+        SendScrollerCall("bullet", Replace(pichtmlscroller.ImageLocation, "\", "/"))
+        SendScrollerStartDirection()
+        SendScrollerCall("fontcolor", ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor))
+        SendScrollerCall("stripcolor", ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.BackColor))
+        SendScrollerCall("stripy", nyhtmlscroll.Value)
+        SendScrollerCall("fontsize", nsizehtmlscroll.Value)
+        SendScrollerCall("font", Replace(cmbfonthtmlscroll.Text, " ", Chr(2)))
+        SendScrollerCall("Tickery", nyhtmlscrollticker.Value)
+        SendScrollerCall("speed", nspeedhtmlscroll.Value)
+    End Sub
+
+    Private Sub SendVerticalScrollerSettings()
+        SendScrollerStartDirection()
+        SendScrollerCall("fontcolor", ColorTranslator.ToHtml(cmdstripcolorhtmlscroll.ForeColor))
+        SendScrollerCall("font", Replace(cmbfonthtmlscroll.Text, " ", Chr(2)))
+        SendScrollerCall("fontsize", nsizehtmlscroll.Value)
+        SendScrollerCall("speed", nspeedhtmlscroll.Value)
     End Sub
 End Class
