@@ -1,17 +1,20 @@
-﻿Public Class ucFourChannelPreview
+Public Class ucFourChannelPreview
+    Private Function GetPreviewControls() As ucnewPreview()
+        Return {UcnewPreview1, UcnewPreview2, UcnewPreview3, UcnewPreview4}
+    End Function
+
+    Private Sub ConfigurePreviewControl(previewControl As ucnewPreview, channelNumber As Integer)
+        previewControl.cmbippreview.Text = "229.0.0.1:500" & channelNumber
+        previewControl.lblchannelnumber.Text = "Channel " & channelNumber
+        previewControl.chnumber = channelNumber
+    End Sub
+
     Private Sub ucFourChannelPreview_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        UcnewPreview1.cmbippreview.Text = "229.0.0.1:5001"
-        UcnewPreview2.cmbippreview.Text = "229.0.0.1:5002"
-        UcnewPreview3.cmbippreview.Text = "229.0.0.1:5003"
-        UcnewPreview4.cmbippreview.Text = "229.0.0.1:5004"
-        UcnewPreview1.lblchannelnumber.Text = "Channel " & 1
-        UcnewPreview2.lblchannelnumber.Text = "Channel " & 2
-        UcnewPreview3.lblchannelnumber.Text = "Channel " & 3
-        UcnewPreview4.lblchannelnumber.Text = "Channel " & 4
-        UcnewPreview1.chnumber = 1
-        UcnewPreview2.chnumber = 2
-        UcnewPreview3.chnumber = 3
-        UcnewPreview4.chnumber = 4
+        Dim channelNumber = 1
+        For Each previewControl In GetPreviewControls()
+            ConfigurePreviewControl(previewControl, channelNumber)
+            channelNumber += 1
+        Next
     End Sub
     Private Sub Cmdhide_Click(sender As Object, e As EventArgs)
         Me.Hide()

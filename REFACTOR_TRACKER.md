@@ -46,6 +46,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucdBFSMeter` | `CasparMediaPlayback/ucdBFSMeter.vb` | Done | Meter polling, preview audio replay commands, pan-filter building, and 16-channel combo initialization consolidated into shared helpers. |
 | `ucEyeDropper` | `CasparMediaPlayback/ucEyeDropper.vb` | Done | Load/init flow consolidated, cursor resource loading extracted, and repeated color-pick finish logic centralized into shared helpers. |
 | `ucFaceBook` | `CasparMediaPlayback/ucFaceBook.vb` | Done | Facebook graph query building, row population, template play actions, and key-file token loading consolidated into shared helpers. |
+| `ucFourChannelPreview` | `CasparMediaPlayback/ucFourChannelPreview.vb` | Done | Four preview-control multicast/channel setup consolidated into shared preview-list helpers. |
 
 ## Repository Cleanup
 
