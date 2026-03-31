@@ -17,29 +17,58 @@ Public Class ucRssFeed
 
     Dim tempspeed = 2
     Dim paused As Boolean = False
+    Private Sub PrepareRssGrid()
+        dgvrss.Rows.Clear()
+        dgvrss.Columns.Clear()
+    End Sub
+
+    Private Sub EnsureManualRssColumns()
+        If dgvrss.Columns.Count < 2 Then
+            dgvrss.Columns.Add("title", "title")
+            dgvrss.Columns.Add("description", "description")
+            Dim chkBox As New DataGridViewCheckBoxColumn(False)
+            dgvrss.Columns.Insert(0, chkBox)
+            dgvrss.Columns(0).Width = 40
+            dgvrss.Columns(1).Width = 500
+            dgvrss.Rows.Add(1)
+        End If
+    End Sub
+
+    Private Sub SetAllRssSelections(isSelected As Boolean)
+        For irss = 0 To dgvrss.Rows.Count - 1
+            dgvrss.Rows(irss).Cells(0).Value = isSelected
+        Next
+    End Sub
+
+    Private Function GetSelectedRssText() As String
+        Dim output As String = ""
+
+        For jrss = 0 To dgvrss.RowCount - 1
+            If dgvrss.Rows(jrss).Cells(0).Value = vbTrue Then
+                If chkrsstitle.Checked = True Then
+                    output &= Replace(dgvrss.Rows(jrss).Cells("title").Value, vbLf, vbNullString) & txtrssdelemeter.Text
+                End If
+                If chkrssdescription.Checked = True Then
+                    output &= Replace(dgvrss.Rows(jrss).Cells("description").Value, vbLf, vbNullString) & txtrssdelemeter.Text
+                End If
+            End If
+        Next
+
+        Return output
+    End Function
+
+    Private Sub UpdateRssTemplateData()
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData("speed", nrssspeed.Value)
+        CasparCGDataCollection.SetData("scrolldata", GetSelectedRssText())
+    End Sub
     Private Sub cmdhidegbrssfeed_Click(sender As Object, e As EventArgs) 
         Me.Hide()
     End Sub
     Private Sub cmdrssmanuallyadd_Click(sender As Object, e As EventArgs) Handles cmdrssmanuallyadd.Click
         On Error Resume Next
-        dgvrss.Rows.Clear()
-        dgvrss.Columns.Clear()
-
-        If dgvrss.Columns.Count < 2 Then
-            dgvrss.Columns.Add("title", "title")
-            dgvrss.Columns.Add("description", "description")
-            Dim chkBox As New DataGridViewCheckBoxColumn(False)
-
-            dgvrss.Columns.Insert(0, chkBox)
-
-            For jrss = 0 To dgvrss.RowCount - 1
-                dgvrss.Rows(jrss).Cells(0).Value = vbTrue
-            Next
-            dgvrss.Columns(0).Width = 40
-            dgvrss.Columns(1).Width = 500
-
-            dgvrss.Rows.Add(1)
-        End If
+        PrepareRssGrid()
+        EnsureManualRssColumns()
 
     End Sub
 
@@ -50,8 +79,7 @@ Public Class ucRssFeed
     Sub readrssdata()
         On Error Resume Next
         Dim objDataset As DataSet = New DataSet
-        dgvrss.Rows.Clear()
-        dgvrss.Columns.Clear()
+        PrepareRssGrid()
 
         If Me.txtrssaddress.Text.Trim <> vbNullString Then
             objDataset.ReadXml(Me.txtrssaddress.Text.Trim, System.Data.XmlReadMode.Auto)
@@ -63,25 +91,19 @@ Public Class ucRssFeed
 
         dgvrss.Columns.Insert(0, chkBox)
 
-        For jrss = 0 To dgvrss.RowCount - 1
-            dgvrss.Rows(jrss).Cells(0).Value = vbTrue
-        Next
+        SetAllRssSelections(True)
         dgvrss.Columns(0).Width = 25
         dgvrss.Columns(1).Width = 500
     End Sub
 
     Private Sub cmdselectallrssfeed_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdselectallrssfeed.Click
         On Error Resume Next
-        For irss = 0 To dgvrss.Rows.Count - 1
-            dgvrss.Rows(irss).Cells(0).Value = vbTrue
-        Next
+        SetAllRssSelections(True)
     End Sub
 
     Private Sub cmddeselectallrssfedd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmddeselectallrssfedd.Click
         On Error Resume Next
-        For irss = 0 To dgvrss.Rows.Count - 1
-            dgvrss.Rows(irss).Cells(0).Value = vbFalse
-        Next
+        SetAllRssSelections(False)
     End Sub
     Private Sub cmdrssplay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrssplay.Click
         On Error Resume Next
@@ -95,34 +117,7 @@ Public Class ucRssFeed
         ' dummy code 
     End Sub
     Sub setdataofrss()
-
-
-        Dim str As String = ""
-
-        If chkrsstitle.Checked = True And chkrssdescription.Checked = False Then
-            For jrss = 0 To dgvrss.RowCount - 1
-                If dgvrss.Rows(jrss).Cells(0).Value = vbTrue Then
-                    str = str + Replace(dgvrss.Rows(jrss).Cells("title").Value, vbLf, vbNullString) + txtrssdelemeter.Text
-                End If
-            Next
-        End If
-        If chkrsstitle.Checked = False And chkrssdescription.Checked = True Then
-            For jrss = 0 To dgvrss.RowCount - 1
-                If dgvrss.Rows(jrss).Cells(0).Value = vbTrue Then
-                    str = str + Replace(dgvrss.Rows(jrss).Cells("description").Value, vbLf, vbNullString) + txtrssdelemeter.Text
-                End If
-            Next
-        End If
-        If chkrsstitle.Checked = True And chkrssdescription.Checked = True Then
-            For jrss = 0 To dgvrss.RowCount - 1
-                If dgvrss.Rows(jrss).Cells(0).Value = vbTrue Then
-                    str = str + Replace(dgvrss.Rows(jrss).Cells("title").Value, vbLf, vbNullString) + txtrssdelemeter.Text + Replace(dgvrss.Rows(jrss).Cells("description").Value, vbLf, vbNullString) + txtrssdelemeter.Text
-                End If
-            Next
-        End If
-        CasparCGDataCollection.Clear()
-        CasparCGDataCollection.SetData("speed", nrssspeed.Value)
-        CasparCGDataCollection.SetData("scrolldata", str)
+        UpdateRssTemplateData()
     End Sub
 
 

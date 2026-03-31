@@ -72,6 +72,15 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `UcPlaylistScheduler` | `CasparMediaPlayback/UcPlaylistScheduler.vb` | Done | Scheduler file open/save, next-run calculation, status updates, and scheduled playlist launch flow consolidated into shared helpers. |
 | `ucPlaylistSetting` | `CasparMediaPlayback/ucPlaylistSetting.vb` | Done | Playlist channel/OSC selection, clip-source routing, and resize-mode mapping consolidated into shared helpers. |
 | `ucPositionAndSize` | `CasparMediaPlayback/ucPositionAndSize.vb` | Done | Mixer fill layer addressing and value formatting consolidated into shared helpers. |
+| `ucPowerPoint` | `CasparMediaPlayback/ucPowerPoint.vb` | Done | PowerPoint output command building, file watcher toggling, and Office document launch/panel attachment consolidated into shared helpers. |
+| `ucPreview` | `CasparMediaPlayback/ucPreview.vb` | Done | Preview stream URL/command building, VLC playback startup, and repeated preview restart flow consolidated into shared helpers. |
+| `ucQuiz` | `CasparMediaPlayback/ucQuiz.vb` | Done | Quiz layer offsets, encoded text building, file dialog setup, and row move/save/open helpers consolidated. |
+| `ucRCCAutomation` | `CasparMediaPlayback/ucRCCAutomation.vb` | Done | RCC sample-flag loading and HTTP payload/upload flow consolidated into shared helpers. |
+| `ucRccBall` | `CasparMediaPlayback/ucRccBall.vb` | Done | Ball output/device commands, mode switching, animation mixer helpers, and logo-picking helpers consolidated. |
+| `ucRecorder` | `CasparMediaPlayback/ucRecorder.vb` | Done | Recorder layer commands, folder picker setup, and repeated VTR command sends consolidated into shared helpers. |
+| `ucRemoteLogging` | `CasparMediaPlayback/ucRemoteLogging.vb` | Done | Remote logging connect/disconnect state handling and socket cleanup consolidated into shared helpers. |
+| `ucRSS` | `CasparMediaPlayback/ucRSS.vb` | Done | RSS grid setup, select-all toggles, and scroll text/template data building consolidated into shared helpers. |
+| `ucSceneScroller` | `CasparMediaPlayback/ucSceneScroller.vb` | Done | Scene scroller file dialog, text building, and repeated CG update calls consolidated into shared helpers. |
 
 ## Repository Cleanup
 

@@ -1,4 +1,4 @@
-﻿Imports System.Net.Sockets
+Imports System.Net.Sockets
 
 Public Class ucRemoteLogging
     Private m_DataBuffer As Byte() = New Byte(9) {}
@@ -9,14 +9,29 @@ Public Class ucRemoteLogging
         Public thisSocket As System.Net.Sockets.Socket
         Public dataBuffer As Byte() = New Byte(0) {}
     End Class
+
+    Private Sub SetRemoteLoggingConnectionState(isConnected As Boolean)
+        cmdConnectRemoteLogging.Enabled = Not isConnected
+        cmddisConnectRemoteLogging.Enabled = isConnected
+    End Sub
+
+    Private Sub DisconnectRemoteLoggingClient()
+        If m_socClient Is Nothing Then
+            Return
+        End If
+
+        m_socClient.Dispose()
+        m_socClient.Close()
+        m_socClient = Nothing
+        SetRemoteLoggingConnectionState(False)
+    End Sub
+
     Private Sub cmdConnectRemoteLogging_Click(sender As Object, e As EventArgs) Handles cmdConnectRemoteLogging.Click
         On Error Resume Next
         m_socClient = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
         m_socClient.Connect(frmmediaplayer.cmbhost.Text, cmbportgbRemoteLogging.Text)
         If m_socClient.Connected Then
-            cmdConnectRemoteLogging.Enabled = False
-            cmddisConnectRemoteLogging.Enabled = True
-
+            SetRemoteLoggingConnectionState(True)
             WaitForData()
         Else
             m_socClient = Nothing
@@ -27,12 +42,10 @@ Public Class ucRemoteLogging
         Control.CheckForIllegalCrossThreadCalls = False
 
         Dim theSockId As CSocketPacket = DirectCast(asyn.AsyncState, CSocketPacket)
-        'end receive...
-        Dim iRx As Integer = 0
-        iRx = theSockId.thisSocket.EndReceive(asyn)
+        Dim iRx As Integer = theSockId.thisSocket.EndReceive(asyn)
         Dim chars As Char() = New Char(iRx) {}
         Dim d As System.Text.Decoder = System.Text.Encoding.UTF8.GetDecoder()
-        Dim charLen As Integer = d.GetChars(theSockId.dataBuffer, 0, iRx, chars, 0)
+        d.GetChars(theSockId.dataBuffer, 0, iRx, chars, 0)
         Dim szData As New System.String(chars)
 
         txtgbRemoteLogging.AppendText(szData)
@@ -41,13 +54,7 @@ Public Class ucRemoteLogging
     End Sub
     Private Sub cmddisConnectRemoteLogging_Click(sender As Object, e As EventArgs) Handles cmddisConnectRemoteLogging.Click
         On Error Resume Next
-        If m_socClient IsNot Nothing Then
-            m_socClient.Dispose()
-            m_socClient.Close()
-            m_socClient = Nothing
-            cmdConnectRemoteLogging.Enabled = True
-            cmddisConnectRemoteLogging.Enabled = False
-        End If
+        DisconnectRemoteLoggingClient()
     End Sub
 
     Public Sub WaitForData()

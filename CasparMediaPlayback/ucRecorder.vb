@@ -6,6 +6,27 @@ Public Class ucRecorder
     Dim filename As String
     Dim irecorder As Integer = 0
     Dim startingtimeofrecording As DateTime
+    Private Sub SendRecorderLayerCommand(commandName As String, commandTarget As String)
+        Dim fullCommand As String = commandName & " " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer
+        If commandTarget <> "" Then
+            fullCommand &= " " & commandTarget
+        End If
+        CasparDevice.SendString(fullCommand)
+    End Sub
+
+    Private Sub ConfigureFolderPicker(dialog As OpenFileDialog)
+        dialog.DereferenceLinks = False
+        dialog.CheckFileExists = False
+        dialog.CheckPathExists = False
+        dialog.Filter = "folders|n"
+        dialog.Title = "Select Folder"
+        dialog.InitialDirectory = Replace(mediafullpath, "/", "\")
+        dialog.FileName = dialog.InitialDirectory & "select folder"
+    End Sub
+
+    Private Sub SendVtrCommand(commandText As String)
+        sp.WriteLine(commandText)
+    End Sub
     Private Sub cmdoutcasparcgwindowrecording_Click(sender As Object, e As EventArgs) Handles cmdoutcasparcgwindowrecording.Click
         On Error Resume Next
         outcasparcgwindown()
@@ -25,11 +46,7 @@ Public Class ucRecorder
     Private Sub cmdinput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinput.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-
-            str = "play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " decklink " & cmbdecklinkforrecording.Text
-            CasparDevice.SendString(str)
-
+            SendRecorderLayerCommand("play", "decklink " & cmbdecklinkforrecording.Text)
         End If
     End Sub
 
@@ -42,13 +59,7 @@ Public Class ucRecorder
         On Error Resume Next
 
         Dim aa As New OpenFileDialog
-        aa.DereferenceLinks = False
-        aa.CheckFileExists = False
-        aa.CheckPathExists = False
-        aa.Filter = "folders|n"
-        aa.Title = "Select Folder"
-        aa.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media"
-        aa.FileName = aa.InitialDirectory & "select folder"
+        ConfigureFolderPicker(aa)
         If aa.ShowDialog() = DialogResult.OK Then
             lblRecordingFolder.Text = Directory.GetParent(aa.FileName).ToString & "\"
         End If
@@ -64,9 +75,7 @@ Public Class ucRecorder
     Private Sub cmdremove_input_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremove_input.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str = "stop " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer
-            CasparDevice.SendString(str)
-
+            SendRecorderLayerCommand("stop", "")
         End If
     End Sub
 
@@ -102,53 +111,53 @@ Public Class ucRecorder
     End Sub
     Private Sub cmdplayvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplayvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(CInt("&H20")) & Chr(1) & Chr(33))
+        SendVtrCommand(Chr(CInt("&H20")) & Chr(1) & Chr(33))
     End Sub
 
     Private Sub cmdstopvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstopvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(0) & Chr(32))
+        SendVtrCommand(Chr(32) & Chr(0) & Chr(32))
     End Sub
 
     Private Sub cmdrewindvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrewindvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(32) & Chr(64))
+        SendVtrCommand(Chr(32) & Chr(32) & Chr(64))
     End Sub
     Private Sub cmdffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(16) & Chr(48))
+        SendVtrCommand(Chr(32) & Chr(16) & Chr(48))
     End Sub
 
     Private Sub cmdinpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(16) & Chr(80))
+        SendVtrCommand(Chr(64) & Chr(16) & Chr(80))
         lblinpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdoutpointvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdoutpointvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(64) & Chr(17) & Chr(81))
+        SendVtrCommand(Chr(64) & Chr(17) & Chr(81))
         lbloutpointvtr.Text = lbltimecode.Text
     End Sub
 
     Private Sub cmdPreRollvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdPreRollvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(48) & Chr(80))
+        SendVtrCommand(Chr(32) & Chr(48) & Chr(80))
     End Sub
 
     Private Sub cmdejectvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdejectvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(15) & Chr(47))
+        SendVtrCommand(Chr(32) & Chr(15) & Chr(47))
     End Sub
 
     Private Sub cmdstandbyonvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyonvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(5) & Chr(37))
+        SendVtrCommand(Chr(32) & Chr(5) & Chr(37))
     End Sub
 
     Private Sub cmdstandbyoffvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstandbyoffvtr.Click
         On Error Resume Next
-        sp.WriteLine(Chr(32) & Chr(4) & Chr(36))
+        SendVtrCommand(Chr(32) & Chr(4) & Chr(36))
     End Sub
 
     Private Sub cmdcuevtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcuevtr.Click
@@ -157,7 +166,7 @@ Public Class ucRecorder
         Dim aa As Array = Split(dgvcuepointsvtr.CurrentRow.Cells(0).Value, ":")
         Dim bb As String = Chr(36) & Chr(49) & Chr(System.Convert.ToInt32(aa(3), 16)) & Chr(System.Convert.ToInt32(aa(2), 16)) & Chr(System.Convert.ToInt32(aa(1), 16)) & Chr(System.Convert.ToInt32(aa(0), 16)) &
          Chr(36 + 49 + System.Convert.ToInt32(aa(3), 16) + System.Convert.ToInt32(aa(2), 16) + System.Convert.ToInt32(aa(1), 16) + System.Convert.ToInt32(aa(0), 16))
-        sp.WriteLine(bb)
+        SendVtrCommand(bb)
     End Sub
 
     Private Sub cmdmarkvtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdmarkvtr.Click

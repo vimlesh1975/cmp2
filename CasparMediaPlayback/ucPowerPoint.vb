@@ -1,32 +1,42 @@
-﻿Imports System.IO
+Imports System.IO
 Public Class ucPowerPoint
     Dim strpowerpoint As String
     Dim fsw As New FileSystemWatcher
+
+    Private Function BuildPowerPointOutputCommand() As String
+        Return "play " & g_int_ChannelNumber & "-" & cmblayervideoforppt.Text & " png" & g_int_ChannelNumber & " " &
+               cmbtransitionforppt.Text & " " & ntransitiondurationforppt.Value & " " & cmbtweentypeforppt.Text & " " & cmbdirectionforppt.Text
+    End Function
+
+    Private Sub TogglePowerPointWatcher(isEnabled As Boolean)
+        fsw.Path = mediafullpath
+        fsw.EnableRaisingEvents = isEnabled
+    End Sub
+
+    Private Sub LaunchOfficeDocument(filePath As String, processName As String)
+        Process.Start(filePath)
+        Threading.Thread.Sleep(1000)
+        SetProcessParent2(processName, Panelpowerpoint)
+    End Sub
+
     Private Sub cmdhidegbppt_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
     Private Sub cmdstarPowerPointoutput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstarPowerPointoutput.Click
         On Error Resume Next
-        'If rdojpg.Checked Then
-        '    strpowerpoint = "play " & g_int_ChannelNumber & "-" & cmblayervideoforppt.Text & " jpg" & g_int_ChannelNumber & " " & cmbtransitionforppt.Text & " " & ntransitiondurationforppt.Value & " " & cmbtweentypeforppt.Text & " " & cmbdirectionforppt.Text
-        'Else
-        '    strpowerpoint = "play " & g_int_ChannelNumber & "-" & cmblayervideoforppt.Text & " png" & g_int_ChannelNumber & " " & cmbtransitionforppt.Text & " " & ntransitiondurationforppt.Value & " " & cmbtweentypeforppt.Text & " " & cmbdirectionforppt.Text
-        'End If
-        strpowerpoint = "play " & g_int_ChannelNumber & "-" & cmblayervideoforppt.Text & " png" & g_int_ChannelNumber & " " & cmbtransitionforppt.Text & " " & ntransitiondurationforppt.Value & " " & cmbtweentypeforppt.Text & " " & cmbdirectionforppt.Text
+        strpowerpoint = BuildPowerPointOutputCommand()
 
         CasparDevice.SendString(strpowerpoint)
         addfilesytemwatcherforpowerpoint()
     End Sub
     Sub addfilesytemwatcherforpowerpoint()
         On Error Resume Next
-        fsw.Path = mediafullpath
-        fsw.EnableRaisingEvents = True
+        TogglePowerPointWatcher(True)
         AddHandler fsw.Changed, AddressOf filemodified
     End Sub
 
     Sub filemodified(ByVal sender As Object, ByVal e As FileSystemEventArgs)
         On Error Resume Next
-        'If e.Name = "jpg" & g_int_ChannelNumber & ".jpg" Or e.Name = "png" & g_int_ChannelNumber & ".png" Then
         If e.Name = "png" & g_int_ChannelNumber & ".png" Then
             SendString(NetStream, strpowerpoint & vbCrLf)
         End If
@@ -39,14 +49,12 @@ Public Class ucPowerPoint
     End Sub
     Sub removefilesytemwatcherforpowerpoint()
         On Error Resume Next
-        fsw.EnableRaisingEvents = False
+        TogglePowerPointWatcher(False)
     End Sub
 
     Private Sub cmdstartpowerpoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstartpowerpoint.Click
         On Error Resume Next
-        Process.Start("c:/casparcg/mydata/ppt/pptm.pptm")
-        Threading.Thread.Sleep(1000)
-        SetProcessParent2("powerpnt", Panelpowerpoint)
+        LaunchOfficeDocument("c:/casparcg/mydata/ppt/pptm.pptm", "powerpnt")
     End Sub
     Private Sub SetProcessParent2(ByVal processName As String, ByVal cc As Control)
         On Error Resume Next
@@ -74,7 +82,7 @@ Public Class ucPowerPoint
 
     Private Sub cmdstartexcell_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstartexcell.Click
         On Error Resume Next
-        Process.Start("c:/casparcg/mydata/excel/chart.xlsm")
+        LaunchOfficeDocument("c:/casparcg/mydata/excel/chart.xlsm", "excel")
     End Sub
 
     Private Sub cmdshowexcellinwindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdshowexcellinwindow.Click

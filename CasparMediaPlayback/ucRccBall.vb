@@ -2,6 +2,29 @@
 Imports Svt.Caspar
 Public Class ucRccBall
     'Public WithEvents CasparDevice As New Svt.Caspar.CasparDevice
+    Private Const BallTeamLogoFolder As String = "C:\casparcg\mydata\games5\country\withname\"
+    Private Const BallGamesLogoFolder As String = "C:/casparcg/mydata/games5/games logo/"
+    Private Const BallEventLogoFolder As String = "C:/casparcg/mydata/games5/event logo/"
+
+    Private Sub SendChannelMode(modeName As String)
+        CasparDevice.SendString("set " & g_int_ChannelNumber & " mode " & modeName)
+    End Sub
+
+    Private Sub SendBallOutputCommand(commandName As String, deviceName As String, deviceNumber As Integer, options As String)
+        CasparDevice.SendString(commandName & " " & g_int_ChannelNumber & " " & deviceName & " " & deviceNumber & " " & options)
+    End Sub
+
+    Private Sub SendBallFill(videoLayer As Integer, fillValues As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videoLayer & " fill " & fillValues & " 50 easeoutexpo")
+    End Sub
+
+    Private Sub SendBallOpacity(videoLayer As Integer, opacityValue As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videoLayer & " opacity " & opacityValue & " 50 easeoutexpo")
+    End Sub
+
+    Private Function PickBallImage(defaultDirectory As String, picture As PictureBox) As String
+        Return openimage(defaultDirectory, picture)
+    End Function
 
 
     Private Sub NG_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -49,12 +72,12 @@ Public Class ucRccBall
 
     Private Sub gamelogoforgym_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gamelogo.Click
         On Error Resume Next
-        openimage("C:/casparcg/mydata/games5/games logo/", sender)
+        PickBallImage(BallGamesLogoFolder, sender)
     End Sub
 
     Private Sub eventlogoforgym_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles eventlogo.Click
         On Error Resume Next
-        openimage("C:/casparcg/mydata/games5/event logo/", sender)
+        PickBallImage(BallEventLogoFolder, sender)
     End Sub
 
 
@@ -86,28 +109,28 @@ Public Class ucRccBall
             x = 0
             y = 1
         ElseIf rdoSqueezeIn.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill 0.5 0 0 1 50 easeoutexpo")
+            SendBallFill(videolayer, "0.5 0 0 1")
             Exit Sub
         ElseIf rdoFedIN.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " opacity  0")
+            SendBallOpacity(videolayer, "0")
             GoTo 50
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        SendBallFill(videolayer, x & " " & y & " 1 1")
 50:
     End Sub
     Sub animationtoscreen(videolayer)
         If rdoFedIN.Checked Or rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " opacity 1 50 easeoutexpo")
+            SendBallOpacity(videolayer, "1")
 
             If chkanimationforhdvan.Checked Then
-                CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill .1 0 .8 1 50 " & "easeoutexpo")
+                SendBallFill(videolayer, ".1 0 .8 1")
             End If
             GoTo 50
         End If
         If chkanimationforhdvan.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill .1 0 .8 1 50 " & "easeoutexpo")
+            SendBallFill(videolayer, ".1 0 .8 1")
         Else
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill 0 0 1 1 50 " & "easeoutexpo")
+            SendBallFill(videolayer, "0 0 1 1")
         End If
 50:
     End Sub
@@ -126,13 +149,13 @@ Public Class ucRccBall
             x = 0
             y = 1
         ElseIf rdoSqueezeOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill 0.5 0 0 1 50 easeoutexpo")
+            SendBallFill(videolayer, "0.5 0 0 1")
             Exit Sub
         ElseIf rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " opacity 0 50 easeoutexpo")
+            SendBallOpacity(videolayer, "0")
             GoTo 50
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & videolayer & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        SendBallFill(videolayer, x & " " & y & " 1 1")
 50:
     End Sub
 
@@ -156,11 +179,10 @@ Public Class ucRccBall
     Private Sub cmdaddoutput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdaddoutput.Click
         On Error Resume Next
 
-        CasparDevice.SendString("add " & g_int_ChannelNumber & " decklink 1 " & "embedded_audio")
-        CasparDevice.SendString("add " & g_int_ChannelNumber & " bluefish 1 " & "embedded_audio")
-
-        CasparDevice.SendString("add " & g_int_ChannelNumber & " decklink 2 " & "key_only") ' for key
-        CasparDevice.SendString("add " & g_int_ChannelNumber & " bluefish 2 " & "key_only") ' for key
+        SendBallOutputCommand("add", "decklink", 1, "embedded_audio")
+        SendBallOutputCommand("add", "bluefish", 1, "embedded_audio")
+        SendBallOutputCommand("add", "decklink", 2, "key_only")
+        SendBallOutputCommand("add", "bluefish", 2, "key_only")
     End Sub
 
     Private Sub cmdremoveoutput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremoveoutput.Click
@@ -168,17 +190,17 @@ Public Class ucRccBall
 
         CasparDevice.SendString("remove " & g_int_ChannelNumber & " decklink 1")
         CasparDevice.SendString("remove " & g_int_ChannelNumber & " bluefish 1")
-        CasparDevice.SendString("remove " & g_int_ChannelNumber & " decklink 2") ' for key
-        CasparDevice.SendString("remove " & g_int_ChannelNumber & " bluefish 2") ' for key
+        CasparDevice.SendString("remove " & g_int_ChannelNumber & " decklink 2")
+        CasparDevice.SendString("remove " & g_int_ChannelNumber & " bluefish 2")
     End Sub
     Private Sub cmdhd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdhd.Click
         On Error Resume Next
-        CasparDevice.SendString("set " & g_int_ChannelNumber & " mode 1080i5000")
+        SendChannelMode("1080i5000")
 
     End Sub
     Private Sub cmdsd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsd.Click
         On Error Resume Next
-        CasparDevice.SendString("set " & g_int_ChannelNumber & " mode PAL")
+        SendChannelMode("PAL")
     End Sub
 
     Private Sub cmdsqueezeforsafesd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsqueezeforsafesd.Click
@@ -199,7 +221,7 @@ Public Class ucRccBall
     End Sub
     Private Sub pict1logoball_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pict1logoball.Click
         On Error Resume Next
-        txtt1ball.Text = openimage("C:\casparcg\mydata\games5\country\withname\", sender)
+        txtt1ball.Text = PickBallImage(BallTeamLogoFolder, sender)
     End Sub
     Private Sub cmdadjustminball_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdadjustminball.Click
         On Error Resume Next
@@ -223,7 +245,7 @@ Public Class ucRccBall
 
     Private Sub pict2logoball_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pict2logoball.Click
         On Error Resume Next
-        txtt2ball.Text = openimage("C:\casparcg\mydata\games5\country\withname\", sender)
+        txtt2ball.Text = PickBallImage(BallTeamLogoFolder, sender)
     End Sub
 
     Private Sub cmdstartclockball_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstartclockball.Click

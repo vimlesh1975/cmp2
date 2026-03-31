@@ -1,37 +1,63 @@
 ﻿Imports System.IO
 
 Public Class ucQuiz
+    Private Function GetQuizLayerOffset(offset As Integer) As Integer
+        Return Int(cmbvideolayerquiz.Text) + offset
+    End Function
+
+    Private Function EncodeQuizText(value As String) As String
+        Dim data() As Byte = System.Text.Encoding.UTF8.GetBytes(value)
+        Return Convert.ToBase64String(data)
+    End Function
+
+    Private Sub ConfigureQuizFileDialog(dialog As FileDialog)
+        dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        dialog.InitialDirectory = "c:\casparcg\mydata\quiz\"
+    End Sub
+
+    Private Sub ResetQuizGrid(defaultRows As Integer)
+        dgvquiz.Rows.Clear()
+        dgvquiz.Rows.Add(defaultRows)
+    End Sub
+
+    Private Function GetQuizAnswerOption(answerOffset As Integer) As String
+        Return Chr(Asc("A"c) + answerOffset - 1)
+    End Function
+
+    Private Sub MoveQuizRow(offset As Integer)
+        Dim currentIndex As Integer = dgvquiz.CurrentCell.RowIndex
+        Dim targetIndex As Integer = currentIndex + offset
+        If targetIndex < 0 OrElse targetIndex > dgvquiz.Rows.Count - 2 Then Return
+
+        Dim currentRow As DataGridViewRow = dgvquiz.CurrentRow
+        dgvquiz.Rows.Remove(currentRow)
+        dgvquiz.Rows.Insert(targetIndex, currentRow)
+        dgvquiz.CurrentCell = dgvquiz.Rows(targetIndex).Cells(0)
+    End Sub
+
     Private Sub cmdplayquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdplayquiz.Click
         On Error Resume Next
         CasparCGDataCollection.Clear()
         Dim cr As Integer = dgvquiz.CurrentRow.Index
-        Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvquiz.Rows(cr).Cells(0).Value)
-        CasparCGDataCollection.SetData("xf0", System.Convert.ToBase64String(array))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbvideolayerquiz.Text), Int(cmbvideolayerquiz.Text), txtQuizTemplate.Text & "/quiz", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparCGDataCollection.SetData("xf0", EncodeQuizText(dgvquiz.Rows(cr).Cells(0).Value))
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetQuizLayerOffset(0), GetQuizLayerOffset(0), txtQuizTemplate.Text & "/quiz", True, CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
     Private Sub cmdstopquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdstopquiz.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbvideolayerquiz.Text), Int(cmbvideolayerquiz.Text))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetQuizLayerOffset(0), GetQuizLayerOffset(0))
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetQuizLayerOffset(1), GetQuizLayerOffset(1))
     End Sub
 
     Private Sub cmdanswerquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdanswerquiz.Click
         On Error Resume Next
         Dim cr As Integer = dgvquiz.CurrentRow.Index
-        If dgvquiz.Rows(cr + 1).Cells(1).Value = 1 Then
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Invoke(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1, "A")
-
-        ElseIf dgvquiz.Rows(cr + 2).Cells(1).Value = 1 Then
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Invoke(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1, "B")
-
-        ElseIf dgvquiz.Rows(cr + 3).Cells(1).Value = 1 Then
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Invoke(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1, "C")
-
-        ElseIf dgvquiz.Rows(cr + 4).Cells(1).Value = 1 Then
-            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Invoke(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1, "D")
-
-        End If
+        For answerOffset As Integer = 1 To 4
+            If dgvquiz.Rows(cr + answerOffset).Cells(1).Value = 1 Then
+                CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Invoke(GetQuizLayerOffset(1), GetQuizLayerOffset(1), GetQuizAnswerOption(answerOffset))
+                Exit For
+            End If
+        Next
     End Sub
 
     Private Sub tsnewquiz_Click(sender As System.Object, e As System.EventArgs)
@@ -39,8 +65,7 @@ Public Class ucQuiz
     Sub newdgvquiz()
 
         On Error Resume Next
-        dgvquiz.Rows.Clear()
-        dgvquiz.Rows.Add(10)
+        ResetQuizGrid(10)
         lblfilenamequiz.Text = "new"
     End Sub
 
@@ -49,8 +74,7 @@ Public Class ucQuiz
     Sub openfilequiz()
         On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\quiz\"
+        ConfigureQuizFileDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sr As StreamReader = New StreamReader(ofd2.FileName)
                 'clear list
@@ -77,8 +101,7 @@ Public Class ucQuiz
     End Sub
     Sub savefilequiz()
         On Error Resume Next
-        osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.InitialDirectory = "c:\casparcg\mydata\quiz\"
+        ConfigureQuizFileDialog(osd2)
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Using sw As StreamWriter = New StreamWriter(osd2.FileName)
@@ -122,14 +145,7 @@ Public Class ucQuiz
     End Sub
     Sub clipmovedownquiz()
         On Error Resume Next
-        If Me.dgvquiz.CurrentCell.RowIndex <> dgvquiz.Rows.Count - 2 Then
-            Dim curRow As Integer = Me.dgvquiz.CurrentCell.RowIndex
-            Dim myRow As DataGridViewRow = Me.dgvquiz.CurrentRow
-            Me.dgvquiz.Rows.Remove(myRow)
-            Me.dgvquiz.Rows.Insert(curRow + 1, myRow)
-            dgvquiz.CurrentCell = dgvquiz.Rows(curRow + 1).Cells(0)
-
-        End If
+        MoveQuizRow(1)
     End Sub
 
     Private Sub cmdupquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdupquiz.Click
@@ -138,13 +154,7 @@ Public Class ucQuiz
     End Sub
     Sub clipmoveupquiz()
         On Error Resume Next
-        If Me.dgvquiz.CurrentCell.RowIndex <> 0 Then
-            Dim curRow As Integer = Me.dgvquiz.CurrentCell.RowIndex
-            Dim myRow As DataGridViewRow = Me.dgvquiz.CurrentRow
-            Me.dgvquiz.Rows.Remove(myRow)
-            Me.dgvquiz.Rows.Insert(curRow - 1, myRow)
-            dgvquiz.CurrentCell = dgvquiz.Rows(curRow - 1).Cells(0)
-        End If
+        MoveQuizRow(-1)
     End Sub
 
     Private Sub tspastequiz_Click(sender As System.Object, e As System.EventArgs)
@@ -174,13 +184,13 @@ Public Class ucQuiz
     Private Sub cmdplaytimerquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdplaytimerquiz.Click
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbvideolayerquiz.Text) + 2, Int(cmbvideolayerquiz.Text) + 2, txtQuizTemplate.Text & "/timer", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetQuizLayerOffset(2), GetQuizLayerOffset(2), txtQuizTemplate.Text & "/timer", True, CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
 
     Private Sub cmdstoptimerquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdstoptimerquiz.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbvideolayerquiz.Text) + 2, Int(cmbvideolayerquiz.Text) + 2)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetQuizLayerOffset(2), GetQuizLayerOffset(2))
 
     End Sub
 
@@ -188,7 +198,7 @@ Public Class ucQuiz
         On Error Resume Next
         CasparCGDataCollection.Clear()
         CasparCGDataCollection.SetData("stoptimer", "")
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmbvideolayerquiz.Text) + 2, Int(cmbvideolayerquiz.Text) + 2, CasparCGDataCollection)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(GetQuizLayerOffset(2), GetQuizLayerOffset(2), CasparCGDataCollection)
 
     End Sub
     Private Sub cmdplayanswerquiz_Click(sender As System.Object, e As System.EventArgs) Handles cmdplayanswerquiz.Click
@@ -196,18 +206,12 @@ Public Class ucQuiz
         CasparCGDataCollection.Clear()
 
         Dim cr As Integer = dgvquiz.CurrentRow.Index
-        Dim array1() As Byte = System.Text.Encoding.UTF8.GetBytes("A: " & dgvquiz.Rows(cr + 1).Cells(0).Value)
-        Dim array2() As Byte = System.Text.Encoding.UTF8.GetBytes("B: " & dgvquiz.Rows(cr + 2).Cells(0).Value)
-        Dim array3() As Byte = System.Text.Encoding.UTF8.GetBytes("C: " & dgvquiz.Rows(cr + 3).Cells(0).Value)
-        Dim array4() As Byte = System.Text.Encoding.UTF8.GetBytes("D: " & dgvquiz.Rows(cr + 4).Cells(0).Value)
+        CasparCGDataCollection.SetData("xf1", EncodeQuizText("A: " & dgvquiz.Rows(cr + 1).Cells(0).Value))
+        CasparCGDataCollection.SetData("xf2", EncodeQuizText("B: " & dgvquiz.Rows(cr + 2).Cells(0).Value))
+        CasparCGDataCollection.SetData("xf3", EncodeQuizText("C: " & dgvquiz.Rows(cr + 3).Cells(0).Value))
+        CasparCGDataCollection.SetData("xf4", EncodeQuizText("D: " & dgvquiz.Rows(cr + 4).Cells(0).Value))
 
-
-        CasparCGDataCollection.SetData("xf1", System.Convert.ToBase64String(array1))
-        CasparCGDataCollection.SetData("xf2", System.Convert.ToBase64String(array2))
-        CasparCGDataCollection.SetData("xf3", System.Convert.ToBase64String(array3))
-        CasparCGDataCollection.SetData("xf4", System.Convert.ToBase64String(array4))
-
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbvideolayerquiz.Text) + 1, Int(cmbvideolayerquiz.Text) + 1, txtQuizTemplate.Text & "/quiz1", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetQuizLayerOffset(1), GetQuizLayerOffset(1), txtQuizTemplate.Text & "/quiz1", True, CasparCGDataCollection.ToAMCPEscapedXml)
 
     End Sub
 
