@@ -198,105 +198,80 @@ Public Class ucCricket
         End If
     End Sub
 
+    Private Function GetCricketHtmlLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & cmblayergames.Text
+    End Function
+
+    Private Function GetCricketBottomScoreTemplatePath() As String
+        Return "c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html"
+    End Function
+
+    Private Function GetCricketScoreLine() As String
+        Return txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")"
+    End Function
+
+    Private Function GetCricketImagePath(imageLocation As String) As String
+        Return replacestring(Replace(imageLocation, "\", "/"))
+    End Function
+
+    Private Function GetScoreFieldValue(baseValue As String, appendStrikeMarker As Boolean, strikeCheckBox As CheckBox) As String
+        If appendStrikeMarker AndAlso strikeCheckBox.Checked Then
+            Return baseValue & "*"
+        End If
+
+        Return baseValue
+    End Function
+
+    Private Sub SendHtmlUpdateString(fieldName As String, fieldValue As String)
+        CasparDevice.SendString("call " & GetCricketHtmlLayerAddress() & " updatestring('" & replacestring(fieldName) & "','" & replacestring(fieldValue) & "')")
+    End Sub
+
+    Private Sub SendHtmlUpdateImage(fieldName As String, imageLocation As String)
+        CasparDevice.SendString("call " & GetCricketHtmlLayerAddress() & " updateimage('" & replacestring(fieldName) & "','" & GetCricketImagePath(imageLocation) & "')")
+    End Sub
+
+    Private Sub UpdateBottomScoreGraphic(infoText As String, detailText As String, Optional appendStrikeMarkers As Boolean = False)
+        SendHtmlUpdateString("ccgf0", txtteamname.Text)
+        SendHtmlUpdateString("ccgf1", GetCricketScoreLine())
+        SendHtmlUpdateString("ccgf2", GetScoreFieldValue(infoText, appendStrikeMarkers, chkStrinkingPostionA))
+        SendHtmlUpdateString("ccgf3", GetScoreFieldValue(detailText, appendStrikeMarkers, chkStrinkingPostionB))
+        SendHtmlUpdateImage("ccgimage1", pict1logocricket.ImageLocation)
+        SendHtmlUpdateImage("ccgimage2", eventlogo.ImageLocation)
+    End Sub
+
+    Private Sub PlayBottomScoreGraphic(infoText As String, detailText As String, Optional appendStrikeMarkers As Boolean = False)
+        If chkanimationzym.Checked Then animation1()
+        CasparDevice.SendString("play " & GetCricketHtmlLayerAddress() & " [html] " & GetCricketBottomScoreTemplatePath())
+        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
+        UpdateBottomScoreGraphic(infoText, detailText, appendStrikeMarkers)
+        If chkanimationzym.Checked Then animationtoscreen()
+    End Sub
+
     Private Sub cmdscore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscore.Click
         On Error Resume Next
-
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
+        PlayBottomScoreGraphic(cmbinfo.Text, txtinfo.Text)
     End Sub
 
     Private Sub cmdscoreupdate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscoreupdate.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo.Text, txtinfo.Text)
     End Sub
     Private Sub cmdscore1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscore1.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo1.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo1.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
+        PlayBottomScoreGraphic(cmbinfo1.Text, txtinfo1.Text)
     End Sub
 
     Private Sub cmdscore1update_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscore1update.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo1.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo1.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
+        UpdateBottomScoreGraphic(cmbinfo1.Text, txtinfo1.Text)
     End Sub
     Private Sub cmdscore2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscore2.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-
-        If chkStrinkingPostionA.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo2.Text & "*") & "')")
-
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo2.Text) & "')")
-
-        End If
-        If chkStrinkingPostionB.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo2.Text & "*") & "')")
-
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo2.Text) & "')")
-
-        End If
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
+        PlayBottomScoreGraphic(cmbinfo2.Text, txtinfo2.Text, True)
     End Sub
 
     Private Sub cmdscore2update_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdscore2update.Click
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-
-        If chkStrinkingPostionA.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo2.Text & "*") & "')")
-
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo2.Text) & "')")
-
-        End If
-        If chkStrinkingPostionB.Checked Then
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo2.Text & "*") & "')")
-
-        Else
-            CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo2.Text) & "')")
-
-        End If
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo2.Text, txtinfo2.Text, True)
     End Sub
 
     Private Sub cmdcleardatabowlerstatics_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdcleardatabowlerstatics.Click
@@ -885,135 +860,52 @@ Public Class ucCricket
     End Sub
 
     Private Sub cmdscore3_Click(sender As Object, e As EventArgs) Handles cmdscore3.Click
-
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo3.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo3.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
+        PlayBottomScoreGraphic(cmbinfo3.Text, txtinfo3.Text)
     End Sub
 
     Private Sub cmdscore3update_Click(sender As Object, e As EventArgs) Handles cmdscore3update.Click
         On Error Resume Next
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo3.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo3.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
+        UpdateBottomScoreGraphic(cmbinfo3.Text, txtinfo3.Text)
     End Sub
 
     Private Sub cmdscore4_Click(sender As Object, e As EventArgs) Handles cmdscore4.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo4.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo4.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
+        PlayBottomScoreGraphic(cmbinfo4.Text, txtinfo4.Text)
     End Sub
 
     Private Sub cmdscore4update_Click(sender As Object, e As EventArgs) Handles cmdscore4update.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo4.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo4.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo4.Text, txtinfo4.Text)
     End Sub
 
     Private Sub cmdscore5_Click(sender As Object, e As EventArgs) Handles cmdscore5.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo5.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo5.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
-
+        PlayBottomScoreGraphic(cmbinfo5.Text, txtinfo5.Text)
     End Sub
 
     Private Sub cmdscore5update_Click(sender As Object, e As EventArgs) Handles cmdscore5update.Click
         On Error Resume Next
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo5.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo5.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo5.Text, txtinfo5.Text)
     End Sub
 
 
     Private Sub cmdscore6_Click(sender As Object, e As EventArgs) Handles cmdscore6.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo6.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo6.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
-
+        PlayBottomScoreGraphic(cmbinfo6.Text, txtinfo6.Text)
     End Sub
     Private Sub cmdscore6update_Click(sender As Object, e As EventArgs) Handles cmdscore6update.Click
         On Error Resume Next
-
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo6.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo6.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo6.Text, txtinfo6.Text)
     End Sub
 
 
     Private Sub cmdscore7_Click(sender As Object, e As EventArgs) Handles cmdscore7.Click
         On Error Resume Next
-        If chkanimationzym.Checked Then animation1()
-        CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & cmblayergames.Text & " [html] c:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html")
-        Threading.Thread.Sleep(Val(txthtmlupdateDelay.Text))
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo7.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo7.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-        If chkanimationzym.Checked Then animationtoscreen()
-
+        PlayBottomScoreGraphic(cmbinfo7.Text, txtinfo7.Text)
     End Sub
     Private Sub cmdscore7update_Click(sender As Object, e As EventArgs) Handles cmdscore7update.Click
         On Error Resume Next
-
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf0") & "','" & replacestring(txtteamname.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf1") & "','" & replacestring(txtrun.Text + "/" + txtwicket.Text + "(" + txtover.Text + ")") & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf2") & "','" & replacestring(cmbinfo7.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updatestring('" & replacestring("ccgf3") & "','" & replacestring(txtinfo7.Text) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage1") & "','" & replacestring(Replace(pict1logocricket.ImageLocation, "\", "/")) & "')")
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & cmblayergames.Text & " updateimage('" & replacestring("ccgimage2") & "','" & replacestring(Replace(eventlogo.ImageLocation, "\", "/")) & "')")
-
+        UpdateBottomScoreGraphic(cmbinfo7.Text, txtinfo7.Text)
     End Sub
     Function replacestring(str As String) As String
         str = Replace(str, vbCrLf, "<br />")
