@@ -28,6 +28,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucHS2` | `CasparMediaPlayback/ucHS2.vb` | Done | Secondary horizontal-scroll layer helpers, crawl text/data building, and color/font updates consolidated. |
 | `ucHtmlScroller` | `CasparMediaPlayback/ucHtmlScroller.vb` | Done | HTML scroller call helpers, text preparation, start/cue routines, and repeated styling updates consolidated. |
 | `ucNDISource` | `CasparMediaPlayback/ucNDISource.vb` | Done | NDI list fetching, response parsing, and dialog-close handling centralized into small helpers. |
+| `ucCCTV` | `CasparMediaPlayback/ucCCTV.vb` | Done | CCTV RTSP command building, four-camera group playback, timer switching, and camera-list loading consolidated. |
 
 ## Repository Cleanup
 
