@@ -41,6 +41,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucChannelInfo` | `CasparMediaPlayback/ucChannelInfo.vb` | Done | Channel-info XML read, row creation, version-specific parsing, and remove/stop actions consolidated into shared helpers. |
 | `UcCommandScheduler` | `CasparMediaPlayback/UcCommandScheduler.vb` | Done | Scheduler grid setup, file open/save, reset/start/stop actions, and multi-command execution consolidated into shared helpers. |
 | `UcCommandSchedulerDateWise` | `CasparMediaPlayback/UcCommandSchedulerDateWise.vb` | Done | Date-wise scheduler grid setup, file open/save, reset/start/stop actions, expired-row cleanup, and multi-command execution consolidated into shared helpers. |
+| `ucCreatePng` | `CasparMediaPlayback/ucCreatePng.vb` | Done | Playlist insertion, Caspar image-add command sending, and generated image-name increment logic consolidated into shared helpers. |
 
 ## Repository Cleanup
 
