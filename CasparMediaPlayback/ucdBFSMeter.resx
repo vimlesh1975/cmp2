@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema 
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="tmraudio.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="TextBox1.Text" xml:space="preserve">
+    <value>&lt;audio&gt;
+  &lt;channel-layouts&gt;
+  &lt;channel-layout&gt;
+&lt;name&gt;R_to_Both&lt;/name&gt;
+&lt;type&gt;xyz&lt;/type&gt;
+&lt;num-channels&gt;2&lt;/num-channels&gt;
+&lt;channels&gt;1 2&lt;/channels&gt;
+&lt;/channel-layout&gt;
+
+ &lt;channel-layout&gt;
+&lt;name&gt;L_to_Both&lt;/name&gt;
+&lt;type&gt;xyz1&lt;/type&gt;
+&lt;num-channels&gt;2&lt;/num-channels&gt;
+&lt;channels&gt;1 2&lt;/channels&gt;
+&lt;/channel-layout&gt;
+
+ &lt;channel-layout&gt;
+&lt;name&gt;Mix&lt;/name&gt;
+&lt;type&gt;xyz2&lt;/type&gt;
+&lt;num-channels&gt;2&lt;/num-channels&gt;
+&lt;channels&gt;1 2&lt;/channels&gt;
+&lt;/channel-layout&gt;
+
+ &lt;channel-layout&gt;
+&lt;name&gt;Only_L&lt;/name&gt;
+&lt;type&gt;xyz3&lt;/type&gt;
+&lt;num-channels&gt;2&lt;/num-channels&gt;
+&lt;channels&gt;1 2&lt;/channels&gt;
+&lt;/channel-layout&gt;
+
+ &lt;channel-layout&gt;
+&lt;name&gt;Only_R&lt;/name&gt;
+&lt;type&gt;xyz4&lt;/type&gt;
+&lt;num-channels&gt;2&lt;/num-channels&gt;
+&lt;channels&gt;1 2&lt;/channels&gt;
+&lt;/channel-layout&gt;
+
+ &lt;/channel-layouts&gt;
+
+
+&lt;mix-configs&gt;
+
+&lt;mix-config&gt;
+&lt;from&gt;xyz&lt;/from&gt;
+&lt;to&gt;2.0&lt;/to&gt;
+&lt;mix&gt;add&lt;/mix&gt;
+&lt;mappings&gt;
+&lt;mapping&gt;2 L 1.0&lt;/mapping&gt;
+&lt;mapping&gt;2 R 1.0&lt;/mapping&gt;
+&lt;/mappings&gt;
+&lt;/mix-config&gt;
+
+&lt;mix-config&gt;
+&lt;from&gt;xyz1&lt;/from&gt;
+&lt;to&gt;2.0&lt;/to&gt;
+&lt;mix&gt;add&lt;/mix&gt;
+&lt;mappings&gt;
+&lt;mapping&gt;1 L 1.0&lt;/mapping&gt;
+&lt;mapping&gt;1 R 1.0&lt;/mapping&gt;
+&lt;/mappings&gt;
+&lt;/mix-config&gt;
+
+&lt;mix-config&gt;
+&lt;from&gt;xyz2&lt;/from&gt;
+&lt;to&gt;2.0&lt;/to&gt;
+&lt;mix&gt;add&lt;/mix&gt;
+&lt;mappings&gt;
+&lt;mapping&gt;1 L 0.7&lt;/mapping&gt;
+&lt;mapping&gt;2 R 0.7&lt;/mapping&gt;
+&lt;mapping&gt;1 R 0.7&lt;/mapping&gt;
+&lt;mapping&gt;2 L 0.7&lt;/mapping&gt;
+&lt;/mappings&gt;
+&lt;/mix-config&gt;
+
+&lt;mix-config&gt;
+&lt;from&gt;xyz3&lt;/from&gt;
+&lt;to&gt;2.0&lt;/to&gt;
+&lt;mix&gt;add&lt;/mix&gt;
+&lt;mappings&gt;
+&lt;mapping&gt;1 L 1.0&lt;/mapping&gt;
+&lt;mapping&gt;1 R 0.0&lt;/mapping&gt;
+&lt;/mappings&gt;
+&lt;/mix-config&gt;
+
+&lt;mix-config&gt;
+&lt;from&gt;xyz4&lt;/from&gt;
+&lt;to&gt;2.0&lt;/to&gt;
+&lt;mix&gt;add&lt;/mix&gt;
+&lt;mappings&gt;
+&lt;mapping&gt;2 L 0.0&lt;/mapping&gt;
+&lt;mapping&gt;2 R 1.0&lt;/mapping&gt;
+&lt;/mappings&gt;
+&lt;/mix-config&gt;
+
+
+&lt;/mix-configs&gt;
+&lt;/audio&gt;</value>
+  </data>
+  <data name="MySettings1.txtcrawlv" xml:space="preserve">
+    <value>Overall In-charge
+MUKESH SHARMA
+
+Producers
+Ravi Deep
+Sandeep Sood
+
+Assistant in Production 
+Vijay Bhingarde
+Yohan Samuel
+Falgun Limbachiye
+Priti Sawant
+
+Presenters 
+Milind Wagle
+Akshay Maurya
+Mona Pahuja
+Charu Priya
+
+Commentator (Marathi)
+Prasanna Sant
+
+Show Co-ordinators
+Shrikala Hattangady
+Prajyoti Manda
+Sandhya Pujari
+Santoshi Pawar
+
+Audio-Video Clips
+Vishwajit Walunje
+Amit Agarkar
+Yogesh Chavan
+Shivaji Gangawane
+
+Editors
+Mrutyunjay Wadhwane
+Siddhesh Chindarkar
+Bhushan Gandhi
+
+Graphics and Captions
+Vimlesh Kumar
+Sachin Binaram
+
+Acknowledgements
+MIT Group of Institution, Pune
+
+Director of Photography
+R.N. S. Reddy
+
+Camera 
+Pradeep Chakravorthy
+N. Venkata Raman
+Vijay Sharma
+Chindananda Murthy
+Sridhar Raj  Urs
+Arun Wilson
+B.M. Rajshekar
+Venkata Raghavan
+K.S. Ravidra
+Maruti Rao
+
+Jib Cameramen
+Bhagesh Sharma
+Pankaj Sharma
+Deepak Jhadavkar
+
+Video Asst.
+Nirmal Sahoo
+Sushant Bansode
+
+
+ENG Teams
+VM
+V.R. Kulkarni
+
+CCU
+Rajendra Deshmukh
+Shankar Renuse
+Vilas Nanijkar
+
+Audio 
+Jayesh Wavhal (OB Van)
+Sadanand Pednekar(Stadium/Commmentator)
+
+EVS
+Vijay Hadap
+Peter Mahindraraj
+
+VTR
+Manoj Shelake
+
+OB Maintenance
+Nitin Patravale
+
+Technicians
+Dinesh Kolhatkar
+L V Gavade
+
+Helpers 
+Shailesh Waghdhare
+Prakash Kharade
+
+Technical Director
+V. Muppudathi
+
+Producers 
+Vidut Shah
+Ashwani Kumar
+Sanjay Karnik
+Pradeep Chakraworthy
+Sridhar Raj urs
+
+Sound
+Hemant Ramarao
+
+Lighting Asstt.
+Sanjay
+Sripad
+Shashi
+
+Drivers
+Iqbal Sangrar
+Dilip Girase
+Kishor Pawaskar
+Prakash Surve
+Narayan Shetty
+Mayur Kadam
+Sanjay Gabaji
+Nandkumar Mistry
+
+First Draw 
+Thailand v/s Egypt
+Japan v/ Korea
+Indonesia V/s Srilanka
+Vietnam v/s Hongkong
+India-(Nirma) v/s Russian
+Malaysia v/s India (VJTI)
+Egypt v/s Fiji
+Korea V/s Mongolia
+Srilanka v/s Nepal
+Honkong v/s Bangladesh
+Russia v/s Iran
+Indai VJTI v/s Kazakhstan
+Fiji v/s Thailand
+Mongolia v/s Japan
+Nepal V/s Indonesia
+Bangladesh v/s vietnam
+Iran v/s India (Nirma)
+kazakhstan V/s Malaysia
+
+Bangladesh 
+Chittagong University of Engineering and Technology 
+
+Egypt 
+Helwan University
+
+Fiji 
+University of the South Pacific
+
+Hong Kong
+Hong Kong University of Science and Technology
+
+India 
+Nirma University
+Veermata Jijabai Technological Institute
+
+Indonesia 
+Institut Teknologi Sepuluh Nopember
+
+Iran 
+Bahonar University
+
+Japan
+Nagoya Institute of Technology
+
+Kazakhstan
+International IT University
+
+Rep of Korea
+Kwangwoon University
+
+Malaysia
+Universiti Teknologi Malaysia
+
+Mongolia
+Mongolian University of Science and Technology
+
+Nepal
+Tribhuvan University (IOE)
+
+Russia
+Don State Technical University
+
+Sri Lanka
+University of Peradeniya
+
+Thailand
+Dhurakijpundit University
+
+Vietnam
+Lac Hong University
+
+</value>
+  </data>
+  <data name="TextBox2.Text" xml:space="preserve">
+    <value>&lt;audio&gt;
+&lt;channel-layouts&gt;
+
+&lt;channel-layout name="R_to_Both"      type="xyz"      num-channels="2" channel-order="FL FR" /&gt;
+&lt;channel-layout name="L_to_Both"      type="xyz1"      num-channels="2" channel-order="FL FR" /&gt;
+&lt;channel-layout name="Mix"      type="xyz2"      num-channels="2" channel-order="FL FR" /&gt;
+&lt;channel-layout name="Only_L"      type="xyz3"      num-channels="2" channel-order="FL FR" /&gt;
+&lt;channel-layout name="Only_R"      type="xyz4"      num-channels="2" channel-order="FL FR" /&gt;
+&lt;/channel-layouts&gt;
+
+&lt;mix-configs&gt;
+&lt;mix-config from-type="xyz"          to-types="stereo"  mix="FL=FR | FR=FR" /&gt;
+&lt;mix-config from-type="xyz1"         to-types="stereo"  mix="FL=FL | FR=FL" /&gt;	
+&lt;mix-config from-type="xyz2"         to-types="stereo"  mix="FL=0.7FL+0.7FR | FR=0.7FL+0.7FR" /&gt;
+&lt;mix-config from-type="xyz3"         to-types="stereo"  mix="FL=FL | FR=0FR" /&gt;	
+&lt;mix-config from-type="xyz4"         to-types="stereo"  mix="FL=0FL | FR=FR" /&gt;		
+&lt;/mix-configs&gt;
+
+&lt;/audio&gt;</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
+  </metadata>
+</root>
