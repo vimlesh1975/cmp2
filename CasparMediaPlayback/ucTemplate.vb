@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Threading
 Imports System.Windows.Controls
 Imports AxShockwaveFlashObjects

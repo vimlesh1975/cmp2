@@ -1,6 +1,12 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 * text=auto
+*.vb text eol=crlf
+*.Designer.vb text eol=crlf
+*.vbproj text eol=crlf
+*.sln text eol=crlf
+*.resx text eol=crlf
+*.config text eol=crlf
 
 # Set default behavior for command prompt diff.
 #

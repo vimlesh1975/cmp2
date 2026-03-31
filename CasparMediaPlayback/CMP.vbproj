@@ -115,15 +115,15 @@
     </Reference>
     <Reference Include="AxInterop.ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dll\AxInterop.ShockwaveFlashObjects.dll</HintPath>
+      <HintPath>lib\AxInterop.ShockwaveFlashObjects.dll</HintPath>
     </Reference>
     <Reference Include="Bespoke.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\HP\Downloads\Tools-master\Tools-master\csharp\OSC\trunk\Source Code\Framework\Bespoke.Common.Osc\src\bin\x86\Debug\Bespoke.Common.dll</HintPath>
+      <HintPath>lib\Bespoke.Common.dll</HintPath>
     </Reference>
     <Reference Include="Bespoke.Common.Osc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\HP\Downloads\Tools-master\Tools-master\csharp\OSC\trunk\Source Code\Framework\Bespoke.Common.Osc\src\bin\x86\Debug\Bespoke.Common.Osc.dll</HintPath>
+      <HintPath>lib\Bespoke.Common.Osc.dll</HintPath>
     </Reference>
     <Reference Include="CefSharp, Version=118.6.80.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
       <HintPath>..\packages\CefSharp.Common.118.6.80\lib\net462\CefSharp.dll</HintPath>
@@ -284,10 +284,10 @@
       <HintPath>..\packages\Vlc.DotNet.Forms.3.1.0\lib\net45\Vlc.DotNet.Forms.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
-      <HintPath>..\..\docker051219_1\WindowsApp4\bin\Debug\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>lib\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015">
-      <HintPath>..\..\docker051219_1\WindowsApp4\bin\Debug\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+      <HintPath>lib\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
