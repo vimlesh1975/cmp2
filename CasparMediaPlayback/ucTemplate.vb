@@ -15,9 +15,13 @@ Public Class ucTemplate
             CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
         End If
 
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
+        For ianytemplate = 0 To dgvanytemplate.Rows.Count - 1
             Dim key = dgvanytemplate.Rows(ianytemplate).Cells(0).Value
             Dim value = dgvanytemplate.Rows(ianytemplate).Cells(1).Value
+
+            If key Is Nothing Then
+                Continue For
+            End If
 
             If normalizePathValues Then
                 value = Replace(value, "\", "/")
@@ -751,7 +755,10 @@ Public Class ucTemplate
     Private Sub tmrsheduletemplatestart_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tmrsheduletemplatestart.Tick
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
+        For ianytemplate = 0 To dgvanytemplate.Rows.Count - 1
+            If dgvanytemplate.Rows(ianytemplate).Cells(0).Value Is Nothing Then
+                Continue For
+            End If
             CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
         Next
         CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.Rows(0).Cells(2).Value & " add " & dgvrundown.Rows(0).Cells(3).Value & " " & """" & dgvrundown.Rows(0).Cells(1).Value & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """" & vbCrLf)
