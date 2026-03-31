@@ -21,6 +21,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucScroll` | `CasparMediaPlayback/ucScroll.vb` | Done | Scroll file I/O, row operations, selection toggles, color updates, and CG update helpers consolidated. |
 | `ucBreakingNews` | `CasparMediaPlayback/ucBreakingNews.vb` | Done | Breaking-news file I/O, row operations, selection filters, and playback command helpers consolidated. |
 | `ucTimers` | `CasparMediaPlayback/ucTimers.vb` | Done | Clock/timer template play, stop, clip-countdown update, and shared layer/template helpers consolidated. |
+| `ucLogo` | `CasparMediaPlayback/ucLogo.vb` | Done | Logo data collection, opacity updates, file open/save, and shared layer/template helpers consolidated. |
 
 ## Repository Cleanup
 
@@ -37,7 +38,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | --- | --- | --- | --- |
 | `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Pending | Good candidate for shared helper extraction and cleanup. |
 | `ucTemplate` | `CasparMediaPlayback/ucTemplate.vb` | Pending | Likely has similar template-play/update duplication worth centralizing. |
-| `ucLogo` | `CasparMediaPlayback/ucLogo.vb` | Pending | Likely another compact graphics/control module suited to helper extraction. |
+| `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Likely another data-driven graphics module with repeated list/template handling. |
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
 
 ## How To Update

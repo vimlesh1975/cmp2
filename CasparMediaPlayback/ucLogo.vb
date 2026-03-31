@@ -1,23 +1,23 @@
-﻿Public Class ucLogo
+Public Class ucLogo
+    Private Const LogoTemplatePath As String = "CMP/logo/logo"
+    Private Const LogoMediaDirectory As String = "c:\casparcg\mydata\logo"
+    Private Const LogoListDirectory As String = "c:\casparcg\mydata\logo\logo_list\"
+
     Private Sub cmdhidegblogo_Click(sender As Object, e As EventArgs) Handles cmdhidegblogo.Click
         Me.Hide()
     End Sub
+
     Private Sub cmdplaylogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplaylogo.Click
         playlogo()
     End Sub
+
     Sub playlogo()
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-
-        CasparCGDataCollection.SetData("logofilename", Replace(piclogo.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth", nlogowidth.Value)
-        CasparCGDataCollection.SetData("logoheight", nlogoheight.Value)
-        CasparCGDataCollection.SetData("logox", nlogox.Value)
-        CasparCGDataCollection.SetData("logoy", nlogoy.Value)
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmbflashlayerforlogo.Text & " opacity " & Replace(nopacitylogo.Value, ",", "."))
-
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbflashlayerforlogo.Text), Int(cmbflashlayerforlogo.Text), "CMP/logo/logo", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        SetLogoData()
+        SetLogoOpacity()
+        AddOrUpdateLogo(True)
     End Sub
+
     Private Sub cmdresetlogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdresetlogo.Click
         On Error Resume Next
         nlogox.Value = 592
@@ -26,51 +26,40 @@
         nlogoheight.Value = 120
         nopacitylogo.Value = 1.0
     End Sub
+
     Private Sub nlogox_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nlogox.ValueChanged, nlogoy.ValueChanged, nlogowidth.ValueChanged, nlogoheight.ValueChanged, nopacitylogo.ValueChanged
         On Error Resume Next
-        CasparCGDataCollection.SetData("logofilename", Replace(piclogo.Movie, "\", "/"))
-        CasparCGDataCollection.SetData("logowidth", nlogowidth.Value)
-        CasparCGDataCollection.SetData("logoheight", nlogoheight.Value)
-        CasparCGDataCollection.SetData("logox", nlogox.Value)
-        CasparCGDataCollection.SetData("logoy", nlogoy.Value)
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmbflashlayerforlogo.Text & " opacity " & Replace(nopacitylogo.Value, ",", "."))
-
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(Int(cmbflashlayerforlogo.Text), Int(cmbflashlayerforlogo.Text), CasparCGDataCollection)
-
+        SetLogoData()
+        SetLogoOpacity()
+        AddOrUpdateLogo(False)
     End Sub
 
     Private Sub cmdstoplogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdstoplogo.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbflashlayerforlogo.Text), Int(cmbflashlayerforlogo.Text))
-
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetLogoLayerNumber(), GetLogoLayerNumber())
     End Sub
+
     Private Sub cmdlogoopen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdlogoopen.Click, piclogo.Enter
         On Error Resume Next
-        picofd.InitialDirectory = "c:\casparcg\mydata\logo"
-        If (picofd.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            piclogo.Movie = "file:///" + Replace(picofd.FileName, "\", "/")
-            piclogo.CtlScale = "ShowAll"
-            txtlogolocation.Text = "file:///" + Replace(picofd.FileName, "\", "/") ' picofd.FileName
+        picofd.InitialDirectory = LogoMediaDirectory
+        If picofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            UpdateLogoMovieLocation(picofd.FileName)
         End If
     End Sub
 
     Sub readfileforlogo(ByVal str As String)
         On Error Resume Next
-        Dim i As Integer
-        Dim a As Array
+        Dim a As Array = Split(My.Computer.FileSystem.ReadAllText(str), Chr(2) + "=")
 
-        a = Split(My.Computer.FileSystem.ReadAllText(str), Chr(2) + "=")
-        Dim b As Array
-
-        For i = 0 To Me.gblogo.Controls.Count - 1
-            b = Split(a(i + 1), Chr(3) + Chr(3))
-            Me.gblogo.Controls(i).Text = b(0)
+        For i As Integer = 0 To gblogo.Controls.Count - 1
+            Dim b As Array = Split(a(i + 1), Chr(3) + Chr(3))
+            gblogo.Controls(i).Text = b(0)
         Next
     End Sub
 
     Private Sub savetslogo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
+
     Private Sub txtlogolocation_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtlogolocation.TextChanged
         On Error Resume Next
         piclogo.Movie = txtlogolocation.Text
@@ -80,6 +69,7 @@
         On Error Resume Next
         CasparDevice.SendString(txtvideoloopaslogo.Text)
     End Sub
+
     Private Sub stopvideoloopaslogo_Click(sender As Object, e As EventArgs) Handles stopvideoloopaslogo.Click
         On Error Resume Next
         CasparDevice.SendString(txtvideoloopaslogostop.Text)
@@ -93,8 +83,8 @@
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         On Error Resume Next
         ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\logo\logo_list\"
-        If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        ofd2.InitialDirectory = LogoListDirectory
+        If ofd2.ShowDialog() = Windows.Forms.DialogResult.OK Then
             readfileforlogo(ofd2.FileName)
             lbllogofilename.Text = ofd2.FileName
         End If
@@ -103,16 +93,11 @@
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         On Error Resume Next
         osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
-        osd2.InitialDirectory = "c:\casparcg\mydata\logo\logo_list\"
+        osd2.InitialDirectory = LogoListDirectory
         osd2.FileName = ""
-        If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Dim i As Integer
-            Dim a As String = ""
-            For i = 0 To Me.gblogo.Controls.Count - 1
-                a = a + Me.gblogo.Controls(i).Name + Chr(2) + "=" + Me.gblogo.Controls(i).Text + Chr(3) + Chr(3)
-            Next
-            a = a + Chr(2) + "=  "
-            My.Computer.FileSystem.WriteAllText(osd2.FileName, a, False)
+
+        If osd2.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            My.Computer.FileSystem.WriteAllText(osd2.FileName, BuildLogoSettingsText(), False)
             lbllogofilename.Text = osd2.FileName
         End If
     End Sub
@@ -120,4 +105,51 @@
     Private Sub MenuStrip1_MouseHover(sender As Object, e As EventArgs) Handles MenuStrip1.MouseHover
         MakeMenuDropDownWhenParrented(sender)
     End Sub
+
+    Private Function GetLogoLayerNumber() As Integer
+        Return Int(cmbflashlayerforlogo.Text)
+    End Function
+
+    Private Function GetLogoMoviePath() As String
+        Return Replace(piclogo.Movie, "\", "/")
+    End Function
+
+    Private Sub SetLogoData()
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData("logofilename", GetLogoMoviePath())
+        CasparCGDataCollection.SetData("logowidth", nlogowidth.Value)
+        CasparCGDataCollection.SetData("logoheight", nlogoheight.Value)
+        CasparCGDataCollection.SetData("logox", nlogox.Value)
+        CasparCGDataCollection.SetData("logoy", nlogoy.Value)
+    End Sub
+
+    Private Sub SetLogoOpacity()
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmbflashlayerforlogo.Text & " opacity " & nopacitylogo.Value.ToString(System.Globalization.CultureInfo.InvariantCulture))
+    End Sub
+
+    Private Sub AddOrUpdateLogo(isNewPlay As Boolean)
+        Dim layerNumber As Integer = GetLogoLayerNumber()
+        If isNewPlay Then
+            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(layerNumber, layerNumber, LogoTemplatePath, True, CasparCGDataCollection.ToAMCPEscapedXml)
+        Else
+            CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Update(layerNumber, layerNumber, CasparCGDataCollection)
+        End If
+    End Sub
+
+    Private Sub UpdateLogoMovieLocation(fileName As String)
+        Dim moviePath As String = "file:///" & Replace(fileName, "\", "/")
+        piclogo.Movie = moviePath
+        piclogo.CtlScale = "ShowAll"
+        txtlogolocation.Text = moviePath
+    End Sub
+
+    Private Function BuildLogoSettingsText() As String
+        Dim settingsText As String = ""
+
+        For i As Integer = 0 To gblogo.Controls.Count - 1
+            settingsText &= gblogo.Controls(i).Name & Chr(2) & "=" & gblogo.Controls(i).Text & Chr(3) & Chr(3)
+        Next
+
+        Return settingsText & Chr(2) & "=  "
+    End Function
 End Class
