@@ -1,216 +1,141 @@
-﻿Imports System.Xml
+Imports System.Xml
 Public Class ucChannelInfo
+    Private Function ReadChannelInfoDocument() As XmlDocument
+        Dim command = "info " & g_int_ChannelNumber
+        SendString(NetStream, command & vbCrLf)
+
+        Threading.Thread.Sleep(100)
+
+        Dim data(10024) As Byte
+        NetStream.Read(data, 0, 10024)
+
+        Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data)
+        xmlString = xmlString.Substring(xmlString.IndexOf("<"))
+
+        Dim document As New XmlDocument()
+        document.LoadXml(xmlString)
+        Return document
+    End Function
+
+    Private Function GetNodeText(node As XmlNode, xPath As String, Optional fallback As String = "") As String
+        Dim selectedNode = node.SelectSingleNode(xPath)
+        If selectedNode Is Nothing Then
+            Return fallback
+        End If
+
+        Return selectedNode.InnerText
+    End Function
+
+    Private Function EnsureChannelInfoTypeName(baseName As String, suffix As String) As String
+        If baseName.Contains(suffix) Then
+            Return baseName
+        End If
+
+        Return baseName & suffix
+    End Function
+
+    Private Sub AddChannelInfoRow(rowIndex As Integer, itemType As String, itemValue As String)
+        dgvchannelinfo.Rows.Add()
+        dgvchannelinfo.Rows(rowIndex).Cells(1).Value = itemType
+        dgvchannelinfo.Rows(rowIndex).Cells(2).Value = itemValue
+    End Sub
+
+    Private Sub ApplyNodeIndexes(nodeList As XmlNodeList, startRowIndex As Integer, indexSelector As Func(Of XmlNode, String))
+        Dim rowIndex = startRowIndex
+        For Each node As XmlNode In nodeList
+            dgvchannelinfo.Rows(rowIndex).Cells(0).Value = indexSelector(node)
+            rowIndex += 1
+        Next
+    End Sub
+
+    Private Sub LoadChannelInfo20(document As XmlDocument)
+        Dim rowIndex As Integer = 0
+
+        For Each node As XmlNode In document.SelectNodes("/channel/stage/layers/layer/foreground/producer")
+            AddChannelInfoRow(rowIndex, EnsureChannelInfoTypeName(node.ChildNodes.Item(0).InnerText, "-producer"), node.ChildNodes.Item(1).InnerText)
+            rowIndex += 1
+        Next
+
+        For Each node As XmlNode In document.SelectNodes("/channel/output/consumers/consumer")
+            Dim consumerType = EnsureChannelInfoTypeName(node.ChildNodes.Item(0).InnerText, "-consumer")
+            Dim consumerValue = If(node.ChildNodes.Item(0).InnerText.Contains("-consumer"), GetNodeText(node, "device"), GetNodeText(node, "filename"))
+            AddChannelInfoRow(rowIndex, consumerType, consumerValue)
+            rowIndex += 1
+        Next
+
+        ApplyNodeIndexes(document.SelectNodes("/channel/stage/layers/layer/index"), 0, Function(node) node.InnerText)
+        ApplyNodeIndexes(document.SelectNodes("/channel/output/consumers/consumer/index"), rowIndex - document.SelectNodes("/channel/output/consumers/consumer/index").Count, Function(node) node.InnerText)
+    End Sub
+
+    Private Sub LoadChannelInfo21(document As XmlDocument)
+        Dim rowIndex As Integer = 0
+
+        For Each node As XmlNode In document.SelectNodes("/channel/stage/layers/layer/foreground/producer")
+            AddChannelInfoRow(rowIndex, EnsureChannelInfoTypeName(node.ChildNodes.Item(0).InnerText, "-producer"), node.ChildNodes.Item(1).InnerText)
+            rowIndex += 1
+        Next
+
+        For Each node As XmlNode In document.SelectNodes("/channel/output/consumers/consumer")
+            Dim consumerName = node.ChildNodes.Item(0).InnerText
+            Dim consumerType = EnsureChannelInfoTypeName(consumerName, "-consumer")
+            Dim consumerValue = If(consumerName.Contains("decklink"), GetNodeText(node, "device"), GetNodeText(node, "path"))
+            AddChannelInfoRow(rowIndex, consumerType, consumerValue)
+            rowIndex += 1
+        Next
+
+        ApplyNodeIndexes(document.SelectNodes("/channel/stage/layers/layer/index"), 0, Function(node) node.InnerText)
+        ApplyNodeIndexes(document.SelectNodes("/channel/output/consumers/consumer/index"), rowIndex - document.SelectNodes("/channel/output/consumers/consumer/index").Count, Function(node) node.InnerText)
+    End Sub
+
+    Private Sub LoadChannelInfo23(document As XmlDocument)
+        Dim rowIndex As Integer = 0
+
+        For Each node As XmlNode In document.SelectNodes("/channel/stage/layer/*/foreground")
+            AddChannelInfoRow(rowIndex, EnsureChannelInfoTypeName(GetNodeText(node, "producer"), "-producer"), GetNodeText(node, "file/path"))
+            rowIndex += 1
+        Next
+
+        For Each node As XmlNode In document.SelectNodes("/channel/output/port/*")
+            Dim consumerPath = GetNodeText(node, "file/path")
+            Dim childNodeName = node.ChildNodes(0).Name
+            Dim consumerType = If(consumerPath.Contains("://"), "streaming-consumer", EnsureChannelInfoTypeName(childNodeName, "-consumer"))
+            AddChannelInfoRow(rowIndex, consumerType, consumerPath)
+            rowIndex += 1
+        Next
+
+        ApplyNodeIndexes(document.SelectNodes("/channel/stage/layer/*"), 0, Function(node) Split(node.Name, "_")(1))
+        ApplyNodeIndexes(document.SelectNodes("/channel/output/port/*"), rowIndex - document.SelectNodes("/channel/output/port/*").Count, Function(node) Split(node.Name, "_")(1))
+    End Sub
+
+    Private Sub RemoveSelectedChannelInfoRow()
+        With dgvchannelinfo
+            Dim typeParts = Split(.CurrentRow.Cells(1).Value, "-")
+            Dim commandName = "remove"
+            If typeParts.Count > 1 AndAlso typeParts(1) = "producer" Then
+                commandName = "stop"
+            End If
+
+            CasparDevice.SendString(commandName & " " & g_int_ChannelNumber & "-" & .CurrentRow.Cells(0).Value)
+        End With
+    End Sub
+
     Private Sub cmdgetchannelinfo_Click(sender As Object, e As EventArgs) Handles cmdgetchannelinfo.Click
         getchannelinfo()
     End Sub
     Sub getchannelinfo()
-        If ServerVersion = 2.0 Then
-            getchannelinfo27()
-        ElseIf ServerVersion = 2.1 Then
-            getchannelinfo21()
-        ElseIf ServerVersion = 2.2 Or 2.3 Then
-            getchannelinfo23()
-        End If
-    End Sub
-    Sub getchannelinfo27()
         On Error Resume Next
         dgvchannelinfo.Rows.Clear()
-        Dim str As String
-        str = "info " & g_int_ChannelNumber
-        SendString(NetStream, str + vbCrLf)
-        Threading.Thread.Sleep(100)
-        Dim data(10024) As Byte
-        NetStream.Read(data, 0, 10024)
-        Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data)
 
-        xmlString = xmlString.Substring(xmlString.IndexOf("<"))
+        Dim document = ReadChannelInfoDocument()
 
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
-        'Create the XML Document
-        m_xmld = New XmlDocument()
-        'Load the Xml string
-        m_xmld.LoadXml(xmlString)
-        'Get the list of name nodes 
-        m_nodelist = m_xmld.SelectNodes("/channel/stage/layers/layer/foreground/producer")
-        Dim ichannelinfo As Integer = 0
-        For Each m_node In m_nodelist
-            dgvchannelinfo.Rows.Add()
-            If m_node.ChildNodes.Item(0).InnerText.Contains("-producer") Then
-                dgvchannelinfo.Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText
-            Else
-                dgvchannelinfo.Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText & "-producer"
-            End If
-
-            dgvchannelinfo.Rows(ichannelinfo).Cells(2).Value = m_node.ChildNodes.Item(1).InnerText
-            ichannelinfo = ichannelinfo + 1
-        Next
-        m_nodelist = m_xmld.SelectNodes("/channel/output/consumers/consumer")
-        For Each m_node In m_nodelist
-            dgvchannelinfo.Rows.Add()
-            If m_node.ChildNodes.Item(0).InnerText.Contains("-consumer") Then
-                dgvchannelinfo.Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText
-            Else
-                dgvchannelinfo.Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText & "-consumer"
-            End If
-
-            If m_node.ChildNodes.Item(0).InnerText.Contains("-consumer") Then
-                dgvchannelinfo.Rows(ichannelinfo).Cells(2).Value = m_node.Item("device").InnerText
-            Else
-                dgvchannelinfo.Rows(ichannelinfo).Cells(2).Value = m_node.Item("filename").InnerText
-            End If
-            ichannelinfo = ichannelinfo + 1
-        Next
-
-        m_nodelist = m_xmld.SelectNodes("/channel/stage/layers/layer/index")
-        ichannelinfo = 0
-        For Each m_node In m_nodelist
-            dgvchannelinfo.Rows(ichannelinfo).Cells(0).Value = m_node.InnerText
-            ichannelinfo = ichannelinfo + 1
-        Next
-        m_nodelist = m_xmld.SelectNodes("/channel/output/consumers/consumer/index")
-
-        For Each m_node In m_nodelist
-            dgvchannelinfo.Rows(ichannelinfo).Cells(0).Value = m_node.InnerText
-            ichannelinfo = ichannelinfo + 1
-        Next
-    End Sub
-
-    Sub getchannelinfo21()
-        On Error Resume Next
-        With dgvchannelinfo
-            .Rows.Clear()
-            Dim str As String
-            str = "info " & g_int_ChannelNumber
-            SendString(NetStream, str + vbCrLf)
-
-            Threading.Thread.Sleep(100)
-
-            Dim data(10024) As Byte
-            NetStream.Read(data, 0, 10024)
-            Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data)
-
-            xmlString = xmlString.Substring(xmlString.IndexOf("<"))
-            Dim m_xmld As XmlDocument
-            Dim m_nodelist As XmlNodeList
-            Dim m_node As XmlNode
-            'Create the XML Document
-            m_xmld = New XmlDocument()
-            'Load the Xml string
-            m_xmld.LoadXml(xmlString)
-            'Get the list of name nodes 
-            m_nodelist = m_xmld.SelectNodes("/channel/stage/layers/layer/foreground/producer")
-            Dim ichannelinfo As Integer = 0
-            For Each m_node In m_nodelist
-                .Rows.Add()
-                If m_node.ChildNodes.Item(0).InnerText.Contains("-producer") Then
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText
-                Else
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText & "-producer"
-                End If
-                .Rows(ichannelinfo).Cells(2).Value = m_node.ChildNodes.Item(1).InnerText
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/output/consumers/consumer")
-            For Each m_node In m_nodelist
-                .Rows.Add()
-                If m_node.ChildNodes.Item(0).InnerText.Contains("-consumer") Then
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText
-                Else
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes.Item(0).InnerText & "-consumer"
-                End If
-                If m_node.ChildNodes.Item(0).InnerText.Contains("decklink") Then
-                    .Rows(ichannelinfo).Cells(2).Value = m_node.Item("device").InnerText
-                Else
-                    .Rows(ichannelinfo).Cells(2).Value = m_node.Item("path").InnerText
-                End If
-
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/stage/layers/layer/index")
-            ichannelinfo = 0
-            For Each m_node In m_nodelist
-                .Rows(ichannelinfo).Cells(0).Value = m_node.InnerText
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/output/consumers/consumer/index")
-            For Each m_node In m_nodelist
-                .Rows(ichannelinfo).Cells(0).Value = m_node.InnerText
-                ichannelinfo = ichannelinfo + 1
-            Next
-        End With
-    End Sub
-    Private Sub getchannelinfo23()
-        On Error Resume Next
-        With dgvchannelinfo
-            .Rows.Clear()
-            Dim str As String
-            str = "info " & g_int_ChannelNumber
-            SendString(NetStream, str + vbCrLf)
-
-            Threading.Thread.Sleep(100)
-
-            Dim data(10024) As Byte
-            NetStream.Read(data, 0, 10024)
-            Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data)
-
-            xmlString = xmlString.Substring(xmlString.IndexOf("<"))
-            Dim m_xmld As XmlDocument
-            Dim m_nodelist As XmlNodeList
-            Dim m_node As XmlNode
-            'Create the XML Document
-            m_xmld = New XmlDocument()
-            'Load the Xml string
-            m_xmld.LoadXml(xmlString)
-            'Get the list of name nodes 
-            m_nodelist = m_xmld.SelectNodes("/channel/stage/layer/*/foreground")
-            Dim ichannelinfo As Integer = 0
-            For Each m_node In m_nodelist
-                .Rows.Add()
-                If m_node.Item("producer").InnerText.Contains("-producer") Then
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.Item("producer").InnerText
-                Else
-                    .Rows(ichannelinfo).Cells(1).Value = m_node.Item("producer").InnerText & "-producer"
-                End If
-
-
-                .Rows(ichannelinfo).Cells(2).Value = m_node.Item("file").Item("path").InnerText
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/output/port/*")
-            For Each m_node In m_nodelist
-                .Rows.Add()
-                If m_node.Item("file").Item("path").InnerText.Contains("://") Then
-                    .Rows(ichannelinfo).Cells(1).Value = "streaming-consumer"
-                Else
-                    If m_node.ChildNodes(0).Name.Contains("-consumer") Then
-                        .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes(0).Name
-                    Else
-                        .Rows(ichannelinfo).Cells(1).Value = m_node.ChildNodes(0).Name & "-consumer"
-                    End If
-
-                End If
-                If m_node.ChildNodes(0).Name.Contains("decklink") Then
-                    .Rows(ichannelinfo).Cells(2).Value = m_node.Item("file").Item("path").InnerText
-                Else
-                    .Rows(ichannelinfo).Cells(2).Value = m_node.Item("file").Item("path").InnerText
-                End If
-
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/stage/layer/*")
-            ichannelinfo = 0
-            For Each m_node In m_nodelist
-                .Rows(ichannelinfo).Cells(0).Value = Split(m_node.Name, "_")(1)
-                ichannelinfo = ichannelinfo + 1
-            Next
-            m_nodelist = m_xmld.SelectNodes("/channel/output/port/*")
-            For Each m_node In m_nodelist
-                .Rows(ichannelinfo).Cells(0).Value = Split(m_node.Name, "_")(1)
-                ichannelinfo = ichannelinfo + 1
-            Next
-        End With
+        Select Case ServerVersion
+            Case 2.0
+                LoadChannelInfo20(document)
+            Case 2.1
+                LoadChannelInfo21(document)
+            Case 2.2, 2.3
+                LoadChannelInfo23(document)
+        End Select
     End Sub
 
     Private Sub cmdhidegbchannelinfo_Click(sender As Object, e As EventArgs)
@@ -222,17 +147,7 @@ Public Class ucChannelInfo
     Private Sub dgvchannelinfo_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvchannelinfo.CellContentClick
         On Error Resume Next
         If e.ColumnIndex = 3 Then
-            With dgvchannelinfo
-                If (Split(.CurrentRow.Cells(1).Value, "-")).Count > 1 Then
-                    If Split(.CurrentRow.Cells(1).Value, "-")(1) = "producer" Then
-                        CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & .CurrentRow.Cells(0).Value)
-                    Else 'consumer
-                        CasparDevice.SendString("remove " & g_int_ChannelNumber & "-" & .CurrentRow.Cells(0).Value)
-                    End If
-                Else ' streaming consumer
-                    CasparDevice.SendString("remove " & g_int_ChannelNumber & "-" & .CurrentRow.Cells(0).Value)
-                End If
-            End With
+            RemoveSelectedChannelInfoRow()
             getchannelinfo()
         End If
     End Sub
