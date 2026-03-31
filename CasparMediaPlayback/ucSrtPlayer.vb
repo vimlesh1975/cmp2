@@ -1,7 +1,27 @@
-﻿Imports System.IO
+Imports System.IO
 
 Public Class ucSrtPlayer
-    Private Sub cmdhidesrtplayer_Click(sender As Object, e As EventArgs) 
+    Private Sub ConfigureSrtFileDialog(dialog As OpenFileDialog, Optional defaultFile As String = "")
+        dialog.Filter = "srt files (*.srt)|*.srt|All files (*.*)|*.*"
+        dialog.InitialDirectory = "c:\casparcg\mydata\srt"
+        If defaultFile <> "" Then
+            dialog.FileName = defaultFile
+        End If
+    End Sub
+
+    Private Function EncodeSrtText() As String
+        Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvsrt.CurrentRow.Cells(3).Value & vbCr & dgvsrt.CurrentRow.Cells(4).Value)
+        Return System.Convert.ToBase64String(array)
+    End Function
+
+    Private Sub ShiftSrtTimings(direction As Integer)
+        For isrt = 0 To dgvsrt.Rows.Count - 1
+            dgvsrt.Rows(isrt).Cells(1).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(1).Value)) + direction * Val(HMSFtoF(txtvtrstarttime.Text)))
+            dgvsrt.Rows(isrt).Cells(2).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(2).Value)) + direction * Val(HMSFtoF(txtvtrstarttime.Text)))
+        Next
+    End Sub
+
+    Private Sub cmdhidesrtplayer_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
     Private Sub cmdstartsrt_Click(sender As System.Object, e As System.EventArgs) Handles cmdstartsrt.Click
@@ -18,11 +38,8 @@ Public Class ucSrtPlayer
         openfilesrtnew()
     End Sub
     Sub openfilesrtnew()
-        'On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.Filter = "srt files (*.srt)|*.srt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\srt"
-        ' ofd2.FileName = "c:\casparcg\mydata\srt\od_hindi.srt"
+        ConfigureSrtFileDialog(ofd2)
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Dim sr As StreamReader = New StreamReader(ofd2.FileName)
             dgvsrt.Rows.Clear()
@@ -48,12 +65,8 @@ Public Class ucSrtPlayer
         lblfilenamesrt.Text = ofd2.FileName
     End Sub
     Sub openfilesrt()
-        'On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.Filter = "srt files (*.srt)|*.srt|All files (*.*)|*.*"
-        ofd2.InitialDirectory = "c:\casparcg\mydata\srt"
-        ofd2.FileName = "c:\casparcg\mydata\srt\od_hindi.srt"
-        'If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        ConfigureSrtFileDialog(ofd2, "c:\casparcg\mydata\srt\od_hindi.srt")
         Dim sr As StreamReader = New StreamReader(ofd2.FileName)
         dgvsrt.Rows.Clear()
 
@@ -93,8 +106,7 @@ Public Class ucSrtPlayer
     Private Sub playsrt()
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvsrt.CurrentRow.Cells(3).Value & vbCr & dgvsrt.CurrentRow.Cells(4).Value)
-        CasparCGDataCollection.SetData("xf0", System.Convert.ToBase64String(array))
+        CasparCGDataCollection.SetData("xf0", EncodeSrtText())
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayersrt.Text), Int(cmblayersrt.Text), txtSRTTemplate.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
     End Sub
 
@@ -105,21 +117,13 @@ Public Class ucSrtPlayer
 
     Private Sub cmdaddtime_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdaddtime.Click
         On Error Resume Next
-        For isrt = 0 To dgvsrt.Rows.Count - 1
-            dgvsrt.Rows(isrt).Cells(1).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(1).Value)) + Val(HMSFtoF(txtvtrstarttime.Text)))
-            dgvsrt.Rows(isrt).Cells(2).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(2).Value)) + Val(HMSFtoF(txtvtrstarttime.Text)))
-
-        Next
+        ShiftSrtTimings(1)
     End Sub
 
 
     Private Sub cmdsubstracttime_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsubstracttime.Click
         On Error Resume Next
-        For isrt = 0 To dgvsrt.Rows.Count - 1
-            dgvsrt.Rows(isrt).Cells(1).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(1).Value)) - Val(HMSFtoF(txtvtrstarttime.Text)))
-            dgvsrt.Rows(isrt).Cells(2).Value = FToHMSF(Val(HMSFtoF(dgvsrt.Rows(isrt).Cells(2).Value)) - Val(HMSFtoF(txtvtrstarttime.Text)))
-
-        Next
+        ShiftSrtTimings(-1)
     End Sub
 
     Private Sub ucSrtPlayer_Load(sender As Object, e As EventArgs) Handles MyBase.Load

@@ -1,46 +1,65 @@
-﻿Public Class ucStreaming
+Public Class ucStreaming
+    Private Function BuildStreamingTarget(address As String, applicationName As String, streamName As String) As String
+        If applicationName = "" Then
+            Return address & streamName
+        End If
+
+        Return address & "/" & applicationName & "/" & streamName
+    End Function
+
+    Private Sub SendStreamingCommand(commandText As String, address As String, applicationName As String, streamName As String, Optional options As String = "")
+        Dim fullCommand As String = commandText & " " & BuildStreamingTarget(address, applicationName, streamName)
+        If options <> "" Then
+            fullCommand &= " " & options
+        End If
+        CasparDevice.SendString(fullCommand)
+    End Sub
+
+    Private Sub RemoveStreamingCommand(commandText As String, address As String, applicationName As String, streamName As String, Optional options As String = "")
+        SendStreamingCommand("remove " & Mid(commandText, 4), address, applicationName, streamName, options)
+    End Sub
+
     Private Sub cmdsendhlsstreaming_Click(sender As Object, e As EventArgs) Handles cmdsendhlsstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandhlstreaming.Text & " " & txtaddresshlsstreaming.Text & "/" & txtapplicationamehlsstreaming.Text & "/" & txtstreamnamehlsstreaming.Text & " " & txtoptionshlsstreaming.Text)
-
+        SendStreamingCommand(txtcommandhlstreaming.Text, txtaddresshlsstreaming.Text, txtapplicationamehlsstreaming.Text, txtstreamnamehlsstreaming.Text, txtoptionshlsstreaming.Text)
     End Sub
     Private Sub cmdstophlsstreaming_Click(sender As Object, e As EventArgs) Handles cmdstophlsstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandhlstreaming.Text, 4) & " " & txtaddresshlsstreaming.Text & "/" & txtapplicationamehlsstreaming.Text & "/" & txtstreamnamehlsstreaming.Text & " " & txtoptionshlsstreaming.Text)
+        RemoveStreamingCommand(txtcommandhlstreaming.Text, txtaddresshlsstreaming.Text, txtapplicationamehlsstreaming.Text, txtstreamnamehlsstreaming.Text, txtoptionshlsstreaming.Text)
     End Sub
     Private Sub cmdsendwsstreaming_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsendwsstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandwsstreaming.Text & " " & txtaddresswsstreaming.Text & "/" & txtapplicationamewsstreaming.Text & "/" & txtstreamnamewsstreaming.Text & " " & txtoptionswsstreaming.Text)
+        SendStreamingCommand(txtcommandwsstreaming.Text, txtaddresswsstreaming.Text, txtapplicationamewsstreaming.Text, txtstreamnamewsstreaming.Text, txtoptionswsstreaming.Text)
     End Sub
 
     Private Sub cmdsendytstreaming_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdsendytstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandytstreaming.Text & " " & txtaddressytstreaming.Text & "/" & txtapplicationameytstreaming.Text & "/" & txtstreamnameytstreaming.Text & " " & txtoptionsytstreaming.Text)
+        SendStreamingCommand(txtcommandytstreaming.Text, txtaddressytstreaming.Text, txtapplicationameytstreaming.Text, txtstreamnameytstreaming.Text, txtoptionsytstreaming.Text)
     End Sub
     Private Sub cmdstopwsstreaming_Click(sender As Object, e As EventArgs) Handles cmdstopwsstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandwsstreaming.Text, 4) & " " & txtaddresswsstreaming.Text & "/" & txtapplicationamewsstreaming.Text & "/" & txtstreamnamewsstreaming.Text & " " & txtoptionswsstreaming.Text)
+        RemoveStreamingCommand(txtcommandwsstreaming.Text, txtaddresswsstreaming.Text, txtapplicationamewsstreaming.Text, txtstreamnamewsstreaming.Text, txtoptionswsstreaming.Text)
 
     End Sub
     Private Sub cmdstopytstreaming_Click(sender As Object, e As EventArgs) Handles cmdstopytstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandytstreaming.Text, 4) & " " & txtaddressytstreaming.Text & "/" & txtapplicationameytstreaming.Text & "/" & txtstreamnameytstreaming.Text)
+        RemoveStreamingCommand(txtcommandytstreaming.Text, txtaddressytstreaming.Text, txtapplicationameytstreaming.Text, txtstreamnameytstreaming.Text)
 
     End Sub
 
-    Private Sub cmdhidegbstreaming_Click(sender As Object, e As EventArgs) 
+    Private Sub cmdhidegbstreaming_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
 
     Private Sub cmdsendfbstreaming_Click(sender As Object, e As EventArgs) Handles cmdsendfbstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandfbstreaming.Text & " " & txtaddressfbstreaming.Text & txtstreamnamefbstreaming.Text & " " & txtoptionsfbstreaming.Text)
+        SendStreamingCommand(txtcommandfbstreaming.Text, txtaddressfbstreaming.Text, "", txtstreamnamefbstreaming.Text, txtoptionsfbstreaming.Text)
 
     End Sub
 
     Private Sub cmdstopfbstreaming_Click(sender As Object, e As EventArgs) Handles cmdstopfbstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandfbstreaming.Text, 4) & " " & txtaddressfbstreaming.Text & txtstreamnamefbstreaming.Text)
+        RemoveStreamingCommand(txtcommandfbstreaming.Text, txtaddressfbstreaming.Text, "", txtstreamnamefbstreaming.Text)
 
     End Sub
 
@@ -64,17 +83,14 @@
     Private Sub cmdinput_Click(sender As Object, e As EventArgs) Handles cmdinput.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-            str = "play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " decklink " & cmbdecklinkforrecording.Text
-            CasparDevice.SendString(str)
+            CasparDevice.SendString("play " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " decklink " & cmbdecklinkforrecording.Text)
         End If
     End Sub
 
     Private Sub cmdremove_input_Click(sender As Object, e As EventArgs) Handles cmdremove_input.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str = "stop " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer
-            CasparDevice.SendString(str)
+            CasparDevice.SendString("stop " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer)
         End If
     End Sub
 
@@ -90,24 +106,24 @@
 
     Private Sub cmdsendytstreaming23_Click(sender As Object, e As EventArgs) Handles cmdsendytstreaming23.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandytstreaming23.Text & " " & txtaddressytstreaming23.Text & "/" & txtapplicationameytstreaming23.Text & "/" & txtstreamnameytstreaming23.Text & " " & txtoptionsytstreaming23.Text)
+        SendStreamingCommand(txtcommandytstreaming23.Text, txtaddressytstreaming23.Text, txtapplicationameytstreaming23.Text, txtstreamnameytstreaming23.Text, txtoptionsytstreaming23.Text)
 
     End Sub
 
     Private Sub cmdstopytstreaming23_Click(sender As Object, e As EventArgs) Handles cmdstopytstreaming23.Click
-        CasparDevice.SendString("remove " & Mid(txtcommandytstreaming23.Text, 4) & " " & txtaddressytstreaming23.Text & "/" & txtapplicationameytstreaming23.Text & "/" & txtstreamnameytstreaming23.Text)
+        RemoveStreamingCommand(txtcommandytstreaming23.Text, txtaddressytstreaming23.Text, txtapplicationameytstreaming23.Text, txtstreamnameytstreaming23.Text)
 
     End Sub
 
     Private Sub cmdsendfbstreaming23_Click(sender As Object, e As EventArgs) Handles cmdsendfbstreaming23.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandfbstreaming23.Text & " " & txtaddressfbstreaming23.Text & txtstreamnamefbstreaming23.Text & " " & txtoptionsfbstreaming23.Text)
+        SendStreamingCommand(txtcommandfbstreaming23.Text, txtaddressfbstreaming23.Text, "", txtstreamnamefbstreaming23.Text, txtoptionsfbstreaming23.Text)
 
     End Sub
 
     Private Sub cmdstopfbstreaming23_Click(sender As Object, e As EventArgs) Handles cmdstopfbstreaming23.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandfbstreaming23.Text, 4) & " " & txtaddressfbstreaming23.Text & txtstreamnamefbstreaming23.Text)
+        RemoveStreamingCommand(txtcommandfbstreaming23.Text, txtaddressfbstreaming23.Text, "", txtstreamnamefbstreaming23.Text)
 
     End Sub
 
@@ -125,7 +141,7 @@
     Private Sub cmduseinffmpeg_Click(sender As Object, e As EventArgs) Handles cmduseinffmpeg.Click
         On Error Resume Next
 
-        Dim ff As String = "/K " & txtuseinffmpeg.Text 'c:/casparcg/mydata/ffmpeg/ffmpeg.exe -y -i " & """" & txtsourcefileforalphavideosd.Text & """" & " -vcodec qtrle -vf scale=1920:1080 " & """" & txtdestinationfolderforhd.Text & txtfilenameforhd.Text & """" & ".mov"
+        Dim ff As String = "/K " & txtuseinffmpeg.Text
         Process.Start("CMD", ff)
     End Sub
 
@@ -135,13 +151,13 @@
 
     Private Sub cmdsendIGstreaming_Click(sender As Object, e As EventArgs) Handles cmdsendIGstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString(txtcommandIGstreaming.Text & " " & txtaddressIGstreaming.Text & txtstreamnameIGstreaming.Text & " " & txtoptionsIGstreaming.Text)
+        SendStreamingCommand(txtcommandIGstreaming.Text, txtaddressIGstreaming.Text, "", txtstreamnameIGstreaming.Text, txtoptionsIGstreaming.Text)
 
     End Sub
 
     Private Sub cmdstopIGstreaming_Click(sender As Object, e As EventArgs) Handles cmdstopIGstreaming.Click
         On Error Resume Next
-        CasparDevice.SendString("remove " & Mid(txtcommandIGstreaming.Text, 4) & " " & txtaddressIGstreaming.Text & txtstreamnameIGstreaming.Text)
+        RemoveStreamingCommand(txtcommandIGstreaming.Text, txtaddressIGstreaming.Text, "", txtstreamnameIGstreaming.Text)
 
     End Sub
 End Class

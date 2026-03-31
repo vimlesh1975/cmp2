@@ -3,6 +3,20 @@
 Imports System.Net.Sockets
 Imports Svt.Caspar
 Public Class ucSG2016
+    Private Const SgGamesLogoFolder As String = "C:\casparcg\mydata\games2\games logo\"
+    Private Const SgEventLogoFolder As String = "C:\casparcg\mydata\games2\event logo\"
+
+    Private Sub SendSgFill(fillValues As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill " & fillValues & " 50 easeoutexpo")
+    End Sub
+
+    Private Sub SendSgOpacity(opacityValue As String)
+        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity " & opacityValue & " 50 easeoutexpo")
+    End Sub
+
+    Private Function PickSgImage(defaultDirectory As String, picture As PictureBox) As String
+        Return openimage(defaultDirectory, picture)
+    End Function
 
     Private Sub NG_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         On Error Resume Next
@@ -183,12 +197,12 @@ Public Class ucSG2016
 
     Private Sub gamelogoforgym_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles gamelogo.Click
         On Error Resume Next
-        openimage("C:\casparcg\mydata\games2\games logo\", sender)
+        PickSgImage(SgGamesLogoFolder, sender)
     End Sub
 
     Private Sub eventlogoforgym_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles eventlogo.Click
         On Error Resume Next
-        openimage("C:\casparcg\mydata\games2\event logo\", sender)
+        PickSgImage(SgEventLogoFolder, sender)
     End Sub
 
 
@@ -219,28 +233,28 @@ Public Class ucSG2016
             x = 0
             y = 1
         ElseIf rdoSqueezeIn.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill 0.5 0 0 1 50 easeoutexpo")
+            SendSgFill("0.5 0 0 1")
             Exit Sub
         ElseIf rdoFedIN.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity  0")
+            SendSgOpacity("0")
             GoTo 50
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        SendSgFill(x & " " & y & " 1 1")
 50:
     End Sub
     Sub animationtoscreen()
         If rdoFedIN.Checked Or rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity 1 50 easeoutexpo")
+            SendSgOpacity("1")
 
             If chkanimationforhdvan.Checked Then
-                CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill .1 0 .8 1 50 " & "easeoutexpo")
+                SendSgFill(".1 0 .8 1")
             End If
             GoTo 50
         End If
         If chkanimationforhdvan.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill .1 0 .8 1 50 " & "easeoutexpo")
+            SendSgFill(".1 0 .8 1")
         Else
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill 0 0 1 1 50 " & "easeoutexpo")
+            SendSgFill("0 0 1 1")
         End If
 50:
     End Sub
@@ -259,13 +273,13 @@ Public Class ucSG2016
             x = 0
             y = 1
         ElseIf rdoSqueezeout.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill 0.5 0 0 1 50 easeoutexpo")
+            SendSgFill("0.5 0 0 1")
             Exit Sub
         ElseIf rdoFedOut.Checked Then
-            CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " opacity 0 50 easeoutexpo")
+            SendSgOpacity("0")
             GoTo 50
         End If
-        CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayergames.Text & " fill " & x & " " & y & " 1 1 50 easeoutexpo")
+        SendSgFill(x & " " & y & " 1 1")
 50:
     End Sub
 

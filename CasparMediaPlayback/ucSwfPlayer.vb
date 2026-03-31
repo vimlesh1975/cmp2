@@ -1,13 +1,21 @@
-﻿Public Class ucSwfPlayer
+Public Class ucSwfPlayer
+    Private Function GetSwfLayerNumber() As Integer
+        Return Int(cmbflashlayerforswf.Text)
+    End Function
+
+    Private Function GetSwfMoviePath() As String
+        Return Replace(picswf.Movie, "\", "/")
+    End Function
+
     Private Sub cmdswfplay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdswfplay.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("loader1", Replace(picswf.Movie, "\", "/"))
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmbflashlayerforswf.Text), Int(cmbflashlayerforswf.Text), "CMP/swf/swf", True, CasparCGDataCollection.ToAMCPEscapedXml)
+        CasparCGDataCollection.Clear()
+        CasparCGDataCollection.SetData("loader1", GetSwfMoviePath())
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetSwfLayerNumber(), GetSwfLayerNumber(), "CMP/swf/swf", True, CasparCGDataCollection.ToAMCPEscapedXml)
     End Sub
     Private Sub cmdswfstop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdswfstop.Click
         On Error Resume Next
-        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(Int(cmbflashlayerforswf.Text), Int(cmbflashlayerforswf.Text))
+        CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Stop(GetSwfLayerNumber(), GetSwfLayerNumber())
     End Sub
     Private Sub picswf_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdswfopen.Click
         On Error Resume Next

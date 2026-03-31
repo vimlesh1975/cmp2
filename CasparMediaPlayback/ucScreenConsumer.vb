@@ -1,8 +1,19 @@
-﻿Public Class ucScreenConsumer
+Public Class ucScreenConsumer
     Public parentedProcess1 As Process
+
+    Private Sub AttachScreenConsumerProcess()
+        SetProcessParentrecorder("casparcg", cmbscreenConsumres, pnlrecording)
+    End Sub
+
+    Private Sub DetachScreenConsumerProcess()
+        If Not parentedProcess1 Is Nothing Then
+            SetParent(parentedProcess1.MainWindowHandle, Nothing)
+        End If
+    End Sub
+
     Private Sub Cmdshowcasparcgwindowrecording_Click(sender As Object, e As EventArgs) Handles cmdshowcasparcgwindowrecording.Click
         On Error Resume Next
-        SetProcessParentrecorder("casparcg", cmbscreenConsumres, pnlrecording)
+        AttachScreenConsumerProcess()
     End Sub
 
     Public Sub SetProcessParentrecorder(ByVal processName As String, ByVal cmb As ComboBox, ByVal pnl As Panel)
@@ -23,9 +34,7 @@
 
     Private Sub Cmdoutcasparcgwindowrecording_Click(sender As Object, e As EventArgs) Handles cmdoutcasparcgwindowrecording.Click
         On Error Resume Next
-        If Not parentedProcess1 Is Nothing Then
-            SetParent(parentedProcess1.MainWindowHandle, Nothing)
-        End If
+        DetachScreenConsumerProcess()
     End Sub
 
     Private Sub ucScreenConsumer_Load(sender As Object, e As EventArgs) Handles MyBase.Load

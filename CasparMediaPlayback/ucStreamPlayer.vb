@@ -5,6 +5,29 @@ Public Class ucStreamPlayer
     Dim bb
     Dim dd
 
+    Private Function BuildBinCommand(commandText As String) As String
+        Return "/K " & txtBinFolder.Text & commandText
+    End Function
+
+    Private Sub RunBinCommand(commandText As String)
+        Process.Start("CMD", BuildBinCommand(commandText))
+    End Sub
+
+    Private Sub SendNdiCommand(commandText As String, sourceName As String)
+        CasparDevice.SendString(commandText & " " & sourceName)
+    End Sub
+
+    Private Sub StopNdiFromText(commandText As String)
+        CasparDevice.SendString("stop " & Mid(Split(commandText, "play ")(1), 1, 3))
+    End Sub
+
+    Private Sub PopulateComboWithItems(combo As ComboBox, items As IEnumerable)
+        combo.Items.Clear()
+        For Each item In items
+            combo.Items.Add(item)
+        Next
+    End Sub
+
     Private Sub cmdhidegbstreaming_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
@@ -26,15 +49,13 @@ Public Class ucStreamPlayer
     End Sub
     Private Sub cmdMonitor_Click(sender As Object, e As EventArgs) Handles cmdMonitor.Click
         On Error Resume Next
-        Dim command As String = "/K " & txtBinFolder.Text & txtmontor.Text
-        Process.Start("CMD", command)
+        RunBinCommand(txtmontor.Text)
     End Sub
 
 
     Private Sub cmdDecklink_Click(sender As Object, e As EventArgs) Handles cmdDecklink.Click
         On Error Resume Next
-        Dim command As String = "/K " & txtBinFolder.Text & txtDecklink.Text
-        Process.Start("CMD", command)
+        RunBinCommand(txtDecklink.Text)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -43,14 +64,12 @@ Public Class ucStreamPlayer
 
     Private Sub cmdStreamFromHere_Click(sender As Object, e As EventArgs) Handles cmdStreamFromHere.Click
         On Error Resume Next
-        Dim command As String = "/K " & txtBinFolder.Text & txtStreamFromHere.Text
-        Process.Start("CMD", command)
+        RunBinCommand(txtStreamFromHere.Text)
     End Sub
 
     Private Sub cmdDesktopDecklink_Click(sender As Object, e As EventArgs) Handles cmdDesktopDecklink.Click
         On Error Resume Next
-        Dim command As String = "/K " & txtBinFolder.Text & txtDesktopDecklink.Text & " " & cmbDesktopDecklink.Text & " " & txtDesktopDecklink2.Text
-        Process.Start("CMD", command)
+        RunBinCommand(txtDesktopDecklink.Text & " " & cmbDesktopDecklink.Text & " " & txtDesktopDecklink2.Text)
     End Sub
 
 
@@ -138,39 +157,39 @@ Public Class ucStreamPlayer
     End Sub
     Private Sub cmdSendNDI_Click(sender As Object, e As EventArgs) Handles cmdSendNDI.Click
         On Error Resume Next
-        CasparDevice.SendString(txtNDI.Text & " " & cmbNDI.Text)
+        SendNdiCommand(txtNDI.Text, cmbNDI.Text)
     End Sub
     Private Sub CmdSendNDI2_Click(sender As Object, e As EventArgs) Handles cmdSendNDI2.Click
         On Error Resume Next
-        CasparDevice.SendString(txtNDI2.Text & " " & cmbNDI2.Text)
+        SendNdiCommand(txtNDI2.Text, cmbNDI2.Text)
     End Sub
     Private Sub CmdSendNDI3_Click(sender As Object, e As EventArgs) Handles cmdSendNDI3.Click
         On Error Resume Next
-        CasparDevice.SendString(txtNDI3.Text & " " & cmbNDI3.Text)
+        SendNdiCommand(txtNDI3.Text, cmbNDI3.Text)
     End Sub
     Private Sub CmdSendNDI4_Click(sender As Object, e As EventArgs) Handles cmdSendNDI4.Click
         On Error Resume Next
-        CasparDevice.SendString(txtNDI4.Text & " " & cmbNDI4.Text)
+        SendNdiCommand(txtNDI4.Text, cmbNDI4.Text)
     End Sub
 
     Private Sub Cmdstopndi_Click(sender As Object, e As EventArgs) Handles cmdstopndi.Click
         On Error Resume Next
-        CasparDevice.SendString("stop " & Mid(Split(txtNDI.Text, "play ")(1), 1, 3))
+        StopNdiFromText(txtNDI.Text)
     End Sub
 
     Private Sub Cmdstopndi2_Click(sender As Object, e As EventArgs) Handles cmdstopndi2.Click
         On Error Resume Next
-        CasparDevice.SendString("stop " & Mid(Split(txtNDI2.Text, "play ")(1), 1, 3))
+        StopNdiFromText(txtNDI2.Text)
     End Sub
 
     Private Sub Cmdstopndi3_Click(sender As Object, e As EventArgs) Handles cmdstopndi3.Click
         On Error Resume Next
-        CasparDevice.SendString("stop " & Mid(Split(txtNDI3.Text, "play ")(1), 1, 3))
+        StopNdiFromText(txtNDI3.Text)
     End Sub
 
     Private Sub Cmdstopndi4_Click(sender As Object, e As EventArgs) Handles cmdstopndi4.Click
         On Error Resume Next
-        CasparDevice.SendString("stop " & Mid(Split(txtNDI4.Text, "play ")(1), 1, 3))
+        StopNdiFromText(txtNDI4.Text)
     End Sub
 
     Private Sub CmdRefreshNDISources_Click(sender As Object, e As EventArgs) Handles cmdRefreshNDISources.Click

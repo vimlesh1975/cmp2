@@ -81,6 +81,18 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucRemoteLogging` | `CasparMediaPlayback/ucRemoteLogging.vb` | Done | Remote logging connect/disconnect state handling and socket cleanup consolidated into shared helpers. |
 | `ucRSS` | `CasparMediaPlayback/ucRSS.vb` | Done | RSS grid setup, select-all toggles, and scroll text/template data building consolidated into shared helpers. |
 | `ucSceneScroller` | `CasparMediaPlayback/ucSceneScroller.vb` | Done | Scene scroller file dialog, text building, and repeated CG update calls consolidated into shared helpers. |
+| `ucScreenConsumer` | `CasparMediaPlayback/ucScreenConsumer.vb` | Done | Screen consumer attach/detach flow consolidated into shared helpers. |
+| `ucSG2016` | `CasparMediaPlayback/ucSG2016.vb` | Done | Games-logo picker and core animation mixer commands consolidated into shared helpers for safer reuse. |
+| `ucSilenceDetector` | `CasparMediaPlayback/ucSilenceDetector.vb` | Done | Silence-level detection, reset flow, tone playback, and source-command sending consolidated into shared helpers. |
+| `ucSlowMotion` | `CasparMediaPlayback/ucSlowMotion.vb` | Done | Slow-motion layer addressing and repeated call/seek command sending consolidated into shared helpers. |
+| `ucSlowMotion21` | `CasparMediaPlayback/ucSlowMotion21.vb` | Done | Dual slow-motion player/recorder setup consolidated into configuration helpers. |
+| `ucSMRecorder` | `CasparMediaPlayback/ucSMRecorder.vb` | Done | Recorder layer commands and folder picker setup consolidated into shared helpers. |
+| `ucSongSubtitling` | `CasparMediaPlayback/ucSongSubtitling.vb` | Done | OSC address building, encoded subtitle text generation, and row-selection routing consolidated into shared helpers. |
+| `ucSrtPlayer` | `CasparMediaPlayback/ucSrtPlayer.vb` | Done | SRT file dialog setup, encoded subtitle text generation, and bulk time shifting consolidated into shared helpers. |
+| `ucStreaming` | `CasparMediaPlayback/ucStreaming.vb` | Done | Streaming target building and add/remove command assembly consolidated into shared helpers. |
+| `ucStreamPlayer` | `CasparMediaPlayback/ucStreamPlayer.vb` | Done | External bin command launching and repeated NDI start/stop handling consolidated into shared helpers. |
+| `ucSwfPlayer` | `CasparMediaPlayback/ucSwfPlayer.vb` | Done | SWF layer addressing and selected movie path handling consolidated into shared helpers. |
+| `ucSystemAudio` | `CasparMediaPlayback/ucSystemAudio.vb` | Done | Per-channel add/remove audio toggles consolidated into a shared helper. |
 
 ## Repository Cleanup
 

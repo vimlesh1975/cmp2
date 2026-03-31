@@ -11,6 +11,23 @@ Public Class ucSMRecorder
     Dim startingtimeofrecording As DateTime
 
     Dim WithEvents spv As clsShuttleProV2.clsShuttleProV2
+    Private Sub SendSmRecorderLayerCommand(commandName As String, commandTarget As String)
+        Dim fullCommand As String = commandName & " " & chnumber & "-1"
+        If commandTarget <> "" Then
+            fullCommand &= " " & commandTarget
+        End If
+        CasparDevice.SendString(fullCommand)
+    End Sub
+
+    Private Sub ConfigureSmRecorderFolderPicker(dialog As OpenFileDialog)
+        dialog.DereferenceLinks = False
+        dialog.CheckFileExists = False
+        dialog.CheckPathExists = False
+        dialog.Filter = "folders|n"
+        dialog.Title = "Select Folder"
+        dialog.InitialDirectory = Replace(mediafullpath, "/", "\")
+        dialog.FileName = dialog.InitialDirectory & "select folder"
+    End Sub
     Private Sub cmdoutcasparcgwindowrecording_Click(sender As Object, e As EventArgs) Handles cmdoutcasparcgwindowrecording.Click
         On Error Resume Next
         If Not parentedProcess1 Is Nothing Then
@@ -37,10 +54,7 @@ Public Class ucSMRecorder
     Private Sub cmdinput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdinput.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str As String
-
-            str = "play " & chnumber & "-1" & " decklink " & cmbdecklinkforrecording.Text
-            CasparDevice.SendString(str)
+            SendSmRecorderLayerCommand("play", "decklink " & cmbdecklinkforrecording.Text)
         End If
     End Sub
 
@@ -55,13 +69,7 @@ Public Class ucSMRecorder
 
 
         Dim aa As New OpenFileDialog
-        aa.DereferenceLinks = False
-        aa.CheckFileExists = False
-        aa.CheckPathExists = False
-        aa.Filter = "folders|n"
-        aa.Title = "Select Folder"
-        aa.InitialDirectory = Replace(mediafullpath, "/", "\")  '"c:\casparcg\_media"
-        aa.FileName = aa.InitialDirectory & "select folder"
+        ConfigureSmRecorderFolderPicker(aa)
         If aa.ShowDialog() = DialogResult.OK Then
             lblRecordingFolder.Text = Directory.GetParent(aa.FileName).ToString & "\"
         End If
@@ -72,9 +80,7 @@ Public Class ucSMRecorder
     Private Sub cmdremove_input_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdremove_input.Click
         On Error Resume Next
         If frmmediaplayer.cmdconnect.BackColor = Color.Green Then
-            Dim str = "stop " & chnumber & "-1"
-            CasparDevice.SendString(str)
-
+            SendSmRecorderLayerCommand("stop", "")
         End If
     End Sub
 

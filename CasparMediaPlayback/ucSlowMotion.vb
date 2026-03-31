@@ -3,6 +3,19 @@ Public Class ucSlowMotion
     Private Sub cmdhidegbslowmotion_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
+    Private Function GetSlowMotionLayerAddress() As String
+        Return g_int_ChannelNumber & "-" & g_int_PlaylistLayer
+    End Function
+
+    Private Sub SendSlowMotionCall(commandText As String)
+        CasparDevice.SendString("call " & GetSlowMotionLayerAddress() & " " & commandText)
+    End Sub
+
+    Private Sub SeekSlowMotion(target As String)
+        playwithspeed0()
+        SendSlowMotionCall("seek " & target)
+    End Sub
+
     Private Sub ucSlowMotion_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         initialiseslowmotiondata()
     End Sub
@@ -12,53 +25,49 @@ Public Class ucSlowMotion
     End Sub
     Private Sub cmdLiveSeekEnd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdLiveSeekEnd.Click
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " speed 1")
+        SendSlowMotionCall("speed 1")
         Threading.Thread.Sleep(250)
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " seek |0")
+        SendSlowMotionCall("seek |0")
     End Sub
     Private Sub nSlowMotion_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nSlowMotion.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " speed " & nSlowMotion.Value)
+        SendSlowMotionCall("speed " & nSlowMotion.Value)
         ucPlaylist.tmrduration.Enabled = True
     End Sub
     Private Sub nSlowMotionforward_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nSlowMotionforward.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " speed " & nSlowMotionforward.Value)
+        SendSlowMotionCall("speed " & nSlowMotionforward.Value)
         ucPlaylist.tmrduration.Enabled = True
     End Sub
 
     Private Sub nSlowMotionbackward_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nSlowMotionbackward.ValueChanged
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " speed " & nSlowMotionbackward.Value)
+        SendSlowMotionCall("speed " & nSlowMotionbackward.Value)
         ucPlaylist.tmrduration.Enabled = True
     End Sub
     Sub playwithspeed0()
         On Error Resume Next
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " speed 0")
+        SendSlowMotionCall("speed 0")
         Threading.Thread.Sleep(250)
     End Sub
     Private Sub cmdgotoin1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotoin1.Click
         On Error Resume Next
-        playwithspeed0()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " seek " & txtmarkin1.Text)
+        SeekSlowMotion(txtmarkin1.Text)
     End Sub
 
     Private Sub cmdgotoin2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotoin2.Click
         On Error Resume Next
-        playwithspeed0()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " seek |" & txtmarkin2.Text)
+        SeekSlowMotion("|" & txtmarkin2.Text)
     End Sub
 
     Private Sub cmdgotoin3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotoin3.Click
         On Error Resume Next
-        playwithspeed0()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & " seek +" & txtmarkin3.Text)
+        SeekSlowMotion("+" & txtmarkin3.Text)
     End Sub
 
     Private Sub cmdgotoin4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdgotoin4.Click
         On Error Resume Next
-        playwithspeed0()
-        CasparDevice.SendString("call " & g_int_ChannelNumber & "-" & g_int_PlaylistLayer & """" & " seek -" & txtmarkin4.Text)
+        SeekSlowMotion("-" & txtmarkin4.Text)
     End Sub
 
     Private Sub cmdplaydecklinksm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdplaydecklinksm.Click

@@ -11,6 +11,18 @@ Public Class ucSongSubtitling
     Dim tempRow As DataGridViewRow
 
     Dim WithEvents sOscServer As OscServer
+    Private Function GetSongSubtitlingOscAddress() As String
+        Return "/channel/" & g_int_ChannelNumber & "/stage/layer/" & g_int_PlaylistLayer & "/file/frame"
+    End Function
+
+    Private Function EncodeSongSubtitleText(value As String) As String
+        Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(value)
+        Return System.Convert.ToBase64String(array)
+    End Function
+
+    Private Sub SetSongSubtitlingRow(rowIndex As Integer)
+        dgvonelinesuper.CurrentCell = dgvonelinesuper.Rows(rowIndex).Cells(0)
+    End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         initialiseonelinerdata()
@@ -35,7 +47,7 @@ Public Class ucSongSubtitling
             Bespoke.Common.Osc.OscPacket.LittleEndianByteOrder = False
             sOscServer = New OscServer(ttype, IPAddress.Any, cmboscport.Text)
             sOscServer.Start()
-            sOscServer.RegisterMethod("/channel/" & g_int_ChannelNumber & "/stage/layer/" & g_int_PlaylistLayer & "/file/frame")
+            sOscServer.RegisterMethod(GetSongSubtitlingOscAddress())
             sOscServer.FilterRegisteredMethods = False
 
         End If
@@ -45,7 +57,7 @@ Public Class ucSongSubtitling
         If Me.InvokeRequired Then
             Me.Invoke(New invokeControlsDelegate1(AddressOf Me.invokeControls1), e)
         Else
-            If e.Message.Address = "/channel/" & g_int_ChannelNumber & "/stage/layer/" & g_int_PlaylistLayer & "/file/frame" Then
+            If e.Message.Address = GetSongSubtitlingOscAddress() Then
                 lblhmsf.Text = FToHMSF(e.Message.Data(0))
             End If
         End If
@@ -115,8 +127,7 @@ Public Class ucSongSubtitling
     Sub playoneliner()
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(dgvonelinesuper.CurrentRow.Cells(0).Value)
-        CasparCGDataCollection.SetData("xf0", System.Convert.ToBase64String(array))
+        CasparCGDataCollection.SetData("xf0", EncodeSongSubtitleText(dgvonelinesuper.CurrentRow.Cells(0).Value))
         CasparCGDataCollection.SetData("scrolling_speed", (Val(dgvonelinesuper.CurrentRow.Cells(4).Value) / 2) / HMSFtoF(dgvonelinesuper.CurrentRow.Cells(3).Value))
         ' CasparCGDataCollection.SetData("xf0", dgvonelinesuper.CurrentRow.Cells(0).Value)
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayeronelinesuper.Text), Int(cmblayeronelinesuper.Text), ("CMP/songsubtitling/songsubtitling"), True, CasparCGDataCollection.ToAMCPEscapedXml)
@@ -170,11 +181,11 @@ Public Class ucSongSubtitling
         ' On Error Resume Next
         For i = 0 To dgvonelinesuper.Rows.Count - 1
             If (lblhmsf.Text) = FToHMSF(HMSFtoF(dgvonelinesuper.Rows(i).Cells(1).Value) - HMSFtoF((txttemplateresponseframe.Text))) Then
-                dgvonelinesuper.CurrentCell = dgvonelinesuper.Rows(i).Cells(0)
+                SetSongSubtitlingRow(i)
                 playoneliner()
             End If
             If (lblhmsf.Text) = FToHMSF(HMSFtoF(dgvonelinesuper.Rows(i).Cells(2).Value) - HMSFtoF((txttemplateresponseframe.Text))) Then
-                dgvonelinesuper.CurrentCell = dgvonelinesuper.Rows(i).Cells(0)
+                SetSongSubtitlingRow(i)
                 stoponeliner()
             End If
         Next

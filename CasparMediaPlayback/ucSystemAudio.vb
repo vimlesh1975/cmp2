@@ -1,33 +1,25 @@
-﻿Public Class ucSystemAudio
+Public Class ucSystemAudio
+    Private Sub ApplySystemAudioState(channelNumber As Integer, isEnabled As Boolean)
+        If isEnabled Then
+            CasparDevice.SendString("add " & channelNumber & " audio")
+        Else
+            CasparDevice.SendString("remove " & channelNumber & " audio")
+        End If
+    End Sub
+
     Private Sub cmdSystemAudio_Click(sender As Object, e As EventArgs) Handles cmdSystemAudio.Click
         On Error Resume Next
         If g_int_NumberOfChannels >= 1 Then
-            If chkSystemAudioch1.Checked Then
-                CasparDevice.SendString("add 1 audio")
-            Else
-                CasparDevice.SendString("remove 1 audio")
-            End If
+            ApplySystemAudioState(1, chkSystemAudioch1.Checked)
         End If
         If g_int_NumberOfChannels >= 2 Then
-            If chkSystemAudioch2.Checked Then
-                CasparDevice.SendString("add 2 audio")
-            Else
-                CasparDevice.SendString("remove 2 audio")
-            End If
+            ApplySystemAudioState(2, chkSystemAudioch2.Checked)
         End If
         If g_int_NumberOfChannels >= 3 Then
-            If chkSystemAudioch3.Checked Then
-                CasparDevice.SendString("add 3 audio")
-            Else
-                CasparDevice.SendString("remove 3 audio")
-            End If
+            ApplySystemAudioState(3, chkSystemAudioch3.Checked)
         End If
         If g_int_NumberOfChannels >= 4 Then
-            If chkSystemAudioch4.Checked Then
-                CasparDevice.SendString("add 4 audio")
-            Else
-                CasparDevice.SendString("remove 4 audio")
-            End If
+            ApplySystemAudioState(4, chkSystemAudioch4.Checked)
         End If
 
     End Sub
