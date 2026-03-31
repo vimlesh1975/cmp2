@@ -4,6 +4,114 @@ Imports System.Windows.Controls
 Imports AxShockwaveFlashObjects
 
 Public Class ucTemplate
+    Private Const RundownDirectory As String = "c:\casparcg\mydata\rundown\"
+    Private Const FlagDirectory As String = "c:/casparcg/mydata/flag/"
+    Private Const PreviewTemplatePath As String = "file:///c:/casparcg/cmp/fth/cg20.fth.pal.43"
+
+    Private Function BuildTemplateData(Optional includeFont As Boolean = False, Optional normalizePathValues As Boolean = False) As String
+        CasparCGDataCollection.Clear()
+
+        If includeFont Then
+            CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
+        End If
+
+        For ianytemplate = 0 To dgvanytemplate.Rows.Count
+            Dim key = dgvanytemplate.Rows(ianytemplate).Cells(0).Value
+            Dim value = dgvanytemplate.Rows(ianytemplate).Cells(1).Value
+
+            If normalizePathValues Then
+                value = Replace(value, "\", "/")
+            End If
+
+            CasparCGDataCollection.SetData(key, value)
+        Next
+
+        Return CasparCGDataCollection.ToAMCPEscapedXml
+    End Function
+
+    Private Function BuildTemplateXml(Optional normalizePathValues As Boolean = False) As String
+        BuildTemplateData(False, normalizePathValues)
+        Return CasparCGDataCollection.ToXml
+    End Function
+
+    Private Function BuildCgCommand(videoLayer As Object, actionName As String, templateLayer As Object, Optional templateName As String = Nothing, Optional escapedXml As String = Nothing, Optional invocationName As String = Nothing) As String
+        Dim str As String = "cg " & g_int_ChannelNumber & "-" & videoLayer & " " & actionName & " " & templateLayer
+
+        If Not String.IsNullOrEmpty(templateName) Then
+            str &= " """ & templateName & """"
+        End If
+
+        If Not String.IsNullOrEmpty(invocationName) Then
+            str &= " " & invocationName
+        End If
+
+        If escapedXml IsNot Nothing Then
+            str &= " 1 """ & escapedXml & """"
+        End If
+
+        Return str & vbCrLf
+    End Function
+
+    Private Sub SendCgCommand(videoLayer As Object, actionName As String, templateLayer As Object, Optional templateName As String = Nothing, Optional escapedXml As String = Nothing, Optional invocationName As String = Nothing)
+        SendString(NetStream, BuildCgCommand(videoLayer, actionName, templateLayer, templateName, escapedXml, invocationName))
+    End Sub
+
+    Private Sub LoadRundownFileFromPath(fileName As String)
+        Using sr As StreamReader = New StreamReader(fileName)
+            dgvrundown.Rows.Clear()
+
+            Dim g As Integer = 0
+            Dim li As String
+            Do Until sr.EndOfStream = True
+                li = sr.ReadLine()
+                dgvrundown.Rows.Add()
+                Dim xyz As Array = Split(li, Chr(2))
+                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
+                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
+                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
+                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
+                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
+                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
+                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
+                g = g + 1
+            Loop
+        End Using
+
+        Me.dgvrundown.Columns(0).HeaderText = fileName
+    End Sub
+
+    Private Sub PopulateDefaultLoaderRows(startIndex As Integer)
+        dgvanytemplate.Rows.Add(6)
+        dgvanytemplate.Rows(startIndex).Cells(0).Value = "loader1"
+        dgvanytemplate.Rows(startIndex).Cells(1).Value = "C:\casparcg\mydata\photo\india\anjum.jpeg"
+
+        dgvanytemplate.Rows(startIndex + 1).Cells(0).Value = "loader2"
+        dgvanytemplate.Rows(startIndex + 1).Cells(1).Value = "C:\casparcg\mydata\photo\india\archana.jpeg"
+
+        dgvanytemplate.Rows(startIndex + 2).Cells(0).Value = "loader3"
+        dgvanytemplate.Rows(startIndex + 2).Cells(1).Value = "C:\casparcg\mydata\photo\india\ekta.jpeg"
+
+        dgvanytemplate.Rows(startIndex + 3).Cells(0).Value = "loader4"
+        dgvanytemplate.Rows(startIndex + 3).Cells(1).Value = "C:\casparcg\mydata\photo\india\gauhar.jpeg"
+
+        dgvanytemplate.Rows(startIndex + 4).Cells(0).Value = "loader5"
+        dgvanytemplate.Rows(startIndex + 4).Cells(1).Value = "C:\casparcg\mydata\photo\india\jhulan.jpeg"
+
+        dgvanytemplate.Rows(startIndex + 5).Cells(0).Value = "loader6"
+        dgvanytemplate.Rows(startIndex + 5).Cells(1).Value = "C:\casparcg\mydata\photo\india\mamta.jpeg"
+    End Sub
+
+    Private Sub AddTemplateMetadataRow(labelValue As String)
+        dgvanytemplate.Rows.Add()
+        dgvanytemplate.Rows(0).Cells(0).Value = "Label"
+        dgvanytemplate.Rows(0).Cells(1).Value = labelValue
+    End Sub
+
+    Private Sub ApplyPreviewData()
+        Dim str = "<invoke name='SetData' returntype='xml'><arguments><array><property id='0'><number>8</number></property></array><string><![CDATA[" + BuildTemplateXml(True) + "]]></string></arguments></invoke>"
+        picanytemplate.CallFunction(str)
+    End Sub
+
     Private Sub cmdadjusttimeofrundown_Click(sender As Object, e As EventArgs) Handles cmdadjusttimeofrundown.Click
         On Error Resume Next
         adjusttimeofrundown()
@@ -23,13 +131,7 @@ Public Class ucTemplate
         On Error Resume Next
         dgvrundown.Rows.Insert(dgvrundown.Rows.Count - 1)
 
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-
-        Dim ianytemplate As Integer
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
+        BuildTemplateData(True)
 
         dgvrundown.CurrentRow.Cells(0).Value = dgvanytemplate.Rows(0).Cells(1).Value
         dgvrundown.CurrentRow.Cells(1).Value = lsttemplate.SelectedItem.ToString
@@ -53,37 +155,29 @@ Public Class ucTemplate
     End Sub
     Private Sub playtsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles playtsrundown.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " add " & dgvrundown.CurrentRow.Cells(3).Value & " " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """")
+        SendCgCommand(dgvrundown.CurrentRow.Cells(2).Value, "add", dgvrundown.CurrentRow.Cells(3).Value, dgvrundown.CurrentRow.Cells(1).Value, BuildTemplateData())
 
     End Sub
     Sub playrundownforvideo()
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-21 add 21 " & """" & dgvrundown.CurrentRow.Cells(1).Value & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """" & vbCrLf)
+        SendCgCommand(21, "add", 21, dgvrundown.CurrentRow.Cells(1).Value, BuildTemplateData())
         dgvrundown.CurrentCell = dgvrundown.Rows(dgvrundown.CurrentRow.Index + 1).Cells(0)
     End Sub
 
     Private Sub nexttsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nexttsrundown.Click
         On Error Resume Next
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " NEXT " & dgvrundown.CurrentRow.Cells(3).Value & vbCrLf)
+        CasparDevice.SendString(BuildCgCommand(dgvrundown.CurrentRow.Cells(2).Value, "NEXT", dgvrundown.CurrentRow.Cells(3).Value))
 
     End Sub
     Private Sub stoptsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles stoptsrundown.Click
 
         On Error Resume Next
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " stop " & dgvrundown.CurrentRow.Cells(3).Value & vbCrLf)
+        CasparDevice.SendString(BuildCgCommand(dgvrundown.CurrentRow.Cells(2).Value, "stop", dgvrundown.CurrentRow.Cells(3).Value))
 
     End Sub
     Private Sub cmdrundowninvoke_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdrundowninvoke.Click
         On Error Resume Next
-        CasparDevice.SendString("cg " & g_int_ChannelNumber & "-" & dgvrundown.CurrentRow.Cells(2).Value & " invoke " & dgvrundown.CurrentRow.Cells(3).Value & " " & cmbrundowninvoke.Text & vbCrLf)
+        CasparDevice.SendString(BuildCgCommand(dgvrundown.CurrentRow.Cells(2).Value, "invoke", dgvrundown.CurrentRow.Cells(3).Value, Nothing, Nothing, cmbrundowninvoke.Text))
 
     End Sub
     Private Sub newtsrundown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -102,63 +196,16 @@ Public Class ucTemplate
     Sub openfilerundown()
         On Error Resume Next
         Dim ofd2 As New OpenFileDialog
-        ofd2.InitialDirectory = "c:\casparcg\mydata\rundown\"
+        ofd2.InitialDirectory = RundownDirectory
         ofd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         If (ofd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Using sr As StreamReader = New StreamReader(ofd2.FileName)
-
-                dgvrundown.Rows.Clear()
-
-                Dim g As Integer = 0
-                Dim li As String
-                Do Until sr.EndOfStream = True
-                    li = sr.ReadLine()
-                    dgvrundown.Rows.Add()
-                    Dim xyz As Array = Split(li, Chr(2))
-                    dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                    dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                    dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                    dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                    dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                    dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                    dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-
-                    g = g + 1
-                Loop
-                sr.Close()
-            End Using
-            Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+            LoadRundownFileFromPath(ofd2.FileName)
         End If
     End Sub
 
     Public Sub openfilerundown(filename As String)
         On Error Resume Next
-
-        Using sr As StreamReader = New StreamReader(filename)
-
-            dgvrundown.Rows.Clear()
-
-            Dim g As Integer = 0
-            Dim li As String
-            Do Until sr.EndOfStream = True
-                li = sr.ReadLine()
-                dgvrundown.Rows.Add()
-                Dim xyz As Array = Split(li, Chr(2))
-                dgvrundown.Rows(g).Cells(0).Value = xyz(0)
-                dgvrundown.Rows(g).Cells(1).Value = xyz(1)
-
-                dgvrundown.Rows(g).Cells(2).Value = xyz(2)
-                dgvrundown.Rows(g).Cells(3).Value = xyz(3)
-                dgvrundown.Rows(g).Cells(4).Value = Replace(xyz(4), "vbnewline", vbNewLine)
-                dgvrundown.Rows(g).Cells(5).Value = xyz(5)
-                dgvrundown.Rows(g).Cells(6).Value = xyz(6)
-
-                g = g + 1
-            Loop
-            sr.Close()
-        End Using
-        Me.dgvrundown.Columns(0).HeaderText = ofd2.FileName
+        LoadRundownFileFromPath(filename)
 
     End Sub
 
@@ -167,7 +214,7 @@ Public Class ucTemplate
     End Sub
     Sub savefilerundown()
         On Error Resume Next
-        osd2.InitialDirectory = "c:\casparcg\mydata\rundown\"
+        osd2.InitialDirectory = RundownDirectory
         osd2.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
         osd2.FileName = ""
         If (osd2.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -334,14 +381,7 @@ Public Class ucTemplate
 
     Sub anytemplateupdate()
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count - 1
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
-        Dim str As String
-        str = "cg " & g_int_ChannelNumber & "-" & cmbvideolayerfortemplate.Text & " UPDATE " & cmblayertemplate.Text & " " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """" & vbCrLf
-        SendString(NetStream, str)
+        SendCgCommand(cmbvideolayerfortemplate.Text, "UPDATE", cmblayertemplate.Text, Nothing, BuildTemplateData(True))
     End Sub
 
     Private Sub lsttemplate_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lsttemplate.SelectedIndexChanged
@@ -388,7 +428,7 @@ Public Class ucTemplate
         If TypeOf senderGrid.Columns(e.ColumnIndex) Is DataGridViewButtonColumn AndAlso e.RowIndex >= 0 Then
 
             Dim ofdanytemplate As New OpenFileDialog
-            ofdanytemplate.InitialDirectory = "c:/casparcg/mydata/flag/"
+            ofdanytemplate.InitialDirectory = FlagDirectory
             If (ofdanytemplate.ShowDialog() = Windows.Forms.DialogResult.OK) Then
                 dgvanytemplate.CurrentRow.Cells(1).Value = ofdanytemplate.FileName
 
@@ -582,9 +622,7 @@ Public Class ucTemplate
         dgvanytemplate.Rows.Clear()
 
         Dim ianytemplate As Integer = 1
-        dgvanytemplate.Rows.Add()
-        dgvanytemplate.Rows(0).Cells(0).Value = "Label"
-        dgvanytemplate.Rows(0).Cells(1).Value = lsttemplate.SelectedItem.ToString '"Label Name" '250814
+        AddTemplateMetadataRow(lsttemplate.SelectedItem.ToString)
 
         For Each instance As MSXML2.IXMLDOMElement In response.getElementsByTagName("instance")
             dgvanytemplate.Rows.Add()
@@ -600,24 +638,7 @@ Public Class ucTemplate
             ianytemplate = ianytemplate + 1
         Next
 
-        dgvanytemplate.Rows.Add(6)
-        dgvanytemplate.Rows(ianytemplate).Cells(0).Value = "loader1"
-        dgvanytemplate.Rows(ianytemplate).Cells(1).Value = "C:\casparcg\mydata\photo\india\anjum.jpeg"
-
-        dgvanytemplate.Rows(ianytemplate + 1).Cells(0).Value = "loader2"
-        dgvanytemplate.Rows(ianytemplate + 1).Cells(1).Value = "C:\casparcg\mydata\photo\india\archana.jpeg"
-
-        dgvanytemplate.Rows(ianytemplate + 2).Cells(0).Value = "loader3"
-        dgvanytemplate.Rows(ianytemplate + 2).Cells(1).Value = "C:\casparcg\mydata\photo\india\ekta.jpeg"
-
-        dgvanytemplate.Rows(ianytemplate + 3).Cells(0).Value = "loader4"
-        dgvanytemplate.Rows(ianytemplate + 3).Cells(1).Value = "C:\casparcg\mydata\photo\india\gauhar.jpeg"
-
-        dgvanytemplate.Rows(ianytemplate + 4).Cells(0).Value = "loader5"
-        dgvanytemplate.Rows(ianytemplate + 4).Cells(1).Value = "C:\casparcg\mydata\photo\india\jhulan.jpeg"
-
-        dgvanytemplate.Rows(ianytemplate + 5).Cells(0).Value = "loader6"
-        dgvanytemplate.Rows(ianytemplate + 5).Cells(1).Value = "C:\casparcg\mydata\photo\india\mamta.jpeg"
+        PopulateDefaultLoaderRows(ianytemplate)
 
 
     End Sub
@@ -635,16 +656,7 @@ Public Class ucTemplate
         On Error Resume Next
         If chkanimatetemplate.Checked Then frmmediaplayer.animation1()
 
-
-        CasparCGDataCollection.Clear() 'cgData.Clear()
-        CasparCGDataCollection.SetData("font", cmbfonttemplate.Text)
-        Dim ianytemplate As Integer
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, dgvanytemplate.Rows(ianytemplate).Cells(1).Value)
-        Next
-        Dim str As String
-        str = "cg " & g_int_ChannelNumber & "-" & cmbvideolayerfortemplate.Text & " add " & cmblayertemplate.Text & " " & """" & Replace(lsttemplate.SelectedItem.ToString, "\", "/") & """" & " 1 " & """" & CasparCGDataCollection.ToAMCPEscapedXml & """" & vbCrLf
-        SendString(NetStream, str)
+        SendCgCommand(cmbvideolayerfortemplate.Text, "add", cmblayertemplate.Text, Replace(lsttemplate.SelectedItem.ToString, "\", "/"), BuildTemplateData(True))
         If chkanimatetemplate.Checked Then
             CasparDevice.SendString("mixer " & g_int_ChannelNumber & "-" & cmblayertemplate.Text & " fill 0 0 1 1 50 easeoutexpo")
         End If
@@ -666,9 +678,7 @@ Public Class ucTemplate
         End If
 
         If chkanimatetemplate.Checked Then frmmediaplayer.animation2()
-        Dim str As String
-        str = "cg " & g_int_ChannelNumber & "-" & cmbvideolayerfortemplate.Text & " STOP " & cmblayertemplate.Text & vbCrLf
-        SendString(NetStream, str)
+        SendCgCommand(cmbvideolayerfortemplate.Text, "STOP", cmblayertemplate.Text)
         Threading.Thread.Sleep(1000)
         If chkanimatetemplate.Checked Then frmmediaplayer.animationtoscreen()
 
@@ -680,9 +690,7 @@ Public Class ucTemplate
     End Sub
     Sub anytemplatenextframe()
         On Error Resume Next
-        Dim str As String
-        str = "cg " & g_int_ChannelNumber & "-" & cmbvideolayerfortemplate.Text & " NEXT " & cmblayertemplate.Text & vbCrLf
-        SendString(NetStream, str)
+        SendCgCommand(cmbvideolayerfortemplate.Text, "NEXT", cmblayertemplate.Text)
     End Sub
 
 
@@ -834,15 +842,10 @@ Public Class ucTemplate
     End Sub
     Private Sub cmdUpdatePreview_Click(sender As Object, e As EventArgs) Handles cmdUpdatePreview.Click
         On Error Resume Next
-        picanytemplate.Movie = "file:///" + "c:/casparcg/cmp/fth/cg20.fth.pal.43"
+        picanytemplate.Movie = PreviewTemplatePath
         Dim teplateName = Replace(templatefullpath & lsttemplate.SelectedItem.ToString, "\", "/") & ".ft"
 
-        CasparCGDataCollection.Clear()
-        Dim ianytemplate As Integer
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, Replace(dgvanytemplate.Rows(ianytemplate).Cells(1).Value, "\", "/"))
-        Next
-        Dim str = "<invoke name='Add' returntype='xml'><arguments><number>8</number><string>" + teplateName + "</string><true/><string></string><string><![CDATA[" + CasparCGDataCollection.ToXml + "]]></string></arguments></invoke>"
+        Dim str = "<invoke name='Add' returntype='xml'><arguments><number>8</number><string>" + teplateName + "</string><true/><string></string><string><![CDATA[" + BuildTemplateXml(True) + "]]></string></arguments></invoke>"
 
         picanytemplate.CallFunction(str)
 
@@ -872,9 +875,7 @@ Public Class ucTemplate
                 dgvanytemplate.Rows.Clear()
 
                 Dim ianytemplate As Integer = 1
-                dgvanytemplate.Rows.Add()
-                dgvanytemplate.Rows(0).Cells(0).Value = "Label"
-                dgvanytemplate.Rows(0).Cells(1).Value = lsttemplate.SelectedItem.ToString '"Label Name" '250814
+                AddTemplateMetadataRow(lsttemplate.SelectedItem.ToString)
 
                 For Each instance In instances
                     dgvanytemplate.Rows.Add()
@@ -883,31 +884,8 @@ Public Class ucTemplate
                     ianytemplate = ianytemplate + 1
                 Next
 
-                dgvanytemplate.Rows.Add(6)
-                dgvanytemplate.Rows(ianytemplate).Cells(0).Value = "loader1"
-                dgvanytemplate.Rows(ianytemplate).Cells(1).Value = "C:\casparcg\mydata\photo\india\anjum.jpeg"
-
-                dgvanytemplate.Rows(ianytemplate + 1).Cells(0).Value = "loader2"
-                dgvanytemplate.Rows(ianytemplate + 1).Cells(1).Value = "C:\casparcg\mydata\photo\india\archana.jpeg"
-
-                dgvanytemplate.Rows(ianytemplate + 2).Cells(0).Value = "loader3"
-                dgvanytemplate.Rows(ianytemplate + 2).Cells(1).Value = "C:\casparcg\mydata\photo\india\ekta.jpeg"
-
-                dgvanytemplate.Rows(ianytemplate + 3).Cells(0).Value = "loader4"
-                dgvanytemplate.Rows(ianytemplate + 3).Cells(1).Value = "C:\casparcg\mydata\photo\india\gauhar.jpeg"
-
-                dgvanytemplate.Rows(ianytemplate + 4).Cells(0).Value = "loader5"
-                dgvanytemplate.Rows(ianytemplate + 4).Cells(1).Value = "C:\casparcg\mydata\photo\india\jhulan.jpeg"
-
-                dgvanytemplate.Rows(ianytemplate + 5).Cells(0).Value = "loader6"
-                dgvanytemplate.Rows(ianytemplate + 5).Cells(1).Value = "C:\casparcg\mydata\photo\india\mamta.jpeg"
-
-                CasparCGDataCollection.Clear()
-                For ianytemplate = 0 To dgvanytemplate.Rows.Count
-                    CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, Replace(dgvanytemplate.Rows(ianytemplate).Cells(1).Value, "\", "/"))
-                Next
-                Dim str = "<invoke name='SetData' returntype='xml'><arguments><array><property id='0'><number>8</number></property></array><string><![CDATA[" + CasparCGDataCollection.ToXml + "]]></string></arguments></invoke>"
-                picanytemplate.CallFunction(str)
+                PopulateDefaultLoaderRows(ianytemplate)
+                ApplyPreviewData()
 
             End If
 
@@ -917,11 +895,6 @@ Public Class ucTemplate
 
     Private Sub cmdOnlyUpdatePreview_Click(sender As Object, e As EventArgs) Handles cmdOnlyUpdatePreview.Click
         On Error Resume Next
-        CasparCGDataCollection.Clear()
-        For ianytemplate = 0 To dgvanytemplate.Rows.Count
-            CasparCGDataCollection.SetData(dgvanytemplate.Rows(ianytemplate).Cells(0).Value, Replace(dgvanytemplate.Rows(ianytemplate).Cells(1).Value, "\", "/"))
-        Next
-        Dim str = "<invoke name='SetData' returntype='xml'><arguments><array><property id='0'><number>8</number></property></array><string><![CDATA[" + CasparCGDataCollection.ToXml + "]]></string></arguments></invoke>"
-        picanytemplate.CallFunction(str)
+        ApplyPreviewData()
     End Sub
 End Class

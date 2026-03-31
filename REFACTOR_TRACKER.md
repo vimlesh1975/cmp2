@@ -30,6 +30,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucNDISource` | `CasparMediaPlayback/ucNDISource.vb` | Done | NDI list fetching, response parsing, and dialog-close handling centralized into small helpers. |
 | `ucCCTV` | `CasparMediaPlayback/ucCCTV.vb` | Done | CCTV RTSP command building, four-camera group playback, timer switching, and camera-list loading consolidated. |
 | `ucdc` | `CasparMediaPlayback/ucdc.vb` | Done | Davis Cup animation routing, layer helpers, scorebug/service data building, and repeated template-play handlers consolidated. |
+| `ucTemplate` | `CasparMediaPlayback/ucTemplate.vb` | Done | Template data building, CG command assembly, rundown file I/O, preview updates, and default loader-row setup consolidated. |
 
 ## Repository Cleanup
 
@@ -45,7 +46,6 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | Module | File | Status | Notes |
 | --- | --- | --- | --- |
 | `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Pending | Good candidate for shared helper extraction and cleanup. |
-| `ucTemplate` | `CasparMediaPlayback/ucTemplate.vb` | Pending | Likely has similar template-play/update duplication worth centralizing. |
 | `ucTicker1` | `CasparMediaPlayback/ucTicker1.vb` | Pending | Likely another data-driven graphics module with repeated list/template handling. |
 | `frmMediaPlayer` | `CasparMediaPlayback/frmMediaPlayer.vb` | Pending | Main shell; best handled after a few module-level refactors. |
 
