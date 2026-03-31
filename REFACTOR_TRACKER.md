@@ -35,6 +35,7 @@ This file tracks module-by-module cleanup/refactor work so we can keep momentum 
 | `ucClipGrid` | `CasparMediaPlayback/ucClipGrid.vb` | Done | Clip-search table setup, result-row creation, progress updates, search matching, and slow-motion load routing consolidated. |
 | `ucPlaylist` | `CasparMediaPlayback/ucPlaylist.vb` | Done | Playlist clip-tree building, clip-search table setup, search-result row creation, progress updates, and clip-grid play/cue command building consolidated. |
 | `uc4ChannelPlayer` | `CasparMediaPlayback/uc4ChannelPlayer.vb` | Done | Four-player setup, window open, and shutdown actions consolidated into shared player-list helpers. |
+| `uc4ChannelRecorderAndTrimmer` | `CasparMediaPlayback/uc4ChannelRecorderAndTrimmer.vb` | Done | Four-recorder setup, resize-helper initialization, and hide/OSC shutdown actions consolidated into shared recorder-list helpers. |
 
 ## Repository Cleanup
 
