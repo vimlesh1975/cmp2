@@ -12,6 +12,7 @@ cef.redist.x64.118.6.8.nupkg
 
 # MSBuild / Visual Studio generated outputs
 obj/
+CasparMediaPlayback/bin/x86/Release/
 
 # Runtime/browser caches inside committed release folders
 **/GPUCache/

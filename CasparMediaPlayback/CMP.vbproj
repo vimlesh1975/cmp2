@@ -108,10 +108,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AudioSwitcher.AudioApi">
-      <HintPath>bin\x86\Release\AudioSwitcher.AudioApi.dll</HintPath>
+      <HintPath>lib\AudioSwitcher.AudioApi.dll</HintPath>
     </Reference>
     <Reference Include="AudioSwitcher.AudioApi.CoreAudio">
-      <HintPath>bin\x86\Release\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
+      <HintPath>lib\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
     </Reference>
     <Reference Include="AxInterop.ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -193,7 +193,7 @@
     <Reference Include="Interop.ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>bin\x86\Release\Interop.ShockwaveFlashObjects.dll</HintPath>
+      <HintPath>lib\Interop.ShockwaveFlashObjects.dll</HintPath>
     </Reference>
     <Reference Include="LinqToTwitter">
       <HintPath>C:\Users\ddkm\Documents\Visual Studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\Debug\LinqToTwitter.dll</HintPath>
@@ -221,7 +221,7 @@
     </Reference>
     <Reference Include="mysql.data, Version=6.10.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\x86\Release\mysql.data.dll</HintPath>
+      <HintPath>lib\mysql.data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
