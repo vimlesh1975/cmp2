@@ -93,13 +93,8 @@ Partial Class ucTwoLiner
         Me.cmdtwolinesuperplay = New System.Windows.Forms.Button()
         Me.cmdtwolinesupernext = New System.Windows.Forms.Button()
         Me.cmdtwolinesuperstop = New System.Windows.Forms.Button()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.cmdRCCPlayer1 = New System.Windows.Forms.Button()
-        Me.cmdRCCStop1 = New System.Windows.Forms.Button()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.txtTemplatename = New System.Windows.Forms.TextBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.gbtwoliner.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -115,13 +110,11 @@ Partial Class ucTwoLiner
         CType(Me.nyhtmltextoneliner, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nsizehtmloneliner, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvtwolinesuper, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbtwoliner
         '
         Me.gbtwoliner.BackColor = System.Drawing.Color.PaleGoldenrod
-        Me.gbtwoliner.Controls.Add(Me.GroupBox4)
         Me.gbtwoliner.Controls.Add(Me.txtvariable2)
         Me.gbtwoliner.Controls.Add(Me.txtvariable1)
         Me.gbtwoliner.Controls.Add(Me.Label273)
@@ -144,7 +137,7 @@ Partial Class ucTwoLiner
         Me.gbtwoliner.Controls.Add(Me.cmdtwolinesuperstop)
         Me.gbtwoliner.Location = New System.Drawing.Point(5, 4)
         Me.gbtwoliner.Name = "gbtwoliner"
-        Me.gbtwoliner.Size = New System.Drawing.Size(660, 733)
+        Me.gbtwoliner.Size = New System.Drawing.Size(660, 600)
         Me.gbtwoliner.TabIndex = 537
         Me.gbtwoliner.TabStop = False
         Me.gbtwoliner.Text = " "
@@ -835,44 +828,6 @@ Partial Class ucTwoLiner
         Me.cmdtwolinesuperstop.Text = "Stop"
         Me.cmdtwolinesuperstop.UseVisualStyleBackColor = False
         '
-        'GroupBox4
-        '
-        Me.GroupBox4.BackColor = System.Drawing.Color.Azure
-        Me.GroupBox4.Controls.Add(Me.txtTemplatename)
-        Me.GroupBox4.Controls.Add(Me.Label10)
-        Me.GroupBox4.Controls.Add(Me.cmdRCCPlayer1)
-        Me.GroupBox4.Controls.Add(Me.cmdRCCStop1)
-        Me.GroupBox4.Location = New System.Drawing.Point(0, 600)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(649, 128)
-        Me.GroupBox4.TabIndex = 751
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "RCC Player"
-        '
-        'cmdRCCPlayer1
-        '
-        Me.cmdRCCPlayer1.BackColor = System.Drawing.Color.Green
-        Me.cmdRCCPlayer1.ForeColor = System.Drawing.Color.White
-        Me.cmdRCCPlayer1.Location = New System.Drawing.Point(7, 18)
-        Me.cmdRCCPlayer1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.cmdRCCPlayer1.Name = "cmdRCCPlayer1"
-        Me.cmdRCCPlayer1.Size = New System.Drawing.Size(47, 53)
-        Me.cmdRCCPlayer1.TabIndex = 748
-        Me.cmdRCCPlayer1.Text = "Play"
-        Me.cmdRCCPlayer1.UseVisualStyleBackColor = False
-        '
-        'cmdRCCStop1
-        '
-        Me.cmdRCCStop1.BackColor = System.Drawing.Color.Red
-        Me.cmdRCCStop1.ForeColor = System.Drawing.Color.White
-        Me.cmdRCCStop1.Location = New System.Drawing.Point(5, 73)
-        Me.cmdRCCStop1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.cmdRCCStop1.Name = "cmdRCCStop1"
-        Me.cmdRCCStop1.Size = New System.Drawing.Size(47, 49)
-        Me.cmdRCCStop1.TabIndex = 749
-        Me.cmdRCCStop1.Text = "Stop"
-        Me.cmdRCCStop1.UseVisualStyleBackColor = False
-        '
         'DataGridViewTextBoxColumn1
         '
         Me.DataGridViewTextBoxColumn1.Frozen = True
@@ -892,23 +847,6 @@ Partial Class ucTwoLiner
         Me.DataGridViewTextBoxColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.DataGridViewTextBoxColumn4.Width = 600
-        '
-        'txtTemplatename
-        '
-        Me.txtTemplatename.Location = New System.Drawing.Point(205, 19)
-        Me.txtTemplatename.Name = "txtTemplatename"
-        Me.txtTemplatename.Size = New System.Drawing.Size(139, 20)
-        Me.txtTemplatename.TabIndex = 754
-        Me.txtTemplatename.Text = "Twoliner"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(119, 22)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(80, 13)
-        Me.Label10.TabIndex = 753
-        Me.Label10.Text = "Template name"
         '
         'ucTwoLiner
         '
@@ -942,8 +880,6 @@ Partial Class ucTwoLiner
         CType(Me.nyhtmltextoneliner, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nsizehtmloneliner, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvtwolinesuper, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1014,9 +950,4 @@ Partial Class ucTwoLiner
     Friend WithEvents txtvariable1 As TextBox
     Friend WithEvents Label273 As Label
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents GroupBox4 As GroupBox
-    Friend WithEvents cmdRCCPlayer1 As Button
-    Friend WithEvents cmdRCCStop1 As Button
-    Friend WithEvents txtTemplatename As TextBox
-    Friend WithEvents Label10 As Label
 End Class

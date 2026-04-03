@@ -2,6 +2,8 @@
 Imports System.Data.DataSet
 Imports System.Web
 Imports System.Data
+Imports System.IO
+Imports System.Net
 'for rss ends
 Public Class ucRssFeed
     Dim ibreakingnews As Integer
@@ -62,6 +64,46 @@ Public Class ucRssFeed
         CasparCGDataCollection.SetData("speed", nrssspeed.Value)
         CasparCGDataCollection.SetData("scrolldata", GetSelectedRssText())
     End Sub
+
+    Private Function LoadRssDataSet(feedAddress As String) As DataSet
+        Dim feedXml As String
+        Dim rssDataSet As New DataSet()
+
+        Using client As New WebClient()
+            client.Encoding = System.Text.Encoding.UTF8
+            client.Headers(HttpRequestHeader.UserAgent) = "Mozilla/5.0 CMP RSS Reader"
+            feedXml = client.DownloadString(feedAddress.Trim())
+        End Using
+
+        Using reader As New StringReader(feedXml)
+            rssDataSet.ReadXml(reader, XmlReadMode.Auto)
+        End Using
+
+        Return rssDataSet
+    End Function
+
+    Private Function GetPreferredRssTable(rssDataSet As DataSet) As DataTable
+        If rssDataSet Is Nothing OrElse rssDataSet.Tables.Count = 0 Then
+            Return Nothing
+        End If
+
+        If rssDataSet.Tables.Contains("item") Then
+            Return rssDataSet.Tables("item")
+        End If
+
+        Dim requestedIndex As Integer = CInt(nrsstable.Value)
+        If requestedIndex >= 0 AndAlso requestedIndex < rssDataSet.Tables.Count Then
+            Return rssDataSet.Tables(requestedIndex)
+        End If
+
+        For Each table As DataTable In rssDataSet.Tables
+            If table.Columns.Contains("title") AndAlso table.Columns.Contains("description") Then
+                Return table
+            End If
+        Next
+
+        Return rssDataSet.Tables(0)
+    End Function
     Private Sub cmdhidegbrssfeed_Click(sender As Object, e As EventArgs) 
         Me.Hide()
     End Sub
@@ -78,15 +120,19 @@ Public Class ucRssFeed
     End Sub
     Sub readrssdata()
         On Error Resume Next
-        Dim objDataset As DataSet = New DataSet
         PrepareRssGrid()
 
         If Me.txtrssaddress.Text.Trim <> vbNullString Then
-            objDataset.ReadXml(Me.txtrssaddress.Text.Trim, System.Data.XmlReadMode.Auto)
-            Dim aa As Integer = nrsstable.Value
-            dgvrss.DataSource = objDataset.Tables(aa)
+            Using objDataset As DataSet = LoadRssDataSet(Me.txtrssaddress.Text.Trim)
+                Dim preferredTable As DataTable = GetPreferredRssTable(objDataset)
+
+                If preferredTable IsNot Nothing Then
+                    dgvrss.DataSource = preferredTable
+                Else
+                    dgvrss.DataSource = Nothing
+                End If
+            End Using
         End If
-        objDataset.Dispose()
         Dim chkBox As New DataGridViewCheckBoxColumn(False)
 
         dgvrss.Columns.Insert(0, chkBox)

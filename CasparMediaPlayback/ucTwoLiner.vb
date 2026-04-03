@@ -1,9 +1,7 @@
 ﻿Imports System.IO
 Imports System.Net
-Imports Newtonsoft.Json
 
 Public Class ucTwoLiner
-    Dim client1 As New WebClient()
     Private Sub ConfigureTwoLinerDialog(dialog As FileDialog, Optional saveFileName As String = "")
         dialog.InitialDirectory = "c:\casparcg\mydata\twoliner\"
         dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
@@ -503,39 +501,4 @@ Public Class ucTwoLiner
         MakeMenuDropDownWhenParrented(sender)
     End Sub
 
-    Private Sub cmdRCCPlayer1_Click(sender As Object, e As EventArgs) Handles cmdRCCPlayer1.Click
-        Try
-            Dim data1
-            Dim data2
-            data1 = New rccData With {.key = txtvariable1.Text, .value = dgvtwolinesuper.CurrentRow.Cells(0).Value, .type = "text"}
-            data2 = New rccData With {.key = txtvariable2.Text, .value = dgvtwolinesuper.Rows(dgvtwolinesuper.CurrentRow.Index + 1).Cells(0).Value, .type = "text"}
-
-
-            Dim allData = {data1, data2}
-            Dim postData As String = "layerNumber=" & cmblayertwolinesuper.Text & "&pageName=" & txtTemplatename.Text & "&data=" & JsonConvert.SerializeObject(allData)
-            Dim data As Byte() = System.Text.Encoding.UTF8.GetBytes(postData)
-            Dim url As String = "http://localhost:8080/recallPage"
-            client1.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
-            client1.UploadData(url, data)
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
-    Private Sub cmdRCCStop1_Click(sender As Object, e As EventArgs) Handles cmdRCCStop1.Click
-        Try
-            Dim postData As String = "layerNumber=" & cmblayertwolinesuper.Text
-            Dim data As Byte() = System.Text.Encoding.UTF8.GetBytes(postData)
-            Dim url As String = "http://localhost:8080/stopGraphics"
-            client1.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
-            client1.UploadData(url, data)
-        Catch ex As Exception
-
-        End Try
-    End Sub
-    Private Class rccData
-        Public key As String
-        Public value As String
-        Public type As String
-    End Class
 End Class
