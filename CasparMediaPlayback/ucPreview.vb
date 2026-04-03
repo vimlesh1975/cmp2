@@ -1,6 +1,26 @@
 Public Class ucPreview
     Dim isplaying As Boolean = False
 
+    Private Function NormalizePreviewOptions(options As String) As String
+        Dim normalizedOptions = options.Trim()
+
+        If ServerVersion > 2.1 Then
+            Dim lowerOptions = normalizedOptions.ToLowerInvariant()
+            Dim hasAudioOption = lowerOptions.Contains("-an") OrElse
+                                 lowerOptions.Contains("-acodec") OrElse
+                                 lowerOptions.Contains("-codec:a") OrElse
+                                 lowerOptions.Contains("-filter:a") OrElse
+                                 lowerOptions.Contains("-af ") OrElse
+                                 lowerOptions.Contains("-ac ")
+
+            If Not hasAudioOption Then
+                normalizedOptions &= " -filter:a pan=stereo|c0=c0|c1=c1"
+            End If
+        End If
+
+        Return normalizedOptions.Trim()
+    End Function
+
     Private Function GetPreviewStreamAddress() As String
         Return "udp://" & cmbippreview.Text
     End Function
@@ -11,7 +31,7 @@ Public Class ucPreview
             options &= " " & extraOptions
         End If
 
-        Return "ADD " & g_int_ChannelNumber & " STREAM " & GetPreviewStreamAddress() & " " & options.Trim()
+        Return "ADD " & g_int_ChannelNumber & " STREAM " & GetPreviewStreamAddress() & " " & NormalizePreviewOptions(options)
     End Function
 
     Private Sub RemovePreviewStream()

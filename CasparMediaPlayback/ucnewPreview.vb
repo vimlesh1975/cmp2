@@ -2,6 +2,26 @@ Public Class ucnewPreview
     Public chnumber As Integer = 1
     Dim isplaying As Boolean = False
 
+    Private Function NormalizePreviewOptions(options As String) As String
+        Dim normalizedOptions = options.Trim()
+
+        If ServerVersion > 2.1 Then
+            Dim lowerOptions = normalizedOptions.ToLowerInvariant()
+            Dim hasAudioOption = lowerOptions.Contains("-an") OrElse
+                                 lowerOptions.Contains("-acodec") OrElse
+                                 lowerOptions.Contains("-codec:a") OrElse
+                                 lowerOptions.Contains("-filter:a") OrElse
+                                 lowerOptions.Contains("-af ") OrElse
+                                 lowerOptions.Contains("-ac ")
+
+            If Not hasAudioOption Then
+                normalizedOptions &= " -filter:a pan=stereo|c0=c0|c1=c1"
+            End If
+        End If
+
+        Return normalizedOptions.Trim()
+    End Function
+
     Private Sub cmdpreviewkey_Click(sender As Object, e As EventArgs) Handles cmdpreviewkey.Click
         On Error Resume Next
         SendPreviewCommand(True)
@@ -34,7 +54,7 @@ Public Class ucnewPreview
     End Function
 
     Private Sub SendPreviewCommand(includeAlphaKey As Boolean)
-        Dim commandText As String = "ADD " & chnumber & " STREAM " & GetPreviewStreamUri() & " " & txtoptionspreview.Text
+        Dim commandText As String = "ADD " & chnumber & " STREAM " & GetPreviewStreamUri() & " " & NormalizePreviewOptions(txtoptionspreview.Text)
         If includeAlphaKey Then
             commandText = commandText & If(ServerVersion > 2.1, " -filter:v alphaextract", " -vf alphaextract")
         End If
