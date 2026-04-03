@@ -7,9 +7,10 @@ Public Class ucChannelInfo
         Threading.Thread.Sleep(100)
 
         Dim data(10024) As Byte
-        NetStream.Read(data, 0, 10024)
+        Dim bytesRead = NetStream.Read(data, 0, data.Length)
 
-        Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data)
+        Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data, 0, bytesRead)
+        xmlString = xmlString.Replace(ChrW(0), "")
         xmlString = xmlString.Substring(xmlString.IndexOf("<"))
 
         Dim document As New XmlDocument()
@@ -123,19 +124,20 @@ Public Class ucChannelInfo
         getchannelinfo()
     End Sub
     Sub getchannelinfo()
+
         On Error Resume Next
         dgvchannelinfo.Rows.Clear()
 
         Dim document = ReadChannelInfoDocument()
 
-        Select Case ServerVersion
-            Case 2.0
-                LoadChannelInfo20(document)
-            Case 2.1
-                LoadChannelInfo21(document)
-            Case 2.2, 2.3
-                LoadChannelInfo23(document)
-        End Select
+
+        If ServerVersion <= 2.0 Then
+            LoadChannelInfo20(document)
+        ElseIf ServerVersion <= 2.1 Then
+            LoadChannelInfo21(document)
+        Else
+            LoadChannelInfo23(document)
+        End If
     End Sub
 
     Private Sub cmdhidegbchannelinfo_Click(sender As Object, e As EventArgs)
