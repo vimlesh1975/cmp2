@@ -6,7 +6,7 @@ Imports System.Data
 Imports Microsoft.Win32 'for number of processor
 Public Class ucMAM
     Private Const FfmpegExecutablePath As String = "c:\casparcg\mydata\ffmpeg\ffmpeg.exe"
-    Private Const YoutubeDlExecutablePath As String = "c:/casparcg/mydata/ffmpeg/youtube-dl.exe"
+    Private Const YoutubeDlExecutablePath As String = "c:/casparcg/mydata/ffmpeg/yt-dlp.exe"
     Private Const EbuMxfDirectory As String = "c:/casparcg/mydata/ebumxf/"
     Dim ibt As Integer
 
