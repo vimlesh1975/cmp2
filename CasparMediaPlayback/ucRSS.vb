@@ -20,7 +20,7 @@ Public Class ucRssFeed
     Dim tempspeed = 2
     Dim paused As Boolean = False
     Private Sub PrepareRssGrid()
-        dgvrss.Rows.Clear()
+        dgvrss.DataSource = Nothing
         dgvrss.Columns.Clear()
     End Sub
 
@@ -82,18 +82,18 @@ Public Class ucRssFeed
         Return rssDataSet
     End Function
 
-    Private Function GetPreferredRssTable(rssDataSet As DataSet) As DataTable
+    Private Function GetSelectedRssTable(rssDataSet As DataSet) As DataTable
         If rssDataSet Is Nothing OrElse rssDataSet.Tables.Count = 0 Then
             Return Nothing
-        End If
-
-        If rssDataSet.Tables.Contains("item") Then
-            Return rssDataSet.Tables("item")
         End If
 
         Dim requestedIndex As Integer = CInt(nrsstable.Value)
         If requestedIndex >= 0 AndAlso requestedIndex < rssDataSet.Tables.Count Then
             Return rssDataSet.Tables(requestedIndex)
+        End If
+
+        If rssDataSet.Tables.Contains("item") Then
+            Return rssDataSet.Tables("item")
         End If
 
         For Each table As DataTable In rssDataSet.Tables
@@ -104,7 +104,7 @@ Public Class ucRssFeed
 
         Return rssDataSet.Tables(0)
     End Function
-    Private Sub cmdhidegbrssfeed_Click(sender As Object, e As EventArgs) 
+    Private Sub cmdhidegbrssfeed_Click(sender As Object, e As EventArgs)
         Me.Hide()
     End Sub
     Private Sub cmdrssmanuallyadd_Click(sender As Object, e As EventArgs) Handles cmdrssmanuallyadd.Click
@@ -124,7 +124,7 @@ Public Class ucRssFeed
 
         If Me.txtrssaddress.Text.Trim <> vbNullString Then
             Using objDataset As DataSet = LoadRssDataSet(Me.txtrssaddress.Text.Trim)
-                Dim preferredTable As DataTable = GetPreferredRssTable(objDataset)
+                Dim preferredTable As DataTable = GetSelectedRssTable(objDataset)
 
                 If preferredTable IsNot Nothing Then
                     dgvrss.DataSource = preferredTable
@@ -133,9 +133,11 @@ Public Class ucRssFeed
                 End If
             End Using
         End If
-        Dim chkBox As New DataGridViewCheckBoxColumn(False)
-
-        dgvrss.Columns.Insert(0, chkBox)
+        If dgvrss.Columns.Count > 0 AndAlso Not TypeOf dgvrss.Columns(0) Is DataGridViewCheckBoxColumn Then
+            Dim chkBox As New DataGridViewCheckBoxColumn(False)
+            chkBox.Name = "Selected"
+            dgvrss.Columns.Insert(0, chkBox)
+        End If
 
         SetAllRssSelections(True)
         dgvrss.Columns(0).Width = 25
