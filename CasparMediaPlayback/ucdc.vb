@@ -327,7 +327,7 @@ Public Class ucdc
         txtset2tt.Text = "0"
     End Sub
 
-    Private Sub cmdversustt_Click(sender As Object, e As EventArgs) Handles cmdversustt.Click
+    Private Sub ShowMatchIdTemplate()
         On Error Resume Next
         CasparCGDataCollection.Clear()
 
@@ -340,6 +340,10 @@ Public Class ucdc
         CasparCGDataCollection.SetData("loader1", pict1tt.ImageLocation)
         CasparCGDataCollection.SetData("loader2", pict2tt.ImageLocation)
         showtemplate("cmp/games4/davis_cup/dc_matchid", CasparCGDataCollection.ToAMCPEscapedXml)
+    End Sub
+
+    Private Sub cmdversustt_Click(sender As Object, e As EventArgs) Handles cmdversustt.Click
+        ShowMatchIdTemplate()
 
     End Sub
 
@@ -400,7 +404,7 @@ Public Class ucdc
     End Sub
 
     Private Sub cmdeventid_Click(sender As Object, e As EventArgs) Handles cmdeventid.Click
-
+        ShowMatchIdTemplate()
     End Sub
     Private Sub cmdw1_Click(sender As Object, e As EventArgs) Handles cmdw1.Click
         On Error Resume Next

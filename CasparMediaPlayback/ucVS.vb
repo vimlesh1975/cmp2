@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Public Class ucVS
     Dim ivs As Integer = 0
-    Dim iPauseResumeV As Integer = 0
+    Dim lastVsRunningSpeed As Decimal = 2
     Private Function GetVsLayerNumber() As Integer
         Return Int(cmblayervs.Text)
     End Function
@@ -48,14 +48,13 @@ Public Class ucVS
 
     Sub PauseResumeV()
         On Error Resume Next
-        If iPauseResumeV = 1 Then
-            UpdateVsData("speed", "0")
+        If nspeedV.Value <> 0 Then
+            lastVsRunningSpeed = nspeedV.Value
+            nspeedV.Value = 0
         Else
-            UpdateVsData("speed", nspeedV.Value)
+            If lastVsRunningSpeed = 0 Then lastVsRunningSpeed = 2
+            nspeedV.Value = lastVsRunningSpeed
         End If
-        iPauseResumeV = iPauseResumeV + 1
-        If iPauseResumeV > 1 Then iPauseResumeV = 0
-
     End Sub
     Private Sub cmdfileV_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdfileV.Click
         On Error Resume Next
@@ -98,7 +97,8 @@ Public Class ucVS
             End If
         Next
         vsgotoitem(str)
-        iPauseResumeV = 0
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
+        nspeedV.Value = 0
     End Sub
 
     Private Sub cmdvsprevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdvsprevious.Click
@@ -120,7 +120,8 @@ Public Class ucVS
         Next
         vsgotoitem(str)
 
-        iPauseResumeV = 0
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
+        nspeedV.Value = 0
     End Sub
     Private Sub cmdvsfirst_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdvsfirst.Click
         On Error Resume Next
@@ -131,7 +132,8 @@ Public Class ucVS
         vsgotoitem(txtcrawlv.Text)
         ivs = 0
 
-        iPauseResumeV = 0
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
+        nspeedV.Value = 0
     End Sub
     Private Sub cmdvslast_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdvslast.Click
         On Error Resume Next
@@ -145,7 +147,8 @@ Public Class ucVS
         vsgotoitem(str)
         ivs = aa.GetUpperBound(0)
 
-        iPauseResumeV = 0
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
+        nspeedV.Value = 0
     End Sub
 
     Private Sub cmdvsgoto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdvsgoto.Click
@@ -163,7 +166,8 @@ Public Class ucVS
         vsgotoitem(str)
         ivs = Int(cmbvsitems.Text)
 
-        iPauseResumeV = 0
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
+        nspeedV.Value = 0
     End Sub
 
     Sub vsgotoitem(ByVal str As String)
@@ -197,6 +201,13 @@ Public Class ucVS
         On Error Resume Next
         CasparCGDataCollection.Clear()
         Dim str As String
+        Dim currentSpeed As Decimal = nspeedV.Value
+
+        If currentSpeed = 0 AndAlso lastVsRunningSpeed <> 0 Then
+            currentSpeed = lastVsRunningSpeed
+            nspeedV.Value = currentSpeed
+        End If
+
         If txtcrawlv.SelectedText = "" Then
             str = txtcrawlv.Text
         Else
@@ -214,7 +225,7 @@ Public Class ucVS
             CasparCGDataCollection.SetData("startfromcenter", "")
         End If
 
-        CasparCGDataCollection.SetData("speed", Int(nspeedV.Value))
+        CasparCGDataCollection.SetData("speed", Int(currentSpeed))
         CasparCGDataCollection.SetData("size", nsizeV.Value)
         CasparCGDataCollection.SetData("color", lblcolorV.Text)
 
@@ -222,7 +233,7 @@ Public Class ucVS
 
         CasparCGDataCollection.SetData("bordercolor", lblcolorborderV.Text)
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(GetVsLayerNumber(), GetVsLayerNumber(), txtvs1Template.Text, True, CasparCGDataCollection.ToAMCPEscapedXml)
-        If nspeedV.Value <> 0 Then iPauseResumeV = 1
+        If currentSpeed <> 0 Then lastVsRunningSpeed = currentSpeed
     End Sub
 
 
@@ -241,7 +252,7 @@ Public Class ucVS
         On Error Resume Next
         UpdateVsData("speed", nspeedV.Value)
 
-        If nspeedV.Value <> 0 Then iPauseResumeV = 1
+        If nspeedV.Value <> 0 Then lastVsRunningSpeed = nspeedV.Value
     End Sub
 
     Private Sub cmdfileSaveV_Click(sender As Object, e As EventArgs) Handles cmdfileSaveV.Click
