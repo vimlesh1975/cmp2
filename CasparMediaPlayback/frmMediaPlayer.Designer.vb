@@ -99,7 +99,6 @@ Partial Class frmmediaplayer
         Me.rdocg2 = New System.Windows.Forms.RadioButton()
         Me.rdoSongSubtitling = New System.Windows.Forms.RadioButton()
         Me.rdohtmlscroller = New System.Windows.Forms.RadioButton()
-        Me.rdoelection = New System.Windows.Forms.RadioButton()
         Me.rdohtml = New System.Windows.Forms.RadioButton()
         Me.rdofacebook = New System.Windows.Forms.RadioButton()
         Me.rdotwitter = New System.Windows.Forms.RadioButton()
@@ -196,7 +195,6 @@ Partial Class frmmediaplayer
         Me.mnuCMPVisionMixer = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPOSC = New System.Windows.Forms.ToolStripMenuItem()
         Me.SilenceDetectorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuCMPElection = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPTimers = New System.Windows.Forms.ToolStripMenuItem()
         Me.DBFSMeter16ChannelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CCTVToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -939,7 +937,6 @@ Partial Class frmmediaplayer
         Me.gbmodules.Controls.Add(Me.rdocg2)
         Me.gbmodules.Controls.Add(Me.rdoSongSubtitling)
         Me.gbmodules.Controls.Add(Me.rdohtmlscroller)
-        Me.gbmodules.Controls.Add(Me.rdoelection)
         Me.gbmodules.Controls.Add(Me.rdohtml)
         Me.gbmodules.Controls.Add(Me.rdofacebook)
         Me.gbmodules.Controls.Add(Me.rdotwitter)
@@ -1397,15 +1394,6 @@ Partial Class frmmediaplayer
         Me.rdohtmlscroller.Text = "HTML Scroller"
         Me.rdohtmlscroller.UseVisualStyleBackColor = True
         '
-        'rdoelection
-        '
-        Me.rdoelection.AutoSize = True
-        Me.rdoelection.Location = New System.Drawing.Point(9, 82)
-        Me.rdoelection.Name = "rdoelection"
-        Me.rdoelection.Size = New System.Drawing.Size(63, 17)
-        Me.rdoelection.TabIndex = 481
-        Me.rdoelection.Text = "Election"
-        Me.rdoelection.UseVisualStyleBackColor = True
         '
         'rdohtml
         '
@@ -1965,7 +1953,7 @@ Partial Class frmmediaplayer
         '
         'mnuCMPModules
         '
-        Me.mnuCMPModules.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuCMPStreaming, Me.mnuStreamPlayer, Me.mnuCMPSubTitling, Me.mnuCMPSlowMotion, Me.mnuCMPSocialMedia, Me.VLCToolStripMenuItem, Me.mnuCMPMixer, Me.mnuCMPVisionMixer, Me.mnuCMPOSC, Me.SilenceDetectorToolStripMenuItem, Me.mnuCMPElection, Me.mnuCMPTimers, Me.DBFSMeter16ChannelToolStripMenuItem, Me.CCTVToolStripMenuItem, Me.CommandSchedulerToolStripMenuItem, Me.CommandSchedulerDateWiseToolStripMenuItem, Me.MySqlTestToolStripMenuItem, Me.WebSocketServerToolStripMenuItem, Me.FullPageCaptionToolStripMenuItem, Me.mnuCMPRemoteLogging, Me.TabPagesToolStripMenuItem, Me.CompositionToolStripMenuItem, Me.TemplatePlaylistToolStripMenuItem})
+        Me.mnuCMPModules.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuCMPStreaming, Me.mnuStreamPlayer, Me.mnuCMPSubTitling, Me.mnuCMPSlowMotion, Me.mnuCMPSocialMedia, Me.VLCToolStripMenuItem, Me.mnuCMPMixer, Me.mnuCMPVisionMixer, Me.mnuCMPOSC, Me.SilenceDetectorToolStripMenuItem, Me.mnuCMPTimers, Me.DBFSMeter16ChannelToolStripMenuItem, Me.CCTVToolStripMenuItem, Me.CommandSchedulerToolStripMenuItem, Me.CommandSchedulerDateWiseToolStripMenuItem, Me.MySqlTestToolStripMenuItem, Me.WebSocketServerToolStripMenuItem, Me.FullPageCaptionToolStripMenuItem, Me.mnuCMPRemoteLogging, Me.TabPagesToolStripMenuItem, Me.CompositionToolStripMenuItem, Me.TemplatePlaylistToolStripMenuItem})
         Me.mnuCMPModules.Name = "mnuCMPModules"
         Me.mnuCMPModules.Size = New System.Drawing.Size(98, 20)
         Me.mnuCMPModules.Text = "&Other Modules"
@@ -2088,11 +2076,6 @@ Partial Class frmmediaplayer
         Me.SilenceDetectorToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
         Me.SilenceDetectorToolStripMenuItem.Text = "Silence Detector"
         '
-        'mnuCMPElection
-        '
-        Me.mnuCMPElection.Name = "mnuCMPElection"
-        Me.mnuCMPElection.Size = New System.Drawing.Size(238, 22)
-        Me.mnuCMPElection.Text = "Election"
         '
         'mnuCMPTimers
         '
@@ -3127,7 +3110,6 @@ Partial Class frmmediaplayer
     Friend WithEvents Label150 As System.Windows.Forms.Label
     Friend WithEvents lbltemplatehostversion As System.Windows.Forms.Label
     Friend WithEvents rdohtml As System.Windows.Forms.RadioButton
-    Friend WithEvents rdoelection As System.Windows.Forms.RadioButton
     Friend WithEvents rdohtmlscroller As System.Windows.Forms.RadioButton
     Friend WithEvents rdoSongSubtitling As System.Windows.Forms.RadioButton
     Friend WithEvents rdocg2 As System.Windows.Forms.RadioButton
@@ -3291,7 +3273,6 @@ Partial Class frmmediaplayer
     Friend WithEvents mnuCMPSlowMotion As ToolStripMenuItem
     Friend WithEvents mnuCMPSlowMotionInServer21 As ToolStripMenuItem
     Friend WithEvents mnuCMPSlowMotionInJStarServer As ToolStripMenuItem
-    Friend WithEvents mnuCMPElection As ToolStripMenuItem
     Friend WithEvents mnuCMPSubTitling As ToolStripMenuItem
     Friend WithEvents mnuCMPSRTPlayer As ToolStripMenuItem
     Friend WithEvents mnuCMPSongSubTitling As ToolStripMenuItem

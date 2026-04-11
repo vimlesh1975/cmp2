@@ -772,11 +772,6 @@ Public Class frmmediaplayer
         ucSlowMotion211.Show(DockPanel1, DockState.Document)
     End Sub
 
-    Private Sub mnuCMPElection_Click(sender As Object, e As EventArgs) Handles mnuCMPElection.Click
-        Process.Start("C:\Program Files (x86)\Doordarshan\Election2019Setup\Election2019.exe")
-    End Sub
-
-
     Private Sub mnuCMPSRTPlayer_Click(sender As Object, e As EventArgs) Handles mnuCMPSRTPlayer.Click
         ucSrtPlayer1.Show(DockPanel1, DockState.Document)
     End Sub
