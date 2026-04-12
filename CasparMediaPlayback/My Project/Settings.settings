@@ -750,10 +750,10 @@ cg 1-2 add 2 cmp/cg_template/clock 1</Value>
       <Value Profile="(Default)">86</Value>
     </Setting>
     <Setting Name="txtgraphfacebook" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://graph.facebook.com/</Value>
+      <Value Profile="(Default)">Facebook</Value>
     </Setting>
     <Setting Name="txtquery" Type="System.String" Scope="User">
-      <Value Profile="(Default)">feed?id=casparcg</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="txturlhtml" Type="System.String" Scope="User">
       <Value Profile="(Default)">file:///C:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricket_bottom_score/index.html</Value>

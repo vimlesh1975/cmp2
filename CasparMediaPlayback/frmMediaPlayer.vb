@@ -85,8 +85,6 @@ Public Class frmmediaplayer
     Friend WithEvents ucScroll1 As DockContent = ucScroll
     Friend WithEvents ucMixer1 As DockContent = ucMixer
     Friend WithEvents ucVisionMixer1 As DockContent = ucVisionMixer
-    Friend WithEvents ucTwitter1 As DockContent = ucTwitter
-    Friend WithEvents ucFaceBook1 As DockContent = ucFaceBook
     Friend WithEvents ucRemoteLogging1 As DockContent = ucRemoteLogging
     Friend WithEvents ucImageScroll1 As DockContent = ucImageScroll
     Friend WithEvents ucHTML1 As DockContent = ucHTML
@@ -780,14 +778,6 @@ Public Class frmmediaplayer
         ucSongSubtitling1.Show(DockPanel1, DockState.Document)
     End Sub
 
-    Private Sub mnuCMPFacebook_Click(sender As Object, e As EventArgs) Handles mnuCMPFacebook.Click
-        ucFaceBook1.Show(DockPanel1, DockState.Document)
-    End Sub
-
-    Private Sub mnuCMPTwitter_Click(sender As Object, e As EventArgs) Handles mnuCMPTwitter.Click
-        ucTwitter1.Show(DockPanel1, DockState.Document)
-    End Sub
-
     Private Sub mnuCMPHTMLorInternet_Click(sender As Object, e As EventArgs) Handles mnuCMPHTMLorInternet.Click
         ucHTML1.Show(DockPanel1, DockState.Document)
     End Sub
@@ -1406,8 +1396,6 @@ Public Class frmmediaplayer
             Return ucdBFSMeter1
         ElseIf persistString = GetType(ucdc).ToString() Then
             Return ucdc1
-        ElseIf persistString = GetType(ucFaceBook).ToString() Then
-            Return ucFaceBook1
         ElseIf persistString = GetType(ucFourChannelPreview).ToString() Then
             Return ucFourChannelPreview1
         ElseIf persistString = GetType(ucFullPageCaption).ToString() Then
@@ -1481,8 +1469,6 @@ Public Class frmmediaplayer
 
         ElseIf persistString = GetType(ucTrimmer).ToString() Then
             Return ucTrimmer1
-        ElseIf persistString = GetType(ucTwitter).ToString() Then
-            Return ucTwitter1
         ElseIf persistString = GetType(ucTwoLiner).ToString() Then
             Return ucTwoLiner1
         ElseIf persistString = GetType(ucUdpChat).ToString() Then
@@ -1541,7 +1527,6 @@ Public Class frmmediaplayer
         ucCricket1.DockPanel = Nothing
         ucdBFSMeter1.DockPanel = Nothing
         ucdc1.DockPanel = Nothing
-        ucFaceBook.DockPanel = Nothing
         ucFourChannelPreview1.DockPanel = Nothing
         ucFullPageCaption1.DockPanel = Nothing
         ucHTML1.DockPanel = Nothing
@@ -1576,7 +1561,6 @@ Public Class frmmediaplayer
 
         ucTemplate1.DockPanel = Nothing
         ucTrimmer1.DockPanel = Nothing
-        ucTwitter1.DockPanel = Nothing
         ucTwoLiner1.DockPanel = Nothing
         ucUdpChat1.DockPanel = Nothing
         ucVDCPController1.DockPanel = Nothing

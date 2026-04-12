@@ -100,8 +100,6 @@ Partial Class frmmediaplayer
         Me.rdoSongSubtitling = New System.Windows.Forms.RadioButton()
         Me.rdohtmlscroller = New System.Windows.Forms.RadioButton()
         Me.rdohtml = New System.Windows.Forms.RadioButton()
-        Me.rdofacebook = New System.Windows.Forms.RadioButton()
-        Me.rdotwitter = New System.Windows.Forms.RadioButton()
         Me.rdorss = New System.Windows.Forms.RadioButton()
         Me.rdoweather = New System.Windows.Forms.RadioButton()
         Me.rdoutility = New System.Windows.Forms.RadioButton()
@@ -185,8 +183,6 @@ Partial Class frmmediaplayer
         Me.mnuCMPSlowMotionInServer21 = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPSlowMotionInJStarServer = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPSocialMedia = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuCMPFacebook = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuCMPTwitter = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPHTMLorInternet = New System.Windows.Forms.ToolStripMenuItem()
         Me.VLCToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StreamTesterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -938,8 +934,6 @@ Partial Class frmmediaplayer
         Me.gbmodules.Controls.Add(Me.rdoSongSubtitling)
         Me.gbmodules.Controls.Add(Me.rdohtmlscroller)
         Me.gbmodules.Controls.Add(Me.rdohtml)
-        Me.gbmodules.Controls.Add(Me.rdofacebook)
-        Me.gbmodules.Controls.Add(Me.rdotwitter)
         Me.gbmodules.Controls.Add(Me.rdorss)
         Me.gbmodules.Controls.Add(Me.rdoweather)
         Me.gbmodules.Controls.Add(Me.rdoutility)
@@ -1404,27 +1398,6 @@ Partial Class frmmediaplayer
         Me.rdohtml.TabIndex = 479
         Me.rdohtml.Text = "HTML"
         Me.rdohtml.UseVisualStyleBackColor = True
-        '
-        'rdofacebook
-        '
-        Me.rdofacebook.AutoSize = True
-        Me.rdofacebook.Location = New System.Drawing.Point(197, 83)
-        Me.rdofacebook.Name = "rdofacebook"
-        Me.rdofacebook.Size = New System.Drawing.Size(73, 17)
-        Me.rdofacebook.TabIndex = 478
-        Me.rdofacebook.Text = "Facebook"
-        Me.rdofacebook.UseVisualStyleBackColor = True
-        '
-        'rdotwitter
-        '
-        Me.rdotwitter.AutoSize = True
-        Me.rdotwitter.Location = New System.Drawing.Point(135, 82)
-        Me.rdotwitter.Name = "rdotwitter"
-        Me.rdotwitter.Size = New System.Drawing.Size(57, 17)
-        Me.rdotwitter.TabIndex = 477
-        Me.rdotwitter.Text = "Twitter"
-        Me.rdotwitter.UseVisualStyleBackColor = True
-        '
         'rdorss
         '
         Me.rdorss.AutoSize = True
@@ -2010,22 +1983,10 @@ Partial Class frmmediaplayer
         '
         'mnuCMPSocialMedia
         '
-        Me.mnuCMPSocialMedia.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuCMPFacebook, Me.mnuCMPTwitter, Me.mnuCMPHTMLorInternet})
+        Me.mnuCMPSocialMedia.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuCMPHTMLorInternet})
         Me.mnuCMPSocialMedia.Name = "mnuCMPSocialMedia"
         Me.mnuCMPSocialMedia.Size = New System.Drawing.Size(238, 22)
         Me.mnuCMPSocialMedia.Text = "Social Media"
-        '
-        'mnuCMPFacebook
-        '
-        Me.mnuCMPFacebook.Name = "mnuCMPFacebook"
-        Me.mnuCMPFacebook.Size = New System.Drawing.Size(161, 22)
-        Me.mnuCMPFacebook.Text = "Facebook"
-        '
-        'mnuCMPTwitter
-        '
-        Me.mnuCMPTwitter.Name = "mnuCMPTwitter"
-        Me.mnuCMPTwitter.Size = New System.Drawing.Size(161, 22)
-        Me.mnuCMPTwitter.Text = "Twitter"
         '
         'mnuCMPHTMLorInternet
         '
@@ -3101,8 +3062,6 @@ Partial Class frmmediaplayer
     Friend WithEvents rdoweather As System.Windows.Forms.RadioButton
     Friend WithEvents lbltime As System.Windows.Forms.Label
     Friend WithEvents rdorss As System.Windows.Forms.RadioButton
-    Friend WithEvents rdofacebook As System.Windows.Forms.RadioButton
-    Friend WithEvents rdotwitter As System.Windows.Forms.RadioButton
     Friend WithEvents lblserverversion As System.Windows.Forms.Label
     Friend WithEvents Label147 As System.Windows.Forms.Label
     Friend WithEvents Label148 As System.Windows.Forms.Label
@@ -3277,8 +3236,6 @@ Partial Class frmmediaplayer
     Friend WithEvents mnuCMPSRTPlayer As ToolStripMenuItem
     Friend WithEvents mnuCMPSongSubTitling As ToolStripMenuItem
     Friend WithEvents mnuCMPSocialMedia As ToolStripMenuItem
-    Friend WithEvents mnuCMPFacebook As ToolStripMenuItem
-    Friend WithEvents mnuCMPTwitter As ToolStripMenuItem
     Friend WithEvents mnuCMPHTMLorInternet As ToolStripMenuItem
     Friend WithEvents mnuCMPVisionMixer As ToolStripMenuItem
     Friend WithEvents mnuCMPOSC As ToolStripMenuItem

@@ -2263,7 +2263,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("https://graph.facebook.com/")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Facebook")>  _
         Public Property txtgraphfacebook() As String
             Get
                 Return CType(Me("txtgraphfacebook"),String)
@@ -2275,7 +2275,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("feed?id=casparcg")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property txtquery() As String
             Get
                 Return CType(Me("txtquery"),String)

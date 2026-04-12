@@ -576,12 +576,6 @@
     <Compile Include="ucChannelInfo.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucFaceBook.Designer.vb">
-      <DependentUpon>ucFaceBook.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ucFaceBook.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ucHS.Designer.vb">
       <DependentUpon>ucHS.vb</DependentUpon>
     </Compile>
@@ -864,12 +858,6 @@
     <Compile Include="ucTrimmer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ucTwitter.Designer.vb">
-      <DependentUpon>ucTwitter.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ucTwitter.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ucTwoLiner.Designer.vb">
       <DependentUpon>ucTwoLiner.vb</DependentUpon>
     </Compile>
@@ -1095,9 +1083,6 @@
     <EmbeddedResource Include="ucChannelInfo.resx">
       <DependentUpon>ucChannelInfo.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucFaceBook.resx">
-      <DependentUpon>ucFaceBook.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ucHS.resx">
       <DependentUpon>ucHS.vb</DependentUpon>
     </EmbeddedResource>
@@ -1243,9 +1228,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ucTrimmer.resx">
       <DependentUpon>ucTrimmer.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucTwitter.resx">
-      <DependentUpon>ucTwitter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ucTwoLiner.resx">
       <DependentUpon>ucTwoLiner.vb</DependentUpon>
