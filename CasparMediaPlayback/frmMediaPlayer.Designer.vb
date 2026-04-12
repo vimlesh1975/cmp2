@@ -87,7 +87,6 @@ Partial Class frmmediaplayer
         Me.rdosm2 = New System.Windows.Forms.RadioButton()
         Me.rdovs2 = New System.Windows.Forms.RadioButton()
         Me.rdoMAM = New System.Windows.Forms.RadioButton()
-        Me.rdometadata = New System.Windows.Forms.RadioButton()
         Me.rdochannelinfo = New System.Windows.Forms.RadioButton()
         Me.rdoudpchat = New System.Windows.Forms.RadioButton()
         Me.rdostreaming = New System.Windows.Forms.RadioButton()
@@ -170,7 +169,6 @@ Partial Class frmmediaplayer
         Me.XDCamSoapClientToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.VDCPControllerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UDPChatToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MetadataToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.XDCamControllersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.YouTubeLiveManagemnetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuCMPModules = New System.Windows.Forms.ToolStripMenuItem()
@@ -921,7 +919,6 @@ Partial Class frmmediaplayer
         Me.gbmodules.Controls.Add(Me.rdosm2)
         Me.gbmodules.Controls.Add(Me.rdovs2)
         Me.gbmodules.Controls.Add(Me.rdoMAM)
-        Me.gbmodules.Controls.Add(Me.rdometadata)
         Me.gbmodules.Controls.Add(Me.rdochannelinfo)
         Me.gbmodules.Controls.Add(Me.rdoudpchat)
         Me.gbmodules.Controls.Add(Me.rdostreaming)
@@ -1267,17 +1264,6 @@ Partial Class frmmediaplayer
         Me.rdoMAM.TabIndex = 497
         Me.rdoMAM.Text = "MAM"
         Me.rdoMAM.UseVisualStyleBackColor = True
-        '
-        'rdometadata
-        '
-        Me.rdometadata.AutoSize = True
-        Me.rdometadata.Location = New System.Drawing.Point(460, 67)
-        Me.rdometadata.Name = "rdometadata"
-        Me.rdometadata.Size = New System.Drawing.Size(70, 17)
-        Me.rdometadata.TabIndex = 495
-        Me.rdometadata.Text = "Metadata"
-        Me.rdometadata.UseVisualStyleBackColor = True
-        '
         'rdochannelinfo
         '
         Me.rdochannelinfo.AutoSize = True
@@ -1877,7 +1863,7 @@ Partial Class frmmediaplayer
         '
         'ExternalSoftwaresToolStripMenuItem
         '
-        Me.ExternalSoftwaresToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MediaAssetManagementToolStripMenuItem, Me.XDCamSoapClientToolStripMenuItem1, Me.VDCPControllerToolStripMenuItem, Me.UDPChatToolStripMenuItem, Me.MetadataToolStripMenuItem, Me.XDCamControllersToolStripMenuItem, Me.YouTubeLiveManagemnetToolStripMenuItem})
+        Me.ExternalSoftwaresToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MediaAssetManagementToolStripMenuItem, Me.XDCamSoapClientToolStripMenuItem1, Me.VDCPControllerToolStripMenuItem, Me.UDPChatToolStripMenuItem, Me.XDCamControllersToolStripMenuItem, Me.YouTubeLiveManagemnetToolStripMenuItem})
         Me.ExternalSoftwaresToolStripMenuItem.Name = "ExternalSoftwaresToolStripMenuItem"
         Me.ExternalSoftwaresToolStripMenuItem.Size = New System.Drawing.Size(115, 20)
         Me.ExternalSoftwaresToolStripMenuItem.Text = "External Softwares"
@@ -1905,13 +1891,6 @@ Partial Class frmmediaplayer
         Me.UDPChatToolStripMenuItem.Name = "UDPChatToolStripMenuItem"
         Me.UDPChatToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
         Me.UDPChatToolStripMenuItem.Text = "UDP Chat"
-        '
-        'MetadataToolStripMenuItem
-        '
-        Me.MetadataToolStripMenuItem.Name = "MetadataToolStripMenuItem"
-        Me.MetadataToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.MetadataToolStripMenuItem.Text = "Metadata"
-        '
         'XDCamControllersToolStripMenuItem
         '
         Me.XDCamControllersToolStripMenuItem.Name = "XDCamControllersToolStripMenuItem"
@@ -3081,7 +3060,6 @@ Partial Class frmmediaplayer
     Friend WithEvents rdoudpchat As System.Windows.Forms.RadioButton
     Friend WithEvents cmdplaylast8seccasaprcgwindow As System.Windows.Forms.Button
     Friend WithEvents rdochannelinfo As System.Windows.Forms.RadioButton
-    Friend WithEvents rdometadata As System.Windows.Forms.RadioButton
     Friend WithEvents rdoMAM As System.Windows.Forms.RadioButton
     Friend WithEvents cmbhost As System.Windows.Forms.ComboBox
     Friend WithEvents rdovs2 As System.Windows.Forms.RadioButton
@@ -3289,7 +3267,6 @@ Partial Class frmmediaplayer
     Friend WithEvents WeatherToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MediaAssetManagementToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents VDCPControllerToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents MetadataToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents UDPChatToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents XDCamSoapClientToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents rdoFourChannelPreview As RadioButton

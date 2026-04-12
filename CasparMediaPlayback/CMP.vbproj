@@ -612,12 +612,6 @@
     <Compile Include="ucLogo.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucMetadata.Designer.vb">
-      <DependentUpon>ucMetadata.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ucMetadata.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ucMixer.Designer.vb">
       <DependentUpon>ucMixer.vb</DependentUpon>
     </Compile>
@@ -1101,9 +1095,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ucLogo.resx">
       <DependentUpon>ucLogo.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucMetadata.resx">
-      <DependentUpon>ucMetadata.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ucMixer.resx">
       <DependentUpon>ucMixer.vb</DependentUpon>

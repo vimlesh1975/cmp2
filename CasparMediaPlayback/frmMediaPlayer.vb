@@ -91,7 +91,6 @@ Public Class frmmediaplayer
     Friend WithEvents ucChannelInfo1 As ucChannelInfo
     Friend WithEvents ucStreaming1 As DockContent = ucStreaming
     Friend WithEvents ucStreamPlayer1 As DockContent = ucStreamPlayer
-    Friend WithEvents ucMetadata1 As DockContent = ucMetadata
     Friend WithEvents ucHS1 As DockContent = ucHS
     Friend WithEvents ucHS21 As DockContent = ucHS2
     Friend WithEvents ucVS1 As DockContent = ucVS
@@ -1304,10 +1303,6 @@ Public Class frmmediaplayer
         ucVDCPController1.Show(DockPanel1, DockState.Document)
     End Sub
 
-    Private Sub MetadataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MetadataToolStripMenuItem.Click
-        ucMetadata1.Show(DockPanel1, DockState.Document)
-    End Sub
-
     Private Sub XDCamSoapClientToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles XDCamSoapClientToolStripMenuItem1.Click
         'System.Diagnostics.Process.Start("XdcamSoapClient.exe")
         ucXdcamSoapClient1.Show(DockPanel1, DockState.Document)
@@ -1347,8 +1342,38 @@ Public Class frmmediaplayer
         'On Error Resume Next
         If File.Exists(lastlayout) Then
             CloseAllContents()
-            DockPanel1.LoadFromXml(lastlayout, New DeserializeDockContent(AddressOf GetContentFromPersistString))
+            Try
+                DockPanel1.LoadFromXml(lastlayout, New DeserializeDockContent(AddressOf GetContentFromPersistString))
+            Catch ex As Exception
+                ResetInvalidLastLayout(ex)
+            End Try
         End If
+    End Sub
+
+    Private Sub ResetInvalidLastLayout(ex As Exception)
+        Dim backupLayoutPath = Path.Combine(Path.GetDirectoryName(lastlayout), Path.GetFileNameWithoutExtension(lastlayout) & "_invalid.xml")
+
+        Try
+            If File.Exists(lastlayout) Then
+                File.Copy(lastlayout, backupLayoutPath, True)
+                File.Delete(lastlayout)
+            End If
+        Catch
+            ' Keep going even if backup/delete fails.
+        End Try
+
+        Try
+            DockPanel1.SaveAsXml(lastlayout)
+        Catch
+            ' Ignore save failures here; the warning is still useful.
+        End Try
+
+        MessageBox.Show("Last layout contained removed or invalid modules, so it has been reset." & Environment.NewLine &
+                        "Backup: " & backupLayoutPath & Environment.NewLine &
+                        "Error: " & ex.Message,
+                        "Load Last Layout",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information)
     End Sub
     Private Sub CloseAllDocuments()
         If DockPanel1.DocumentStyle = DocumentStyle.SystemMdi Then
@@ -1411,9 +1436,6 @@ Public Class frmmediaplayer
 
         ElseIf persistString = GetType(ucMAM).ToString() Then
             Return ucMAM1
-        ElseIf persistString = GetType(ucMetadata).ToString() Then
-            Return ucMetadata1
-
         ElseIf persistString = GetType(ucMultiBulletScroll).ToString() Then
             Return ucMultiBulletScroll1
         ElseIf persistString = GetType(ucMySqlTest).ToString() Then
@@ -1534,7 +1556,6 @@ Public Class frmmediaplayer
         ucHtmlTemplate1.DockPanel = Nothing
         ucImageScroll1.DockPanel = Nothing
         ucMAM1.DockPanel = Nothing
-        ucMetadata1.DockPanel = Nothing
         ucMultiBulletScroll1.DockPanel = Nothing
         ucMySqlTest1.DockPanel = Nothing
         ucNG20151.DockPanel = Nothing
