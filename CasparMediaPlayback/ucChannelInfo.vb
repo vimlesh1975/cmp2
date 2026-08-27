@@ -1,21 +1,29 @@
 Imports System.Xml
 Public Class ucChannelInfo
     Private Function ReadChannelInfoDocument() As XmlDocument
-        Dim command = "info " & g_int_ChannelNumber
-        SendString(NetStream, command & vbCrLf)
+        Try
+            If NetStream Is Nothing Then Return Nothing
+            Dim command = "info " & g_int_ChannelNumber
+            SendString(NetStream, command & vbCrLf)
 
-        Threading.Thread.Sleep(100)
+            Threading.Thread.Sleep(100)
 
-        Dim data(10024) As Byte
-        Dim bytesRead = NetStream.Read(data, 0, data.Length)
+            Dim data(10024) As Byte
+            Dim bytesRead = NetStream.Read(data, 0, data.Length)
+            If bytesRead <= 0 Then Return Nothing
 
-        Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data, 0, bytesRead)
-        xmlString = xmlString.Replace(ChrW(0), "")
-        xmlString = xmlString.Substring(xmlString.IndexOf("<"))
+            Dim xmlString As String = System.Text.Encoding.UTF8.GetString(data, 0, bytesRead)
+            xmlString = xmlString.Replace(ChrW(0), "")
+            Dim idx As Integer = xmlString.IndexOf("<")
+            If idx < 0 Then Return Nothing
+            xmlString = xmlString.Substring(idx)
 
-        Dim document As New XmlDocument()
-        document.LoadXml(xmlString)
-        Return document
+            Dim document As New XmlDocument()
+            document.LoadXml(xmlString)
+            Return document
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
 
     Private Function GetNodeText(node As XmlNode, xPath As String, Optional fallback As String = "") As String

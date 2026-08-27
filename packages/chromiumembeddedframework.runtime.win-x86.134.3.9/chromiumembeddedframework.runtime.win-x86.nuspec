@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="5.0.0">
+    <id>chromiumembeddedframework.runtime.win-x86</id>
+    <version>134.3.9</version>
+    <authors>The Chromium Embedded Framework Authors</authors>
+    <owners>The CefSharp Authors</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/cefsharp/cef-binary</projectUrl>
+    <description>Chromium Embedded Framework (CEF) Release Distribution
+    NOTE: This package is maintained on behalf of the CEF authors by the CefSharp project at http://github.com/cefsharp/cef-binary</description>
+    <copyright>Copyright © 2008-2021</copyright>
+    <tags>chrome chromium native embedded browser CEF nativepackage</tags>
+    <icon>images\cef128x128.png</icon>
+  </metadata>
+</package>

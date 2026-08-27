@@ -1,4 +1,4 @@
-﻿Imports Svt.Caspar
+Imports Svt.Caspar
 Imports Svt.Network
 Imports System.Net.Sockets
 Imports System.Drawing.Text
@@ -27,12 +27,42 @@ Public Class frmmediaplayer
         End If
     End Sub
 
+    Private Function ExtractXmlTag(xml As String, tagName As String, Optional defaultValue As String = "") As String
+        Try
+            If String.IsNullOrEmpty(xml) Then Return defaultValue
+            Dim openTag As String = "<" & tagName & ">"
+            Dim closeTag As String = "</" & tagName & ">"
+            Dim startPos As Integer = xml.IndexOf(openTag, StringComparison.OrdinalIgnoreCase)
+            If startPos >= 0 Then
+                startPos += openTag.Length
+                Dim endPos As Integer = xml.IndexOf(closeTag, startPos, StringComparison.OrdinalIgnoreCase)
+                If endPos >= startPos Then
+                    Return xml.Substring(startPos, endPos - startPos).Trim()
+                End If
+            End If
+        Catch
+        End Try
+        Return defaultValue
+    End Function
+
     Private Function ResolveServerPath(pathValue As String, fallbackPath As String) As String
-        Dim pathParts = Split(pathValue, ":")
-        If pathParts(1) = "" Then
-            Return initialpath & fallbackPath
-        End If
-        Return pathValue
+        Try
+            Dim target As String = If(Not String.IsNullOrEmpty(pathValue), pathValue, fallbackPath)
+            If String.IsNullOrEmpty(target) Then
+                Return If(String.IsNullOrEmpty(initialpath), "c:/casparcg/", initialpath)
+            End If
+
+            target = target.Replace("\"c, "/"c)
+            If target.Contains(":") OrElse target.StartsWith("//") OrElse target.StartsWith("\\") Then
+                Return target
+            Else
+                Dim baseP As String = If(String.IsNullOrEmpty(initialpath), "c:/casparcg/", initialpath).Replace("\"c, "/"c)
+                If Not baseP.EndsWith("/") Then baseP &= "/"
+                Return baseP & target.TrimStart("/"c)
+            End If
+        Catch
+            Return pathValue
+        End Try
     End Function
 
     Private Sub UpdateMediaDependentPaths()
@@ -224,75 +254,58 @@ Public Class frmmediaplayer
     End Function
     '---------------- for getting casparcg process directory
     Sub getpaths()
-        On Error Resume Next
+        Try
+            Dim returndata As String = ""
+            If ServerVersion = 2.2 Then
+                Dim procs = System.Diagnostics.Process.GetProcessesByName("casparcg")
+                If procs.Length > 0 Then
+                    Dim configPath As String = Path.Combine(Path.GetDirectoryName(GetPathToApp(procs(0))), "casparcg.config")
+                    If File.Exists(configPath) Then
+                        Dim xmldoc As New System.Xml.XmlDocument()
+                        Using fs As New FileStream(configPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                            xmldoc.Load(fs)
+                        End Using
+                        Dim xmlnode As System.Xml.XmlNodeList = xmldoc.GetElementsByTagName("paths")
+                        If xmlnode IsNot Nothing AndAlso xmlnode.Count > 0 Then
+                            returndata = xmlnode(0).InnerXml
+                        End If
+                    End If
+                End If
+            End If
 
-        Dim returndata As String = ""
-        'If Mid(lblserverversion.Text, 1, 3) = "2.2" Or Mid(lblserverversion.Text, 1, 3) = "2.3" Then
-        If ServerVersion = 2.2 Then
-            Dim xmldoc As New System.Xml.XmlDocument()
-            Dim xmlnode As System.Xml.XmlNodeList
-            Dim fs As New FileStream(Path.GetDirectoryName(GetPathToApp(System.Diagnostics.Process.GetProcessesByName("casparcg")(0))) & "\" & "casparcg.config", FileMode.Open, FileAccess.Read)
-            xmldoc.Load(fs)
-            xmlnode = xmldoc.GetElementsByTagName("paths")
-            returndata = xmlnode(0).InnerXml
+            If String.IsNullOrEmpty(returndata) AndAlso NetStream IsNot Nothing Then
+                SendString(NetStream, "info paths" + vbCrLf)
+                Dim data(10024) As Byte
+                Dim bytesRead As Integer = NetStream.Read(data, 0, 10024)
+                If bytesRead > 0 Then
+                    returndata = System.Text.Encoding.UTF8.GetString(data, 0, bytesRead)
+                End If
+            End If
 
-        Else
-            SendString(NetStream, "info paths" + vbCrLf)
-            Dim data(10024) As Byte
-            NetStream.Read(data, 0, 10024)
-            returndata = System.Text.Encoding.UTF8.GetString(data)
+            mediapath = ExtractXmlTag(returndata, "media-path", "c:/casparcg/_media/").Replace("\"c, "/"c)
+            templatepath = ExtractXmlTag(returndata, "template-path", "c:/casparcg/").Replace("\"c, "/"c)
+            initialpath = ExtractXmlTag(returndata, "initial-path", "c:/casparcg/").Replace("\"c, "/"c)
 
-        End If
+            Dim thumbTag As String = If(ServerVersion = 2.0, "thumbnails-path", "thumbnail-path")
+            thumbnailspath = ExtractXmlTag(returndata, thumbTag, "thumbnails/").Replace("\"c, "/"c)
+            logpath = ExtractXmlTag(returndata, "log-path", "log/").Replace("\"c, "/"c)
+            datapath = ExtractXmlTag(returndata, "data-path", "data/").Replace("\"c, "/"c)
+            fontpath = ExtractXmlTag(returndata, "font-path", "font/").Replace("\"c, "/"c)
 
-        Dim a As Array = Split(returndata, "<media-path>")
-        Dim b As Array = Split(a(1), "</media-path>")
-        mediapath = Replace(b(0), "\/", "/")
+            templatefullpath = ResolveServerPath(templatepath, "c:/casparcg/")
+            mediafullpath = ResolveServerPath(mediapath, "c:/casparcg/_media/")
+            thumbnailsfullpath = ResolveServerPath(thumbnailspath, "thumbnails/")
+            logpath = ResolveServerPath(logpath, "log/")
+            datapath = ResolveServerPath(datapath, "data/")
+            fontpath = ResolveServerPath(fontpath, "font/")
 
-        Dim c As Array = Split(returndata, "<template-path>")
-        Dim d As Array = Split(c(1), "</template-path>")
-        templatepath = Replace(d(0), "\/", "/")
+            UpdateMediaDependentPaths()
+            UpdateUtilityPathGrid()
 
-        If ServerVersion = 2.2 Then
-            initialpath = Path.GetDirectoryName(GetPathToApp(System.Diagnostics.Process.GetProcessesByName("casparcg")(0))) & "/"
-        Else
-            Dim e As Array = Split(returndata, "<initial-path>")
-            Dim f As Array = Split(e(1), "</initial-path>")
-            initialpath = f(0)
-        End If
-
-        Dim h As Array
-        If ServerVersion = 2.0 Then
-            Dim g As Array = Split(returndata, "<thumbnails-path>")
-            h = Split(g(1), "</thumbnails-path>")
-        Else
-            Dim g As Array = Split(returndata, "<thumbnail-path>")
-            h = Split(g(1), "</thumbnail-path>")
-        End If
-        thumbnailspath = h(0)
-
-        Dim iii As Array = Split(returndata, "<log-path>")
-        Dim jjj As Array = Split(iii(1), "</log-path>")
-        logpath = jjj(0)
-
-        Dim kkk As Array = Split(returndata, "<data-path>")
-        Dim lll As Array = Split(kkk(1), "</data-path>")
-        datapath = lll(0)
-
-        Dim mmm As Array = Split(returndata, "<font-path>")
-        Dim nnn As Array = Split(mmm(1), "</font-path>")
-        fontpath = nnn(0)
-
-        templatefullpath = ResolveServerPath(templatepath, d(0))
-        mediafullpath = ResolveServerPath(mediapath, b(0))
-        thumbnailsfullpath = ResolveServerPath(thumbnailspath, h(0))
-        logpath = ResolveServerPath(logpath, jjj(0))
-        datapath = ResolveServerPath(datapath, lll(0))
-        fontpath = ResolveServerPath(fontpath, nnn(0))
-
-        UpdateMediaDependentPaths()
-        UpdateUtilityPathGrid()
-
-        ucPlaylist.initialisetvclips()
+            ucPlaylist.initialisetvclips()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("getpaths error: " & ex.Message)
+        End Try
     End Sub
     Sub getversions()
         On Error Resume Next
@@ -704,14 +717,22 @@ Public Class frmmediaplayer
         'DUMMY CODE
     End Sub
 
+    Private Function GetBuildDateTimeString() As String
+        Try
+            Dim exePath As String = System.Reflection.Assembly.GetExecutingAssembly().Location
+            If File.Exists(exePath) Then
+                Return File.GetLastWriteTime(exePath).ToString("dd-MM-yyyy HH:mm:ss")
+            End If
+        Catch
+        End Try
+        Return Now.ToString("dd-MM-yyyy HH:mm:ss")
+    End Function
+
     Sub Modifychannelname()
         On Error Resume Next
-        If Me.Text <> "" Then
-            Me.Text = ChannelName & "                              " & cmbhost.Text & "       Channel " & cmbchannel.Text
-            g_int_ChannelNumber = Int(cmbchannel.Text)
-            ucOSC.stoposcserver()
-        End If
-
+        Me.Text = "CasparMediaPlayback " & GetBuildDateTimeString() & "        " & cmbhost.Text & "       Channel " & cmbchannel.Text
+        g_int_ChannelNumber = Int(Val(cmbchannel.Text))
+        ucOSC.stoposcserver()
     End Sub
     Private Sub cmbchannel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbchannel.SelectedIndexChanged, cmbhost.LostFocus
         'DUMMY CODE

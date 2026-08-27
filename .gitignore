@@ -1,8 +1,4 @@
-# Ignore .msi files
-*.msi
-cef.redist.x86.118.6.8.nupkg
-libcef.dll
-cef.redist.x64.118.6.8.nupkg
+# Ignored developer cache and visual studio temporary files
 .vs/
 *.user
 *.suo
@@ -12,7 +8,9 @@ cef.redist.x64.118.6.8.nupkg
 
 # MSBuild / Visual Studio generated outputs
 obj/
-CasparMediaPlayback/bin/x86/Release/
+CasparMediaPlayback/obj/
+**/bin/Debug/
+**/bin/*/Debug/
 
 # Runtime/browser caches inside committed release folders
 **/GPUCache/

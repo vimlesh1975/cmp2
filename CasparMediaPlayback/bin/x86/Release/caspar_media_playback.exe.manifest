@@ -1,0 +1,2887 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="caspar_media_playback.exe" version="2.0.0.0" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
+  <description asmv2:iconFile="cmp.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="caspar_media_playback" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+    <commandLine file="caspar_media_playback.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!-- UAC Manifest Options
+            If you want to change the Windows User Account Control level replace the 
+            requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+            Specifying requestedExecutionLevel node will disable file and registry virtualization.
+            If you want to utilize File and Registry Virtualization for backward 
+            compatibility then delete the requestedExecutionLevel node.
+        -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AudioSwitcher.AudioApi.dll" size="35840">
+      <assemblyIdentity name="AudioSwitcher.AudioApi" version="4.0.0.308" publicKeyToken="FDA5729E2DB3A64F" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>7fzAX3ba2f5zVfQ38GPu3Sag8jW8dAF/8Q4wAC4EvBw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AudioSwitcher.AudioApi.CoreAudio.dll" size="98816">
+      <assemblyIdentity name="AudioSwitcher.AudioApi.CoreAudio" version="4.0.0.308" publicKeyToken="FDA5729E2DB3A64F" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>vrBDZNZTkHzFqrnk11APv61ZI8OHIEeWr3C87VqvBrI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AxInterop.ShockwaveFlashObjects.dll" size="28672">
+      <assemblyIdentity name="AxInterop.ShockwaveFlashObjects" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>1y8avgaLNLT/LHNOiZr5+wzqDkt1UmacYmT6j9FpJoE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bespoke.Common.dll" size="108032">
+      <assemblyIdentity name="Bespoke.Common" version="4.3.0.0" publicKeyToken="843A094264521388" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>8X0CioOySO1jO+DWHI/NreSEb7SRDQt9fMnZfKdDLU0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bespoke.Common.Osc.dll" size="20480">
+      <assemblyIdentity name="Bespoke.Common.Osc" version="4.3.0.0" publicKeyToken="843A094264521388" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Rg16K3BRMPwQWfbpvgjSKZAjIOOt/HEl44N6xmEobA0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="caspar_media_playback.exe" size="7575040">
+      <assemblyIdentity name="caspar_media_playback" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>42X6x9fBYPgAACBhr6lIQWAJ7MX+Oa9blVlvScInAHA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="caspar_media_playback.XmlSerializers.dll" size="402432">
+      <assemblyIdentity name="caspar_media_playback.XmlSerializers" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>jNVuqFDt33wXFYdK8W7LyBTbwivQLkIJlXfLLpfoUw0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CefSharp.dll" size="287744">
+      <assemblyIdentity name="CefSharp" version="151.3.170.0" publicKeyToken="40C4B6FC221F4138" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>uCRo2Jh56j++iA51kZ0xPpRAyU+gUVQdEJqb5MXnzBA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CefSharp.Core.dll" size="1139712">
+      <assemblyIdentity name="CefSharp.Core" version="151.3.170.0" publicKeyToken="40C4B6FC221F4138" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>HNNxioXAOkYtcyBvy+WnQ88aAr66w0Lwe9dXjGQ57rM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CefSharp.Core.Runtime.dll" size="1107456">
+      <assemblyIdentity name="CefSharp.Core.Runtime" version="151.3.170.0" publicKeyToken="40C4B6FC221F4138" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>yMHFaoxmMcX8C60B4mV10ehX8XOKby1TjuT7H0GVUxs=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CefSharp.WinForms.dll" size="54784">
+      <assemblyIdentity name="CefSharp.WinForms" version="151.3.170.0" publicKeyToken="40C4B6FC221F4138" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>jVaQyWLP3Z9LvOlSSJJn2MwqF1JyNF8QM3aTzcVN5SY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CircularProgressBar.dll" size="38912">
+      <assemblyIdentity name="CircularProgressBar" version="1.0.3.4" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>q1Zq/MxbwX18sxA3b91IbhS0IorLrXszxnj+82u9doM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="clsShuttleproV2.dll" size="61952">
+      <assemblyIdentity name="clsShuttleproV2" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>JdPebxn2GOOGsZnrB3h16tj9ig3l1Bag4mkyJlndrPE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CoreAudioApi.dll" size="32768">
+      <assemblyIdentity name="CoreAudioApi" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>03a+Glcb9uzcD4G6yAWrkRWvQ/raS0WvONOI97n2Z5U=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="dBFS_Meter.dll" size="75776">
+      <assemblyIdentity name="dBFS_Meter" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>LtDGdcW8gg5EPS/7FMr8SX0MOPMgoeXbqJOsaJ0KPKc=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DirectShowLib-2005.dll" size="303104">
+      <assemblyIdentity name="DirectShowLib-2005" version="2.1.0.0" publicKeyToken="67E7B740CDFC2D3F" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>u8uxcCQtn/G1ZoCoCx+HVd8RNfnHFFNf87P1dUQvONw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Facebook.dll" size="105984">
+      <assemblyIdentity name="Facebook" version="6.0.10.0" publicKeyToken="58CB4F2111D1E6DE" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>lMdkucj0CNTC53RrzuJFUfZ5ScjlOb+eo0/jjFmQdd4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Api.Gax.dll" size="78848">
+      <assemblyIdentity name="Google.Api.Gax" version="3.5.0.0" publicKeyToken="3EC5EA7F18953E47" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>WUSFfcZ+2LyTiuGwaqJcCgfI8v2WtT/Rus1SqmaH9GM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Api.Gax.Rest.dll" size="25600">
+      <assemblyIdentity name="Google.Api.Gax.Rest" version="3.5.0.0" publicKeyToken="3EC5EA7F18953E47" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>2qoivoQie6aYXOydZ9i0PzH+ZcGFzS4dxEEOxedlMko=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.dll" size="80896">
+      <assemblyIdentity name="Google.Apis" version="1.55.0.0" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>U96uDZuUEqRv0spCBxWCgiXN9cUOcvClat8KyRAuyyg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.Auth.dll" size="161280">
+      <assemblyIdentity name="Google.Apis.Auth" version="1.55.0.0" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>NjSnSggoS7d06ncpGmwBcs2VzXDgcjFpJ0Pkfm8J4KA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.Auth.PlatformServices.dll" size="5120">
+      <assemblyIdentity name="Google.Apis.Auth.PlatformServices" version="1.55.0.0" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>I6cXr53iW4D1QnTLEHW5MdL4V7d0dD5C3q2OWzIPYbs=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.Core.dll" size="77312">
+      <assemblyIdentity name="Google.Apis.Core" version="1.55.0.0" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Wy3E6EMN7PZCAv3C5RyTufZD78/V1JPOOWgLx003SrE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.PlatformServices.dll" size="4608">
+      <assemblyIdentity name="Google.Apis.PlatformServices" version="1.55.0.0" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>oC2ZosiSfwrrtsrw/EfZwt4QkxreNwMZhEwOtmG9vf8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.Translate.v2.dll" size="22528">
+      <assemblyIdentity name="Google.Apis.Translate.v2" version="1.55.0.875" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>UwWDUGO+ZhE6q31dJStvhcGlj30F2b9GqhASVRln3eQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Apis.YouTube.v3.dll" size="300032">
+      <assemblyIdentity name="Google.Apis.YouTube.v3" version="1.55.0.2449" publicKeyToken="4B01FA6E34DB77AB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>CtHvkY1kYN7KjQuy79IX5oHldqKC/UejveItaOAykyw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Google.Cloud.Translation.V2.dll" size="36352">
+      <assemblyIdentity name="Google.Cloud.Translation.V2" version="2.1.0.0" publicKeyToken="185C282632E132A0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>ZtFprry1VEErSQkjfbg3uktO336fsnUFGxTex+ovchw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Hammock.ClientProfile.dll" size="196608">
+      <assemblyIdentity name="Hammock.ClientProfile" version="1.0.0.0" publicKeyToken="C148CFBA29ED1A4D" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>dl3+uFJVibFh0B2pkGLktIhA9W9kW1N6ejuQfU5Hr58=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Interop.ShockwaveFlashObjects.dll" size="32768">
+      <assemblyIdentity name="Interop.ShockwaveFlashObjects" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>70eP0oCx9vdidK3kuvovNPP7ZAM4+hJGIA4NlUkKFNw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LinqToTwitter.dll" size="545280">
+      <assemblyIdentity name="LinqToTwitter" version="2.1.12.0" publicKeyToken="957107BE965C25D9" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>9VvHlmLM6ibgHN4xGN+8dVUuZpfmHoA0bCC1wXS0IDY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="mailtest.dll" size="13824">
+      <assemblyIdentity name="mailtest" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>7bmFUTcP2lEFmku35cOdzdBCx7ueq0Af+8OUEa6XhlM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MasaSam.Forms.Controls.dll" size="71680">
+      <assemblyIdentity name="MasaSam.Forms.Controls" version="1.0.6208.23445" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>oT4d7uIWI5CieIFBWrjHh33/oPac4ih0lFffGZIoqm4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MediaInfoDotNet.dll" size="31744">
+      <assemblyIdentity name="MediaInfoDotNet" version="0.7.4954.40056" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>RLbHbVpkO0/LTkmIPaWngp8gzLUcfavbfdLtW370Jd8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Bcl.AsyncInterfaces.dll" size="22144">
+      <assemblyIdentity name="Microsoft.Bcl.AsyncInterfaces" version="6.0.0.0" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>KVryFC2SFPP9hOr+R3jcoRm+fgIp8UtrqNUmnC8eLng=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.VisualBasic.PowerPacks.dll" size="269568">
+      <assemblyIdentity name="Microsoft.VisualBasic.PowerPacks" version="12.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>9SpbDh0TsZfUzAYy9xwqO8RKYqWm3x7iEW1lR4k90vY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.WindowsAPICodePack.dll" size="103424">
+      <assemblyIdentity name="Microsoft.WindowsAPICodePack" version="1.1.4.0" publicKeyToken="8985BEAAB7EA3F04" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>eUsKXOXdAh6bOoAAW1RVH6xBB/sY7m4VmWpV9QID2no=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.WindowsAPICodePack.Shell.dll" size="512512">
+      <assemblyIdentity name="Microsoft.WindowsAPICodePack.Shell" version="1.1.4.0" publicKeyToken="8985BEAAB7EA3F04" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>D+t5m8kbiDO1AnUCqMiHwR9lVtW1EraDYaw87Ktt+Gk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="mysql.data.dll" size="688640">
+      <assemblyIdentity name="MySql.Data" version="8.0.11.0" publicKeyToken="C5687FC88969C44D" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>KeY+Kh5+A5CIBvHLVvNsTVoTRzg+tC+GiEhPwdF1Rrk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="701992">
+      <assemblyIdentity name="Newtonsoft.Json" version="13.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>tiSUnfiw46YVP9+3MKfG9JkLZZLuDZIuF4hDPSdmEPM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="stdole.dll" size="26680">
+      <assemblyIdentity name="stdole" version="7.0.3300.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>HmuDuFi04YzBeRzlpfE/xc1P32hdL8/3Wrj6kyaztMI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="svt.caspar.dll" size="53760">
+      <assemblyIdentity name="Svt.Caspar" version="1.1.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>A1xf3vpVqZsu4kXduO8OvYV4vHZ0sQ0rW7znCAZGhn8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="svt.network.dll" size="24576">
+      <assemblyIdentity name="Svt.Network" version="1.1.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Qesb8dYAWKqmEWMJrUBxgWvjwjI8Nk167KBLALI8PAQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Reactive.dll" size="1470416">
+      <assemblyIdentity name="System.Reactive" version="5.0.0.0" publicKeyToken="94BC3704CDDFC263" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>6mmuOvHP/V6JXHno++16sIhZEd9j8Yf/IGnGuOIjb84=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Reactive.Core.dll" size="16848">
+      <assemblyIdentity name="System.Reactive.Core" version="3.0.6000.0" publicKeyToken="94BC3704CDDFC263" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>xnyTUAEikt4Q1T6knnJ9MW2xmWexT06M9j2zHST/3fo=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Runtime.CompilerServices.Unsafe.dll" size="18024">
+      <assemblyIdentity name="System.Runtime.CompilerServices.Unsafe" version="6.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>N3aEiOjvRXKbx9miZ3YzxkUAQpdbuWUW4YbabLnNDc8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Threading.Tasks.Extensions.dll" size="25984">
+      <assemblyIdentity name="System.Threading.Tasks.Extensions" version="4.2.0.1" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>T4H/0NxyBNt1r8NepCkXabB8RAWS8oiUJg7qdmJqI8Y=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.ValueTuple.dll" size="25232">
+      <assemblyIdentity name="System.ValueTuple" version="4.0.3.0" publicKeyToken="CC7B13FFCD2DDD51" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>6QXRAlhbIsbfBPIZr1y9v6e8Fll56XiLYt9tzBZeEPQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TweetSharp.dll" size="230912">
+      <assemblyIdentity name="TweetSharp" version="2.0.0.0" publicKeyToken="C148CFBA29ED1A4D" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>As3S/H5sKVVfrBAIWItU2w/8Wtsv6D50CXiYYrq4eL0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="VerticalProgressBar.dll" size="24576">
+      <assemblyIdentity name="VerticalProgressBar" version="1.0.1734.32024" language="neutral" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>hZ/UKmDrXhl8purjVPsPwANSe3BG86aanCunetjg644=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Vlc.DotNet.Core.dll" size="66048">
+      <assemblyIdentity name="Vlc.DotNet.Core" version="3.1.0.0" publicKeyToken="84529DA31F4EB963" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>WpqlUJYP3yaE6SUHRWtLqr92sM/WB1S3RedsR0yuqNI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Vlc.DotNet.Core.Interops.dll" size="79872">
+      <assemblyIdentity name="Vlc.DotNet.Core.Interops" version="3.1.0.0" publicKeyToken="84529DA31F4EB963" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>bWO/3WivFGGAsilkzp9f6LOUaklJe5xYn+gTjNLhb8Q=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Vlc.DotNet.Forms.dll" size="24576">
+      <assemblyIdentity name="Vlc.DotNet.Forms" version="3.1.0.0" publicKeyToken="84529DA31F4EB963" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>OfRxuEdM+Vf1Q3rnHguYj2hlF7MvqdBB2REgrvYMwD0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WeifenLuo.WinFormsUI.Docking.dll" size="245736">
+      <assemblyIdentity name="WeifenLuo.WinFormsUI.Docking" version="3.1.0.0" publicKeyToken="5CDED1A1A0A7B481" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>kXGADlfzgl6i6PqznQCxMXhTYcatDPSSYH+P9lN3pNA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" size="231400">
+      <assemblyIdentity name="WeifenLuo.WinFormsUI.Docking.ThemeVS2015" version="3.1.0.0" publicKeyToken="5CDED1A1A0A7B481" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>kcv8352m3nhu76t0GECh+6Ax4gAIPoFXoESkRI402DI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="caspar_media_playback.exe.config" size="40549">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>u+tKQiPKT9mKL7mErzcqzOOWzeGRBqaueS9pfL05KJo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="CefSharp.BrowserSubprocess.Core.dll" size="1556992">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>r1b5QZecCzDcB838OLwefRA01El1hza5/Ps4CHidoKo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="CefSharp.BrowserSubprocess.Core.pdb" size="18477056">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>FRHtj1aaEAnCvt4SkMKhjwZ/k2NCTxHkJiIjoloy/g8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="CefSharp.BrowserSubprocess.exe" size="7168">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>a+BJtpKnl7V0CHzwQXTUBkKswk9hA1drd1o9HQH0c3w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="CefSharp.BrowserSubprocess.pdb" size="19968">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>QrDCNnDbn/bw9xN3W9OxZLQrHs2zEfTYcCCd3oleyuc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="chrome_100_percent.pak" size="705714">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>mpzugopGsrOrlrxpB0k/te5ssj2iI57pKuTX8Yv00TA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="chrome_200_percent.pak" size="1224671">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>RQCqEEOk7c0SwsUkrgq0P0xIL3KA46hQ2U4aoYYNNOI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="chrome_elf.dll" size="1671680">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>jvVBfbed3wpkDpsaA2KtyCq95A4qo8/MwDXoBepFVBY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="cmp.ico" size="152126">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>KrKFbWwkIQs+BE8RtwAX127LquUBySSgZLAqA43d/AE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="d3dcompiler_47.dll" size="4147544">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>CublIHKFfDrP3lO5j1bDxtm9DnsJ8keuf0C/1FFZPEw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="icudtl.dat" size="10876560">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>n0jH+cfJTVFqFIcHB+kQq5TXWuZA/2hCxK9TJ2zSbr4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="libcef.dll" size="238863872">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>tH/RwTc0Itk2RGtlrlaQwuG0C6QgG0oyPdlC/s56wr4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="libEGL.dll" size="390656">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>yq79vlgraiibKABPIgNvpruDGglIYBdkptV77sQcgxQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="libGLESv2.dll" size="390656">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>92iinWV+qbaPCyUYJ4+6LQCHlLfyYsAJlDgO6H2+4P4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\af.pak" size="646228">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>zeZxjIbQh1joiy8wl1m7hDuJy3jsYwEqD0qzraBcmZs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\af_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\af_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\af_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\am.pak" size="1043706">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>oQCUDwO2JhpdMW18T7N1w5NXfrbnrusYC0NUbKDc6qI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\am_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\am_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\am_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ar.pak" size="1153646">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>YhCbN9VsSUuAthCDNfvBSyVxUrjpTiRAE4A8n8bWbps=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ar_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ar_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ar_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bg.pak" size="1195468">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>+lUI1fS7wI1UjPY581+b+UOUycBGTGFSpS/3kZ6AZTc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bg_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bg_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bg_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bn.pak" size="1529524">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>IC98U9MKdB3g+B2K6qCberTJLA0C1zF6LmIOtgi36Uk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bn_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bn_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\bn_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ca.pak" size="735363">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>/zwR5oXlpZOmMKa5lvBsXjeGC6j2WvX5Z5Xvi247v/8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ca_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ca_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ca_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\cs.pak" size="753636">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>P1fDlw0tSse5Vkfph4/dECrOSfcFUbRYr5pqAI+2n4c=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\cs_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\cs_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\cs_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\da.pak" size="680527">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>4KqKoIkc5wSkFrUZ5L7YlQtFBt1ef40s6DY/W7htRII=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\da_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\da_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\da_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\de.pak" size="737254">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>XePb8PwwcsNKWjIwqvLzajG+/QjJ1rLtnhcev8CfoOc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\de_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\de_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\de_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\el.pak" size="1311662">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>k3TO1zlERteQSR4mFT2x/HLQA0m3pUi07z1nv3cf2kE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\el_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\el_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\el_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-GB.pak" size="589263">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ICxPQz4PCEH/mCOiOiHfKAOsmMI65oKUVAWu7D1Asyo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-GB_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-GB_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-GB_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-US.pak" size="595910">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>CypyzIUdYvYVCA85VPLJTXAJzKwxrEJIOY8INZ/RxxQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-US_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-US_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\en-US_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es.pak" size="715849">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>pAZGMkxzFwivA98F5Kd3MuWFQ/4WW9kpJ1X2/rzLBpE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es-419.pak" size="721249">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>pOXPXhvMi0cAn3V48x0pmEn2i82tdtGdA9sSSCpt3pM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es-419_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es-419_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\es-419_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\et.pak" size="655732">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>vNfrnjBrQ5+wx9cQseMNt7p8DwjNmHtoLyIcQUgA15M=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\et_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\et_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\et_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fa.pak" size="1076301">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>aJKg80QprOllFmRpTu2vlhiqFc6fHZBo8ura7zJvG6U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fa_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fa_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fa_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fi.pak" size="665609">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>VKT8pWn5awcwiNUsl3s3xEWFCFjZdsqiTpGt7tqkH+g=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fi_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fi_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fi_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fil.pak" size="752783">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Ro521ay2sjftFi1jzLu8TH48irlzgEDMY0s2tQ4/QT8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fil_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fil_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fil_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fr.pak" size="780413">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>LQIlYQxTig6a/AOFQQB0F3Ll5SEwl2cFpniDBWmY64E=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fr_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fr_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\fr_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\gu.pak" size="1517270">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>o+8vCTyHf0p2KBeVccihKiYYHkanrKgxyOqPfWeLhSE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\gu_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\gu_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\gu_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\he.pak" size="946119">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>1sz9Eqf55eNmPc3LZRNDtF95RSQe9cj/eeRhCRNiRy0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\he_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\he_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\he_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hi.pak" size="1619562">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>5acp/aUbPeoN2o3FYbDoSU8SOJB4etdqRudQPnIoWJo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hi_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hi_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hi_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hr.pak" size="726493">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>hRnCJ28Y5QmXtMZgyWYKO8eOkGcBLQWTIjhhemt71Y4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hr_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hr_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hr_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hu.pak" size="777751">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>gEgB0NYh8NB+FlrwKyYGmPHaoaKPYRuFWK/Axov448k=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hu_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hu_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\hu_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\id.pak" size="645339">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>pYsT4qiuY8Ydq3StXbfr68iQXsf2faRLuohFZcLKVAc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\id_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\id_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\id_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\it.pak" size="711687">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>dgMFgdYf/B6Z2PHVUIuS3WLh4qbE3CzULFwvMiG6av0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\it_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\it_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\it_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ja.pak" size="862191">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>rkyEekCVG/CxxmtT4OmcB0T01GXVpgmHUKOz6cnTBT4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ja_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ja_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ja_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\kn.pak" size="1736086">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>c7oSMxlkae11epyDWtFVrDElLjNCPSDWRDV4Qvrm/k8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\kn_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\kn_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\kn_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ko.pak" size="731419">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>02EMxxTrgkLwCoBz2jxgyBerhLCi9meSZvpLaSJIKM0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ko_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ko_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ko_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lt.pak" size="790252">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>QuGxhImWEBTiEz65ABienxJ3MsyJDCQ7BVA77xvM4qs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lt_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lt_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lt_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lv.pak" size="787770">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>DBfi6ea9t65970pQ83pyWCf9cu2Cp9SmFA2hBkb0E2c=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lv_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lv_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\lv_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ml.pak" size="1785728">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>sV4Jm39CDM3RlYwr0TwG5nfecIAXxcwj1siqq1CxwTs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ml_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ml_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ml_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\mr.pak" size="1483293">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>LOydrofny914Yi7FRTUD5X65IykxuaIAgH+YwY2ezW0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\mr_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\mr_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\mr_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ms.pak" size="678561">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>NG4D7yqj+72drexMyG7q8xgFFYMWvcUScIPSou6lEew=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ms_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ms_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ms_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nb.pak" size="648486">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Ig3q6LfxKNE2Mmp2KUG2LQ0lxHKix4d8x0lcpiQ5F/o=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nb_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nb_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nb_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nl.pak" size="675664">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>AcrS+HW3kUREQpFqSiDumTi1cZRovB406qFfH/UjB/U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nl_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nl_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\nl_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pl.pak" size="754938">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Z7kcLAnBbAl4f6oKwhBZazdsTiZP4vdZJO5W2XIjg9o=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pl_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pl_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pl_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-BR.pak" size="707473">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>O5ypM1bDnldM7NzrSdagOyHA1VkPcU3oKeL3nRrmyZY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-BR_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-BR_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-BR_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-PT.pak" size="712615">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>qsXsmie7gW5tt3fQh6ozqmwB/mrvjGq4z0q3Mucm3uo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-PT_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-PT_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\pt-PT_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ro.pak" size="738911">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>bD9XEz0zhfIz4j4SZ6j4I4qaZpgLCVw7xvDG0Y5onJU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ro_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ro_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ro_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ru.pak" size="1219241">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>HWBrK6IHFDXAAfTIvneYqHb+Kl331NXvvQLpyLHVkK8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ru_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ru_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ru_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sk.pak" size="765840">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>nz7qbJyClDeyr2NBztjcKDq+ENoM0DOnH4g3hyocGsk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sk_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sk_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sk_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sl.pak" size="733711">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>R/g7EmtmQpNsM+QsoAzpvogp58+Mw8TqX6Ti+j0Doqw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sl_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sl_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sl_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sr.pak" size="1126588">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>sqkH3iU7hQXVtdd6pSGcmTu0M0OXE8a97Wsr+ezUSkQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sr_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sr_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sr_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sv.pak" size="657356">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>rUpar3xur2oXlU75GvdVbzXPMk1G9x8wvygvtXXgJNU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sv_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sv_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sv_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sw.pak" size="695611">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>o4Yo/F8TiXfsCUSdgqAYO47Lu/MLLcSMt3YrYOvUI0w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sw_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sw_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\sw_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ta.pak" size="1779775">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>qM+OCv+W6o/fkI5qWd437iNsrjpknbXznQV5bjoXNEc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ta_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ta_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ta_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\te.pak" size="1646243">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>LXtgFX4ijJIlNClMAlU6TE8nOrOH6oBVHcnM58Tjtco=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\te_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\te_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\te_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\th.pak" size="1384663">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>SlohSb85N74Th6LKsswX/40Wh0sKLUvfAwekI/shlcE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\th_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\th_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\th_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\tr.pak" size="708301">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>pk+WuRcHlrWLccHm24Hd6Zl/ESTZKC3N1kxdZMd3a1U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\tr_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\tr_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\tr_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\uk.pak" size="1226290">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>VTTdERkL9XIlnAVtv9ChTIOfNrvt7ovI+uA5+PoUzoU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\uk_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\uk_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\uk_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ur.pak" size="1058640">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>2xe9ZP+A7zgUZlE0EjNYgw37vjX6BgxlImt0kfWxPlU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ur_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ur_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\ur_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\vi.pak" size="842876">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>k0wp7FWD4K+EUPem2G5jYJSbZy7I4lTLqM6OIHQxNJQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\vi_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\vi_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\vi_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-CN.pak" size="602390">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Vyr9yTk6wp3DUImaVu3XMulrzh84opi1cJKlOTZwhsI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-CN_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-CN_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-CN_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-TW.pak" size="596485">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>KMRfcIm1pnn2tNRWR+sFuLXZiNw46cNGXf388U05pUE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-TW_FEMININE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-TW_MASCULINE.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="locales\zh-TW_NEUTER.pak" size="18">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="MediaInfo.dll" size="3032984">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>V+J0UW58slcGVgij4wTNjaHEZPYht6b+KtSLowuvYWM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="resources.pak" size="21252470">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ccNdaeB8/taVWRbDU3n9G4mT3YEZbk3OaPTvcA8aSvQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\9.png" size="2413">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>PS8EbAcqwrsuS3RUrYYMQ5HLFQTOdXZNxzFcfvXmBHI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\cmp.ico" size="152126">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>KrKFbWwkIQs+BE8RtwAX127LquUBySSgZLAqA43d/AE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\Play_last_5_Sec.png" size="2101">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>KCdOtmHJ9UhOxZi4cQZnAcYNCaf4gug8eZdG48v3abQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="v8_context_snapshot.bin" size="731172">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Uxs2Mm24kGbp+hjPlGpT43WCvf+Dno25df6HRVF3w9Y=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="vk_swiftshader.dll" size="4867072">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>q9ia1rhv+5qRh0weezMxAPfLZyv+09f6KwQwhqlNPoM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="vk_swiftshader_icd.json" size="106">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Mtg/8RP+9TKp+X4NKDH4ZWYoqxyZ6QYPAzKxUyg5r9k=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="vulkan-1.dll" size="861184">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>kK5u+6qnOparyFRwtB7SoqAwpxtNDuAfkMopTSaqqUc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- A list of all Windows versions that this application is designed to work with. Windows will automatically select the most compatible environment.-->
+      <!-- If your application is designed to work with Windows 7, uncomment the following supportedOS node-->
+      <!--<supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>-->
+    </application>
+  </compatibility>
+</asmv1:assembly>

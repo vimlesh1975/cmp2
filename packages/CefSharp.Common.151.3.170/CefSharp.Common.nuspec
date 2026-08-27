@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>CefSharp.Common</id>
+    <version>151.3.170</version>
+    <authors>The CefSharp Authors</authors>
+    <owners>The CefSharp Authors</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/cefsharp/CefSharp</projectUrl>
+    <description>The CefSharp Chromium-based browser component ('Core' and common 'Element' components, needed by both WPF and WinForms).</description>
+    <copyright>Copyright © The CefSharp Authors</copyright>
+    <tags>chrome browser</tags>
+    <repository type="git" url="https://github.com/cefsharp/CefSharp.git" branch="cefsharp/151" commit="11bfd0dd4f10eb0158250f03f0c5c49ed3c64d8e" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="chromiumembeddedframework.runtime.win-x86" version="[151.3.17]" />
+        <dependency id="chromiumembeddedframework.runtime.win-x64" version="[151.3.17]" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

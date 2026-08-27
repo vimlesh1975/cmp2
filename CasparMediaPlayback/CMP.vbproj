@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.props')" />
-  <Import Project="..\packages\chromiumembeddedframework.runtime.win-x86.134.3.9\build\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('..\packages\chromiumembeddedframework.runtime.win-x86.134.3.9\build\chromiumembeddedframework.runtime.win-x86.props')" />
-  <Import Project="..\packages\chromiumembeddedframework.runtime.win-x64.134.3.9\build\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('..\packages\chromiumembeddedframework.runtime.win-x64.134.3.9\build\chromiumembeddedframework.runtime.win-x64.props')" />
+  <Import Project="..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.props')" />
+  <Import Project="..\packages\chromiumembeddedframework.runtime.win-x86.151.3.17\build\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('..\packages\chromiumembeddedframework.runtime.win-x86.151.3.17\build\chromiumembeddedframework.runtime.win-x86.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5B8EAB40-3F9F-4F39-8D7A-85B57EA67CE7}</ProjectGuid>
@@ -54,7 +53,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\x86\Debug\</OutputPath>
     <DocumentationFile>caspar_media_playback.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <PlatformTarget>x86</PlatformTarget>
@@ -67,7 +66,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\x86\Release\</OutputPath>
     <DocumentationFile>caspar_media_playback.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <PlatformTarget>x86</PlatformTarget>
@@ -125,37 +124,37 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Bespoke.Common.Osc.dll</HintPath>
     </Reference>
-    <Reference Include="CefSharp, Version=134.3.90.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>..\packages\CefSharp.Common.134.3.90\lib\net462\CefSharp.dll</HintPath>
+    <Reference Include="CefSharp, Version=151.3.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.151.3.170\lib\net462\CefSharp.dll</HintPath>
     </Reference>
-    <Reference Include="CefSharp.Core, Version=134.3.90.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>..\packages\CefSharp.Common.134.3.90\lib\net462\CefSharp.Core.dll</HintPath>
+    <Reference Include="CefSharp.Core, Version=151.3.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.151.3.170\lib\net462\CefSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="CefSharp.WinForms, Version=134.3.90.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>..\packages\CefSharp.WinForms.134.3.90\lib\net462\CefSharp.WinForms.dll</HintPath>
+    <Reference Include="CefSharp.WinForms, Version=151.3.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.WinForms.151.3.170\lib\net462\CefSharp.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="CircularProgressBar">
-      <HintPath>C:\casparcg\_media\NDMS_Share_1\CircularProgressBar.dll</HintPath>
+      <HintPath>lib\CircularProgressBar.dll</HintPath>
     </Reference>
     <Reference Include="clsShuttleproV2">
-      <HintPath>C:\Users\HP\Desktop\New folder\shuttleProV2\shuttleProV2merged wth ilmerg\clsShuttleproV2.dll</HintPath>
+      <HintPath>lib\clsShuttleproV2.dll</HintPath>
     </Reference>
     <Reference Include="CoreAudioApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\VU Meter_125\VU Meter\bin\Debug\CoreAudioApi.dll</HintPath>
+      <HintPath>lib\CoreAudioApi.dll</HintPath>
     </Reference>
     <Reference Include="CustomMarshalers" />
     <Reference Include="dBFS_Meter">
-      <HintPath>C:\Users\vimle\Downloads\dBFS_Meter_ANY_CPU_COMPILED\dBFS_Meter.dll</HintPath>
+      <HintPath>lib\dBFS_Meter.dll</HintPath>
     </Reference>
     <Reference Include="DirectShowLib-2005">
-      <HintPath>C:\Users\vimlesh\Downloads\DirectShowLibV2-1\lib\DirectShowLib-2005.dll</HintPath>
+      <HintPath>lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Facebook">
-      <HintPath>..\..\cmpfb101113\cmpfb\bin\Debug\Facebook.dll</HintPath>
+      <HintPath>lib\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="Google.Api.Gax, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Api.Gax.3.5.0\lib\net461\Google.Api.Gax.dll</HintPath>
@@ -196,23 +195,25 @@
       <HintPath>lib\Interop.ShockwaveFlashObjects.dll</HintPath>
     </Reference>
     <Reference Include="LinqToTwitter">
-      <HintPath>C:\Users\ddkm\Documents\Visual Studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\Debug\LinqToTwitter.dll</HintPath>
+      <HintPath>lib\LinqToTwitter.dll</HintPath>
     </Reference>
     <Reference Include="mailtest">
-      <HintPath>C:\Users\CB STUDIO\Desktop\mailtest.dll</HintPath>
+      <HintPath>lib\mailtest.dll</HintPath>
     </Reference>
     <Reference Include="MasaSam.Forms.Controls, Version=1.0.6208.23445, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\vimlesh1975\Downloads\File System Tree View\VB\MasaSam.Forms.Controls\bin\Debug\MasaSam.Forms.Controls.dll</HintPath>
+      <HintPath>lib\MasaSam.Forms.Controls.dll</HintPath>
     </Reference>
     <Reference Include="MediaInfoDotNet">
-      <HintPath>C:\Users\Administrator\Documents\Visual Studio 2010\Projects\WindowsApplication12\WindowsApplication12\bin\Debug\MediaInfoDotNet.dll</HintPath>
+      <HintPath>lib\MediaInfoDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.VisualBasic.PowerPacks, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>lib\Microsoft.VisualBasic.PowerPacks.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.4.0, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.4\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -230,11 +231,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="Svt.Caspar, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Cricket\bin\x86\Release\svt.caspar.dll</HintPath>
+      <HintPath>lib\svt.caspar.dll</HintPath>
     </Reference>
     <Reference Include="Svt.Network, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CasparMediaPlayback050817_1\CasparMediaPlayback\bin\x86\Release\svt.network.dll</HintPath>
+      <HintPath>lib\svt.network.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -272,7 +273,7 @@
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\TweetSharp.dll</HintPath>
     </Reference>
     <Reference Include="VerticalProgressBar">
-      <HintPath>..\..\dll\VerticalProgressBar.dll</HintPath>
+      <HintPath>lib\VerticalProgressBar.dll</HintPath>
     </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
       <HintPath>..\packages\Vlc.DotNet.Core.3.1.0\lib\net45\Vlc.DotNet.Core.dll</HintPath>
@@ -291,6 +292,12 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\MediaInfo.dll">
+      <Link>MediaInfo.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -1558,6 +1565,7 @@
   <ItemGroup>
     <None Include="changes.log" />
     <None Include="Resources\minus.jpg" />
+    <EmbeddedResource Include="Resources\en-US.pak" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\x86\" />
@@ -1601,12 +1609,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\LargeAddressAware.1.0.5\build\LargeAddressAware.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LargeAddressAware.1.0.5\build\LargeAddressAware.targets'))" />
-    <Error Condition="!Exists('..\packages\chromiumembeddedframework.runtime.win-x64.134.3.9\build\chromiumembeddedframework.runtime.win-x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\chromiumembeddedframework.runtime.win-x64.134.3.9\build\chromiumembeddedframework.runtime.win-x64.props'))" />
-    <Error Condition="!Exists('..\packages\chromiumembeddedframework.runtime.win-x86.134.3.9\build\chromiumembeddedframework.runtime.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\chromiumembeddedframework.runtime.win-x86.134.3.9\build\chromiumembeddedframework.runtime.win-x86.props'))" />
-    <Error Condition="!Exists('..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\packages\chromiumembeddedframework.runtime.win-x86.151.3.17\build\chromiumembeddedframework.runtime.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\chromiumembeddedframework.runtime.win-x86.151.3.17\build\chromiumembeddedframework.runtime.win-x86.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets'))" />
   </Target>
-  <Import Project="..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.134.3.90\build\CefSharp.Common.targets')" />
+  <Import Project="..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
