@@ -295,7 +295,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\MediaInfo.dll">
-      <Link>MediaInfo.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -1614,11 +1613,7 @@
     <Error Condition="!Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets'))" />
   </Target>
   <Import Project="..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.151.3.170\build\CefSharp.Common.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Target Name="CopyMediaInfoToRoot" AfterTargets="Build">
+    <Copy SourceFiles="$(ProjectDir)lib\MediaInfo.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

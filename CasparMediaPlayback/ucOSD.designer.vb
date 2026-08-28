@@ -235,10 +235,10 @@ Partial Class ucOSD
         Me.LinkLabel3.AutoSize = True
         Me.LinkLabel3.Location = New System.Drawing.Point(181, 75)
         Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.Size = New System.Drawing.Size(140, 13)
+        Me.LinkLabel3.Size = New System.Drawing.Size(411, 13)
         Me.LinkLabel3.TabIndex = 1175
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "http://builds.casparcg.com/"
+        Me.LinkLabel3.Text = "https://drive.google.com/drive/u/0/folders/1-6YFiLDCM9EbgVn-gGTJjz9ad1T6dNQ-"
         '
         'Label3
         '

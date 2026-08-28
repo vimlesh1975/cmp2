@@ -103,14 +103,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="caspar_media_playback.exe" size="7575040">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="caspar_media_playback.exe" size="7566336">
       <assemblyIdentity name="caspar_media_playback" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>42X6x9fBYPgAACBhr6lIQWAJ7MX+Oa9blVlvScInAHA=</dsig:DigestValue>
+        <dsig:DigestValue>Fek8HyQk4g/Q54+2T6bt/Y7C/aiMzy6fm80OMTxl2Sw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -122,7 +122,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>jNVuqFDt33wXFYdK8W7LyBTbwivQLkIJlXfLLpfoUw0=</dsig:DigestValue>
+        <dsig:DigestValue>hKKqAHSahOXlZXNoa6Wvttpm2NUCduw80wAJBLGOrFM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -787,6 +787,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>n0jH+cfJTVFqFIcHB+kQq5TXWuZA/2hCxK9TJ2zSbr4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="lib\MediaInfo.dll" size="3032984">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>V+J0UW58slcGVgij4wTNjaHEZPYht6b+KtSLowuvYWM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="libcef.dll" size="238863872">
@@ -2794,15 +2803,6 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>ynMJe9los2O3FF6Gtk88WV5TOAiwdj3Ihjon/DY8+lE=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="MediaInfo.dll" size="3032984">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>V+J0UW58slcGVgij4wTNjaHEZPYht6b+KtSLowuvYWM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="resources.pak" size="21252470">

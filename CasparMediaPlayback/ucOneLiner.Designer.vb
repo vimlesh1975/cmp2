@@ -23,30 +23,17 @@ Partial Class ucOneLiner
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ucOneLiner))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ucOneLiner))
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gboneliner = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtTemplatename = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.chkPlayFromTraslatedGrigRCC = New System.Windows.Forms.CheckBox()
         Me.cmdRCCPlayer1 = New System.Windows.Forms.Button()
         Me.cmdRCCStop1 = New System.Windows.Forms.Button()
-        Me.cmdGetLanguage = New System.Windows.Forms.Button()
-        Me.chkPlayFromTraslatedGrigFlash = New System.Windows.Forms.CheckBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.cmblanguage = New System.Windows.Forms.ComboBox()
-        Me.cmdTranslate = New System.Windows.Forms.Button()
-        Me.dgvonelinesuperTranslated = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.txtvariable1 = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -59,7 +46,6 @@ Partial Class ucOneLiner
         Me.PasteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cmdfittextoneliner = New System.Windows.Forms.Button()
-        Me.chkPlayFromTraslatedGrigHTML = New System.Windows.Forms.CheckBox()
         Me.Strip = New System.Windows.Forms.GroupBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.nheighthtmloneliner = New System.Windows.Forms.NumericUpDown()
@@ -91,14 +77,12 @@ Partial Class ucOneLiner
         Me.addtsoneliner = New System.Windows.Forms.Button()
         Me.dgvonelinesuper = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colTranslate = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.cmdonelinesuperplay = New System.Windows.Forms.Button()
         Me.cmdonelinesupernext = New System.Windows.Forms.Button()
         Me.cmdonelinesuperstop = New System.Windows.Forms.Button()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.gboneliner.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        CType(Me.dgvonelinesuperTranslated, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Strip.SuspendLayout()
@@ -113,12 +97,6 @@ Partial Class ucOneLiner
         '
         Me.gboneliner.BackColor = System.Drawing.Color.LightSkyBlue
         Me.gboneliner.Controls.Add(Me.GroupBox2)
-        Me.gboneliner.Controls.Add(Me.cmdGetLanguage)
-        Me.gboneliner.Controls.Add(Me.chkPlayFromTraslatedGrigFlash)
-        Me.gboneliner.Controls.Add(Me.Label3)
-        Me.gboneliner.Controls.Add(Me.cmblanguage)
-        Me.gboneliner.Controls.Add(Me.cmdTranslate)
-        Me.gboneliner.Controls.Add(Me.dgvonelinesuperTranslated)
         Me.gboneliner.Controls.Add(Me.txtvariable1)
         Me.gboneliner.Controls.Add(Me.MenuStrip1)
         Me.gboneliner.Controls.Add(Me.GroupBox1)
@@ -147,7 +125,6 @@ Partial Class ucOneLiner
         Me.GroupBox2.BackColor = System.Drawing.Color.Azure
         Me.GroupBox2.Controls.Add(Me.txtTemplatename)
         Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Controls.Add(Me.chkPlayFromTraslatedGrigRCC)
         Me.GroupBox2.Controls.Add(Me.cmdRCCPlayer1)
         Me.GroupBox2.Controls.Add(Me.cmdRCCStop1)
         Me.GroupBox2.Location = New System.Drawing.Point(5, 606)
@@ -174,16 +151,6 @@ Partial Class ucOneLiner
         Me.Label4.TabIndex = 751
         Me.Label4.Text = "Template name"
         '
-        'chkPlayFromTraslatedGrigRCC
-        '
-        Me.chkPlayFromTraslatedGrigRCC.AutoSize = True
-        Me.chkPlayFromTraslatedGrigRCC.Location = New System.Drawing.Point(92, 19)
-        Me.chkPlayFromTraslatedGrigRCC.Name = "chkPlayFromTraslatedGrigRCC"
-        Me.chkPlayFromTraslatedGrigRCC.Size = New System.Drawing.Size(144, 17)
-        Me.chkPlayFromTraslatedGrigRCC.TabIndex = 750
-        Me.chkPlayFromTraslatedGrigRCC.Text = "Play from Translated Grid"
-        Me.chkPlayFromTraslatedGrigRCC.UseVisualStyleBackColor = True
-        '
         'cmdRCCPlayer1
         '
         Me.cmdRCCPlayer1.BackColor = System.Drawing.Color.Green
@@ -207,103 +174,6 @@ Partial Class ucOneLiner
         Me.cmdRCCStop1.TabIndex = 749
         Me.cmdRCCStop1.Text = "Stop"
         Me.cmdRCCStop1.UseVisualStyleBackColor = False
-        '
-        'cmdGetLanguage
-        '
-        Me.cmdGetLanguage.Location = New System.Drawing.Point(559, 134)
-        Me.cmdGetLanguage.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.cmdGetLanguage.Name = "cmdGetLanguage"
-        Me.cmdGetLanguage.Size = New System.Drawing.Size(99, 30)
-        Me.cmdGetLanguage.TabIndex = 748
-        Me.cmdGetLanguage.Text = "Get Language"
-        Me.cmdGetLanguage.UseVisualStyleBackColor = True
-        '
-        'chkPlayFromTraslatedGrigFlash
-        '
-        Me.chkPlayFromTraslatedGrigFlash.AutoSize = True
-        Me.chkPlayFromTraslatedGrigFlash.Location = New System.Drawing.Point(514, 42)
-        Me.chkPlayFromTraslatedGrigFlash.Name = "chkPlayFromTraslatedGrigFlash"
-        Me.chkPlayFromTraslatedGrigFlash.Size = New System.Drawing.Size(144, 17)
-        Me.chkPlayFromTraslatedGrigFlash.TabIndex = 747
-        Me.chkPlayFromTraslatedGrigFlash.Text = "Play from Translated Grid"
-        Me.chkPlayFromTraslatedGrigFlash.UseVisualStyleBackColor = True
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(562, 95)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(94, 13)
-        Me.Label3.TabIndex = 729
-        Me.Label3.Text = "Target Languages"
-        '
-        'cmblanguage
-        '
-        Me.cmblanguage.FormattingEnabled = True
-        Me.cmblanguage.Location = New System.Drawing.Point(559, 111)
-        Me.cmblanguage.Name = "cmblanguage"
-        Me.cmblanguage.Size = New System.Drawing.Size(91, 21)
-        Me.cmblanguage.TabIndex = 728
-        Me.cmblanguage.Text = "mr (Marathi)"
-        '
-        'cmdTranslate
-        '
-        Me.cmdTranslate.Location = New System.Drawing.Point(561, 167)
-        Me.cmdTranslate.Name = "cmdTranslate"
-        Me.cmdTranslate.Size = New System.Drawing.Size(97, 49)
-        Me.cmdTranslate.TabIndex = 727
-        Me.cmdTranslate.Text = "Translate All with Google Translator"
-        Me.cmdTranslate.UseVisualStyleBackColor = True
-        '
-        'dgvonelinesuperTranslated
-        '
-        Me.dgvonelinesuperTranslated.AllowDrop = True
-        Me.dgvonelinesuperTranslated.AllowUserToOrderColumns = True
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.dgvonelinesuperTranslated.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
-        Me.dgvonelinesuperTranslated.BackgroundColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvonelinesuperTranslated.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
-        Me.dgvonelinesuperTranslated.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvonelinesuperTranslated.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvonelinesuperTranslated.DefaultCellStyle = DataGridViewCellStyle3
-        Me.dgvonelinesuperTranslated.Location = New System.Drawing.Point(7, 257)
-        Me.dgvonelinesuperTranslated.MultiSelect = False
-        Me.dgvonelinesuperTranslated.Name = "dgvonelinesuperTranslated"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvonelinesuperTranslated.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
-        Me.dgvonelinesuperTranslated.RowHeadersWidth = 25
-        Me.dgvonelinesuperTranslated.Size = New System.Drawing.Size(545, 191)
-        Me.dgvonelinesuperTranslated.TabIndex = 726
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.Frozen = True
-        Me.DataGridViewTextBoxColumn1.HeaderText = "Oneline Super"
-        Me.DataGridViewTextBoxColumn1.MinimumWidth = 600
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.DataGridViewTextBoxColumn1.Width = 600
         '
         'txtvariable1
         '
@@ -378,7 +248,6 @@ Partial Class ucOneLiner
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.PowderBlue
         Me.GroupBox1.Controls.Add(Me.cmdfittextoneliner)
-        Me.GroupBox1.Controls.Add(Me.chkPlayFromTraslatedGrigHTML)
         Me.GroupBox1.Controls.Add(Me.Strip)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.cmdcolorhtmloneliner)
@@ -408,16 +277,6 @@ Partial Class ucOneLiner
         Me.cmdfittextoneliner.TabIndex = 747
         Me.cmdfittextoneliner.Text = "Fit Text"
         Me.cmdfittextoneliner.UseVisualStyleBackColor = True
-        '
-        'chkPlayFromTraslatedGrigHTML
-        '
-        Me.chkPlayFromTraslatedGrigHTML.AutoSize = True
-        Me.chkPlayFromTraslatedGrigHTML.Location = New System.Drawing.Point(445, 11)
-        Me.chkPlayFromTraslatedGrigHTML.Name = "chkPlayFromTraslatedGrigHTML"
-        Me.chkPlayFromTraslatedGrigHTML.Size = New System.Drawing.Size(144, 17)
-        Me.chkPlayFromTraslatedGrigHTML.TabIndex = 746
-        Me.chkPlayFromTraslatedGrigHTML.Text = "Play from Translated Grid"
-        Me.chkPlayFromTraslatedGrigHTML.UseVisualStyleBackColor = True
         '
         'Strip
         '
@@ -722,62 +581,51 @@ Partial Class ucOneLiner
         '
         Me.dgvonelinesuper.AllowDrop = True
         Me.dgvonelinesuper.AllowUserToOrderColumns = True
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.dgvonelinesuper.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.dgvonelinesuper.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvonelinesuper.BackgroundColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvonelinesuper.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvonelinesuper.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvonelinesuper.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvonelinesuper.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn3, Me.colTranslate})
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvonelinesuper.DefaultCellStyle = DataGridViewCellStyle8
+        Me.dgvonelinesuper.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn3})
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvonelinesuper.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvonelinesuper.Location = New System.Drawing.Point(5, 64)
         Me.dgvonelinesuper.MultiSelect = False
         Me.dgvonelinesuper.Name = "dgvonelinesuper"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvonelinesuper.RowHeadersDefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvonelinesuper.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvonelinesuper.RowHeadersWidth = 25
-        Me.dgvonelinesuper.Size = New System.Drawing.Size(547, 187)
+        Me.dgvonelinesuper.Size = New System.Drawing.Size(642, 384)
         Me.dgvonelinesuper.TabIndex = 510
         '
         'DataGridViewTextBoxColumn3
         '
         Me.DataGridViewTextBoxColumn3.Frozen = True
         Me.DataGridViewTextBoxColumn3.HeaderText = "Oneline Super"
-        Me.DataGridViewTextBoxColumn3.MinimumWidth = 400
+        Me.DataGridViewTextBoxColumn3.MinimumWidth = 600
         Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
         Me.DataGridViewTextBoxColumn3.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.DataGridViewTextBoxColumn3.Width = 400
-        '
-        'colTranslate
-        '
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.colTranslate.DefaultCellStyle = DataGridViewCellStyle7
-        Me.colTranslate.HeaderText = "Translate This"
-        Me.colTranslate.Name = "colTranslate"
-        Me.colTranslate.Text = "Translate This"
-        Me.colTranslate.ToolTipText = "Translate ony This Line"
-        Me.colTranslate.UseColumnTextForButtonValue = True
+        Me.DataGridViewTextBoxColumn3.Width = 600
         '
         'cmdonelinesuperplay
         '
@@ -842,7 +690,6 @@ Partial Class ucOneLiner
         Me.gboneliner.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        CType(Me.dgvonelinesuperTranslated, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -902,22 +749,12 @@ Partial Class ucOneLiner
     Friend WithEvents CopyToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PasteToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents txtvariable1 As TextBox
-    Friend WithEvents cmdTranslate As Button
-    Friend WithEvents dgvonelinesuperTranslated As DataGridView
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents Label3 As Label
-    Friend WithEvents cmblanguage As ComboBox
-    Friend WithEvents chkPlayFromTraslatedGrigFlash As CheckBox
-    Friend WithEvents chkPlayFromTraslatedGrigHTML As CheckBox
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents cmdGetLanguage As Button
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents colTranslate As DataGridViewButtonColumn
     Friend WithEvents cmdfittextoneliner As Button
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents cmdRCCPlayer1 As Button
     Friend WithEvents cmdRCCStop1 As Button
-    Friend WithEvents chkPlayFromTraslatedGrigRCC As CheckBox
     Friend WithEvents txtTemplatename As TextBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
 End Class

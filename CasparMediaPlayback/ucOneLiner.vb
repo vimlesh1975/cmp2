@@ -1,12 +1,9 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Net
-Imports Google.Cloud.Translation.V2
 Imports Newtonsoft.Json
 Public Class ucOneLiner
     Private Const OnelinerDirectory As String = "c:\casparcg\mydata\oneliner\"
     Private Const OnelinerHtmlPath As String = "file:///C:/casparcg/mydata/html/oneliner.html"
-    Private Const GoogleCredentialsPath As String = "C:\casparcg\mydata\GoogleTranslate\Quickstart-4d2796c29251.json"
-    Dim client As TranslationClient
 
     Dim client1 As New WebClient()
 
@@ -160,7 +157,7 @@ Public Class ucOneLiner
     Private Sub cmdonelinesuperplay_Click(sender As Object, e As EventArgs) Handles cmdonelinesuperplay.Click
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        Dim selectedText As String = GetSelectedOnelinerText(chkPlayFromTraslatedGrigFlash.Checked)
+        Dim selectedText As String = dgvonelinesuper.CurrentRow.Cells(0).Value
         Dim array() As Byte = System.Text.Encoding.UTF8.GetBytes(selectedText)
         CasparCGDataCollection.SetData("base64", System.Convert.ToBase64String(array))
         CasparCGDataCollection.SetData(txtvariable1.Text, selectedText)
@@ -172,27 +169,7 @@ Public Class ucOneLiner
     Private Sub ucOneLiner_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         initialiseonelinerdata()
         enumeratefontsforall()
-        TryInitializeTranslationClient()
     End Sub
-    Public Function ListLanguageNames() As IList(Of Language)
-        cmblanguage.Items.Clear()
-        Dim languages As IList(Of Language)
-        Try
-            If Not EnsureTranslationClient() Then
-                Return Nothing
-            End If
-            languages = client.ListLanguages(target:="en")
-            For Each language In languages
-                cmblanguage.Items.Add(language.Code & " (" & language.Name & ")")
-            Next
-            Return languages
-        Catch ex As Exception
-            MessageBox.Show("Unable to load Google Translate languages." & Environment.NewLine & ex.Message, "One Liner Translate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return Nothing
-        End Try
-
-    End Function
-
 
     Sub enumeratefontsforall()
         On Error Resume Next
@@ -205,7 +182,6 @@ Public Class ucOneLiner
     Sub initialiseonelinerdata()
         On Error Resume Next
         dgvonelinesuper.Rows.Add(8)
-        dgvonelinesuperTranslated.Rows.Add(8)
         Me.dgvonelinesuper.Item(0, 0).Value = "When nothing is sure, Everything is possible."
         Me.dgvonelinesuper.Item(0, 1).Value = "People lie, Actions don't."
         Me.dgvonelinesuper.Item(0, 2).Value = "Hurt me with the truth but don't comfort me with a lie"
@@ -232,7 +208,7 @@ Public Class ucOneLiner
         On Error Resume Next
 
         CasparDevice.SendString("play " & GetOnelinerLayerAddress() & " [HTML] " & """" & OnelinerHtmlPath & """")
-        SendOnelinerHtmlData(GetSelectedOnelinerText(chkPlayFromTraslatedGrigHTML.Checked))
+        SendOnelinerHtmlData(dgvonelinesuper.CurrentRow.Cells(0).Value)
         SendOnelinerHtmlCall("stripy('" & nyhtmloneliner.Value & "%')")
         SendOnelinerHtmlCall("Tickery('" & nyhtmltextoneliner.Value & "%')")
         SendOnelinerHtmlCall("fontsize('" & nsizehtmloneliner.Value & "')")
@@ -313,7 +289,7 @@ Public Class ucOneLiner
 
     Private Sub chkbase64htmloneliner_CheckedChanged(sender As Object, e As EventArgs) Handles chkbase64htmloneliner.CheckedChanged
         On Error Resume Next
-        SendOnelinerHtmlData(GetSelectedOnelinerText(False))
+        SendOnelinerHtmlData(dgvonelinesuper.CurrentRow.Cells(0).Value)
     End Sub
 
     Private Sub NewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItem.Click
@@ -349,57 +325,6 @@ Public Class ucOneLiner
         MakeMenuDropDownWhenParrented(sender)
     End Sub
 
-    Private Async Sub cmdTranslate_Click(sender As Object, e As EventArgs) Handles cmdTranslate.Click
-        Try
-            If Not EnsureTranslationClient() Then
-                Exit Sub
-            End If
-
-            Dim sourceRows As List(Of String) = GetTranslatableRows()
-            Dim targetLanguage As String = GetSelectedLanguageCode()
-
-            dgvonelinesuperTranslated.Rows.Clear()
-            dgvonelinesuperTranslated.Rows.Add(sourceRows.Count)
-
-            For i = 0 To sourceRows.Count - 1
-                dgvonelinesuperTranslated.Rows(i).Cells(0).Value = Await TranslateTextAsync(sourceRows(i), targetLanguage)
-            Next
-        Catch ex As Exception
-            MessageBox.Show("One-liner translation failed." & Environment.NewLine & ex.Message, "One Liner Translate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End Try
-    End Sub
-    Async Function TranslateTextAsync(bb As String, targetLanguage As String) As Threading.Tasks.Task(Of String)
-        If String.IsNullOrWhiteSpace(bb) Then
-            Return String.Empty
-        End If
-
-        Dim aa As String = (Await client.TranslateTextAsync(bb, targetLanguage)).TranslatedText
-        Return aa
-    End Function
-
-    Private Sub cmdGetLanguage_Click(sender As Object, e As EventArgs) Handles cmdGetLanguage.Click
-        ListLanguageNames()
-    End Sub
-
-    Private Async Sub dgvonelinesuper_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvonelinesuper.CellContentClick
-        Try
-            If dgvonelinesuper.Columns(e.ColumnIndex).Name = "colTranslate" Then
-                If e.RowIndex < 0 OrElse dgvonelinesuper.Rows(e.RowIndex).IsNewRow Then
-                    Exit Sub
-                End If
-
-                If Not EnsureTranslationClient() Then
-                    Exit Sub
-                End If
-
-                EnsureTranslatedGridRowCount(e.RowIndex + 1)
-                dgvonelinesuperTranslated.Rows(e.RowIndex).Cells(0).Value = Await TranslateTextAsync(Convert.ToString(dgvonelinesuper.Rows(e.RowIndex).Cells(0).Value), GetSelectedLanguageCode())
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Unable to translate the selected one-liner." & Environment.NewLine & ex.Message, "One Liner Translate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End Try
-    End Sub
-
     Private Sub cmdfittextoneliner_Click(sender As Object, e As EventArgs) Handles cmdfittextoneliner.Click
         On Error Resume Next
         SendOnelinerHtmlCall("fit1()")
@@ -409,11 +334,7 @@ Public Class ucOneLiner
     Private Sub cmdRCCPlayer1_Click(sender As Object, e As EventArgs) Handles cmdRCCPlayer1.Click
         On Error Resume Next
         CasparCGDataCollection.Clear()
-        If chkPlayFromTraslatedGrigRCC.Checked Then
-            CasparCGDataCollection.SetData("f0", dgvonelinesuperTranslated.CurrentRow.Cells(0).Value)
-        Else
-            CasparCGDataCollection.SetData("f0", dgvonelinesuper.CurrentRow.Cells(0).Value)
-        End If
+        CasparCGDataCollection.SetData("f0", dgvonelinesuper.CurrentRow.Cells(0).Value)
         CasparDevice.Channels(g_int_ChannelNumber - 1).CG.Add(Int(cmblayeronelinesuper.Text), Int(cmblayeronelinesuper.Text), txtTemplatename.Text, False, CasparCGDataCollection)
         CasparDevice.SendString("call " & (g_int_ChannelNumber) & "-" & Int(cmblayeronelinesuper.Text) & " " & """" & "sheet.sequence.play({ range: [0,0.5] })" & """")
 
@@ -435,14 +356,6 @@ Public Class ucOneLiner
         Return g_int_ChannelNumber & "-" & Int(cmblayeronelinesuper.Text)
     End Function
 
-    Private Function GetSelectedOnelinerText(useTranslatedGrid As Boolean) As String
-        If useTranslatedGrid Then
-            Return dgvonelinesuperTranslated.CurrentRow.Cells(0).Value
-        End If
-
-        Return dgvonelinesuper.CurrentRow.Cells(0).Value
-    End Function
-
     Private Sub SendOnelinerHtmlCall(commandText As String)
         CasparDevice.SendString("call " & GetOnelinerLayerAddress() & " " & commandText)
     End Sub
@@ -454,58 +367,5 @@ Public Class ucOneLiner
         Else
             SendOnelinerHtmlCall("marqueedata('" & replacestring1(textValue) & "')")
         End If
-    End Sub
-
-    Private Sub TryInitializeTranslationClient()
-        Try
-            If EnsureTranslationClient() Then
-                ListLanguageNames()
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Google Translate initialization failed." & Environment.NewLine & ex.Message, "One Liner Translate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End Try
-    End Sub
-
-    Private Function EnsureTranslationClient() As Boolean
-        If client IsNot Nothing Then
-            Return True
-        End If
-
-        If Not File.Exists(GoogleCredentialsPath) Then
-            MessageBox.Show("Google Translate credential file was not found:" & Environment.NewLine & GoogleCredentialsPath, "One Liner Translate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
-        End If
-
-        System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", GoogleCredentialsPath)
-        client = TranslationClient.Create()
-        Return True
-    End Function
-
-    Private Function GetSelectedLanguageCode() As String
-        If String.IsNullOrWhiteSpace(cmblanguage.Text) Then
-            Throw New InvalidOperationException("Please select a target language.")
-        End If
-
-        Return Split(cmblanguage.Text, " "c)(0)
-    End Function
-
-    Private Function GetTranslatableRows() As List(Of String)
-        Dim rows As New List(Of String)
-
-        For Each row As DataGridViewRow In dgvonelinesuper.Rows
-            If row.IsNewRow Then
-                Continue For
-            End If
-
-            rows.Add(Convert.ToString(row.Cells(0).Value))
-        Next
-
-        Return rows
-    End Function
-
-    Private Sub EnsureTranslatedGridRowCount(requiredRows As Integer)
-        While dgvonelinesuperTranslated.Rows.Count < requiredRows
-            dgvonelinesuperTranslated.Rows.Add()
-        End While
     End Sub
 End Class
