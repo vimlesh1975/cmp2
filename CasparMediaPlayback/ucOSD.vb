@@ -50,4 +50,9 @@ Public Class ucOSD
         If rdoNone.Checked Then Return "none"
         Return "yellow"
     End Function
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        On Error Resume Next
+        Process.Start(LinkLabel3.Text)
+    End Sub
 End Class
