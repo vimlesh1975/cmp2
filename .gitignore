@@ -26,3 +26,7 @@ CasparMediaPlayback/obj/
 CasparMediaPlayback/Quickstart-4d2796c29251.json
 CasparMediaPlayback/bin/x86/Release/Quickstart-4d2796c29251.json
 **/Quickstart-*.json
+
+# Installer build artifacts
+CasparMediaPlaybackSetup/Release/CasparMediaPlaybackSetup.msi
+
