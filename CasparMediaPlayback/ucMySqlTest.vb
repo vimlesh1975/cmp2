@@ -18,7 +18,15 @@ Public Class ucMySqlTest
     Private Sub cmdFillTablenames_Click(sender As Object, e As EventArgs) Handles cmdFillTablenames.Click
         Try
             conn.Open()
-            Dim dt = conn.GetSchema("TABLES")
+            Dim dt As DataTable
+            If servertype = MySqlServerType Then
+                Dim adp = CreateDataAdapter("SELECT table_name AS table_name FROM information_schema.tables WHERE table_schema = DATABASE();")
+                Dim ds As New DataSet()
+                adp.Fill(ds)
+                dt = ds.Tables(0)
+            Else
+                dt = conn.GetSchema("TABLES")
+            End If
             cmbTables.DataSource = dt
             cmbTables.DisplayMember = "table_name"
             cmbTables.ValueMember = "table_name"
@@ -129,7 +137,7 @@ Public Class ucMySqlTest
 
     Private Sub cmdSetServerMySql_Click(sender As Object, e As EventArgs) Handles cmdSetServerMySql.Click
         SetConnection(New MySqlConnection With {
-            .ConnectionString = "server=" & txtservermysql.Text & ";user=" & txtusemysql.Text & ";database=" & txtdatabasemysql.Text & ";port=" & txtport.Text & ";password=" & txtpasswordMysql.Text},
+            .ConnectionString = "server=" & txtservermysql.Text & ";user=" & txtusemysql.Text & ";database=" & txtdatabasemysql.Text & ";port=" & txtport.Text & ";password=" & txtpasswordMysql.Text & ";CharSet=utf8;"},
             MySqlServerType)
     End Sub
 
