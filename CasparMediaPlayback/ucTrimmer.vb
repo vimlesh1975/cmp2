@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.ComponentModel
 Imports System.Drawing.Text
 
@@ -21,7 +21,7 @@ Public Class ucTrimmer
         Dim strinout = BuildTrimInOut()
         ConfigureTrimmerSaveDialog("_ffmbc", 3, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Process.Start("CMD", "/K " & "C:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -threads 4 -tff -target xdcamhd422 -f mxf -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionsffmbc.Text)
+            Process.Start("CMD", "/K " & "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -threads 4 -tff -target xdcamhd422 -f mxf -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionsffmbc.Text)
         End If
     End Sub
     Private Sub chkvideocodeccopy_CheckedChanged(sender As Object, e As EventArgs) Handles chkvideocodeccopy.CheckedChanged
@@ -151,7 +151,7 @@ Public Class ucTrimmer
         Dim proc As New Process
         Dim startinfo As New System.Diagnostics.ProcessStartInfo
         Dim sr As StreamReader
-        Dim cmd As String = "-i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text) & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1  -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe" & """" & " -i - -threads 4 -tff -target xdcamhd422 -f mxf -y -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionstrimmer3.Text
+        Dim cmd As String = "-i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -ss " & FToHMSms(UcnewTrimmer11.txtmarkintrimmer.Text) & " -t " & FToHMSms(UcnewTrimmer11.txtmarkouttrimmer.Text - UcnewTrimmer11.txtmarkintrimmer.Text) & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1  -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe" & """" & " -i - -threads 4 -tff -target xdcamhd422 -f mxf -y -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionstrimmer3.Text
 
         Dim ffmpegOutput As String
 
@@ -248,7 +248,7 @@ Public Class ucTrimmer
         On Error Resume Next
         ConfigureTrimmerSaveDialog("_ffmbc", 3, "original wrapper (*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & ")|*" & System.IO.Path.GetExtension(UcnewTrimmer11.ofdtrimmer.FileName) & "|mp4 files (*.mp4)|*.mp4|mxf files (*.mxf)|*.mxf|avi files (*.avi)|*.avi|All files (*.*)|*.*")
         If (UcnewTrimmer11.osdcutfilename.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Process.Start("CMD", "/K " & "c:\casparcg\mydata\ffmpeg\ffmpeg.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1  -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe" & """" & " -i - -threads 4 -tff -target xdcamhd422 -f mxf -y -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionstrimmer3.Text)
+            Process.Start("CMD", "/K " & "c:\casparcg\mydata\ffmpeg\ffmpeg.exe -y " & strinout & " -i " & """" & UcnewTrimmer11.ofdtrimmer.FileName & """" & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1  -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe" & """" & " -i - -threads 4 -tff -target xdcamhd422 -f mxf -y -an " & """" & UcnewTrimmer11.osdcutfilename.FileName & """" & " " & txtoptionstrimmer3.Text)
 
         End If
     End Sub

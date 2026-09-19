@@ -1786,4 +1786,46 @@ Public Class frmmediaplayer
         uc4ChannelPlayer1.Show(DockPanel1, DockState.Document)
 
     End Sub
+
+    Private Sub DecklinkplayerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DecklinkplayerToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "decklinkplayer*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
+
+    Private Sub DecklinkRecorderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DecklinkRecorderToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "4Ch_Recoder_1Ch_Player*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
+
+    Private Sub DeckLinkStreamStudioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeckLinkStreamStudioToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "DeckLinkStreamStudio*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
+
+    Private Sub DecklinkSrtSuiteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DecklinkSrtSuiteToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "SrtSuite*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
+
+    Private Sub DecklinkaudiorecorderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DecklinkaudiorecorderToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "DeckLinkAudioRecorder*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
+
+    Private Sub DeckLinkScrollPlayerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeckLinkScrollPlayerToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "DeckLinkVerticalScrollPlayer*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
 End Class

@@ -22,7 +22,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>D22F477D99BA3A1592F441CAEA6CB7628F03D7E2</ManifestCertificateThumbprint>
     <ManifestKeyFile>caspar_media_playback_TemporaryKey.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

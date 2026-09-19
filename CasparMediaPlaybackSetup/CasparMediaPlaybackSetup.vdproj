@@ -1,4 +1,4 @@
-﻿"DeployProject"
+"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -63613,7 +63613,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A9A3C4087252481A96ED98DBF61A5A70"
             {
-            "SourcePath" = "8:C:\\casparcg\\mydata\\ffmbc\\ffmbc-0.7.4-x64.exe"
+            "SourcePath" = "8:C:\\casparcg\\mydata\\ffmpeg\\ffmbc-0.7.4-x64.exe"
             "TargetName" = "8:ffmbc-0.7.4-x64.exe"
             "Tag" = "8:"
             "Folder" = "8:_25A0E688EC0743CA8E474B299574267C"
@@ -87958,7 +87958,7 @@
                             }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_25A0E688EC0743CA8E474B299574267C"
                             {
-                            "Name" = "8:ffmbc"
+                            "Name" = "8:ffmpeg"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
@@ -90862,7 +90862,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
@@ -91419,3 +91419,4 @@
         }
     }
 }
+

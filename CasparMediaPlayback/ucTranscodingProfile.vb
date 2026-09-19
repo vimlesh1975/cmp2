@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Win32 'for number of processor
+Imports Microsoft.Win32 'for number of processor
 
 
 Public Class ucTranscodingProfile
@@ -74,7 +74,7 @@ Public Class ucTranscodingProfile
         On Error Resume Next
 
         If rdoHDtoXDCAMHD422mxfwithFFMBC.Checked Or rdoHDtoCenterCutSDmov.Checked Or rdoHDtoLetterBoxSDmov.Checked Or rdoHDtoAnamorphicmov.Checked Or rdodvcpro50dv.Checked Or (rdoCustomTranscode.Checked And rdocustomtranscodeffmbc.Checked) Then
-            startinfofilename = "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe"
+            startinfofilename = "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe"
         Else
             If rdoSDtoXDcamHD422Mxf.Checked Or rdoanytoAnamorphicXDcamHD422Mxf.Checked Then
                 startinfofilename = "c:\casparcg\mydata\ffmpeg\ffmpeg.exe"
@@ -88,7 +88,7 @@ Public Class ucTranscodingProfile
         On Error Resume Next
 
         If rdoSDtoXDcamHD422Mxf.Checked Then
-            cmdtranscodingcommand = " -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & threadstousefortranscoding & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1 -ar 48000 -r 25 -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe" & """" & " -i -  -tff  -target xdcamhd422 -f mxf -y -an " & """" & osdcutfilename.FileName & """" & " " &
+            cmdtranscodingcommand = " -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & threadstousefortranscoding & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1440:1080,pad=1920:1080:240:0,setfield=tff -pix_fmt yuv422p -alternate_scan 1 -ar 48000 -r 25 -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe" & """" & " -i -  -tff  -target xdcamhd422 -f mxf -y -an " & """" & osdcutfilename.FileName & """" & " " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &
@@ -107,7 +107,7 @@ Public Class ucTranscodingProfile
              "-map_audio_channel 0:1:0:0:8:0"
         End If
         If rdoanytoAnamorphicXDcamHD422Mxf.Checked Then
-            cmdtranscodingcommand = " -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & threadstousefortranscoding & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1920:1080,setfield=tff -pix_fmt yuv422p -alternate_scan 1 -ar 48000 -r " & txtFPS.Text & " -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe" & """" & " -i -  -tff  -target xdcamhd422 -f mxf -y -an " & """" & osdcutfilename.FileName & """" & " " &
+            cmdtranscodingcommand = " -y " & strinout & " -i " & """" & ofdtrimmer.FileName & """" & threadstousefortranscoding & " -vcodec mpeg2video -acodec pcm_s24le -vf scale=1920:1080,setfield=tff -pix_fmt yuv422p -alternate_scan 1 -ar 48000 -r " & txtFPS.Text & " -g 12 -bf 2 -b:v 50000k -minrate 50000k -maxrate 50000k -aspect 16:9 -ac 1 -map 0:0 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -map 0:1 -timecode 00:02:00:00 -metadata creation_time=now -color_primaries bt709 -color_trc 1  -colorspace 1 -f mxf pipe:1 | " & """" & "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe" & """" & " -i -  -tff  -target xdcamhd422 -f mxf -y -an " & """" & osdcutfilename.FileName & """" & " " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &
             "-acodec pcm_s24le -ar 48000 -newaudio " &

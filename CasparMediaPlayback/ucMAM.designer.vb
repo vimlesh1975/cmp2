@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ucMAM
     'Inherits System.Windows.Forms.UserControl
     Inherits WeifenLuo.WinFormsUI.Docking.DockContent
@@ -696,7 +696,7 @@ Partial Class ucMAM
         Me.txtFfmbcTargetTranscoding.ScrollBars = System.Windows.Forms.ScrollBars.Both
         Me.txtFfmbcTargetTranscoding.Size = New System.Drawing.Size(681, 35)
         Me.txtFfmbcTargetTranscoding.TabIndex = 833
-        Me.txtFfmbcTargetTranscoding.Text = "c:/casparcg/mydata/ffmbc/ffmbc-0.7.4-x64.exe -y -i c:/casparcg/_media/kabhi_kabhi" &
+        Me.txtFfmbcTargetTranscoding.Text = "c:/casparcg/mydata/ffmpeg/ffmbc-0.7.4-x64.exe -y -i c:/casparcg/_media/kabhi_kabhi" &
     ".mp4 -tff -target dvcpro50 c:/casparcg/_media/kabhi_kabhi_dvcpro50.mov"
         '
         'Label6
