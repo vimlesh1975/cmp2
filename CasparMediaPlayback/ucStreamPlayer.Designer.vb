@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ucStreamPlayer
     'Inherits System.Windows.Forms.UserControl
     Inherits WeifenLuo.WinFormsUI.Docking.DockContent
@@ -24,6 +24,8 @@ Partial Class ucStreamPlayer
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.gbstreamPlayer = New System.Windows.Forms.GroupBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.pnlVolumeMixer = New System.Windows.Forms.Panel()
         Me.cmdGetvolumeMixer = New System.Windows.Forms.Button()
@@ -120,8 +122,6 @@ Partial Class ucStreamPlayer
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtBinFolder = New System.Windows.Forms.TextBox()
         Me.cmdBinFolder = New System.Windows.Forms.Button()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
-        Me.Label20 = New System.Windows.Forms.Label()
         Me.gbstreamPlayer.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.gbUscreen.SuspendLayout()
@@ -192,6 +192,30 @@ Partial Class ucStreamPlayer
         Me.gbstreamPlayer.TabIndex = 1169
         Me.gbstreamPlayer.TabStop = False
         Me.gbstreamPlayer.Text = " "
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(4, 369)
+        Me.Label20.MaximumSize = New System.Drawing.Size(290, 0)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(276, 26)
+        Me.Label20.TabIndex = 1249
+        Me.Label20.Text = "Screen Capture Recorder link (Install if Screen Capture recorder is not avalilabl" &
+    "e here.)"
+        '
+        'LinkLabel3
+        '
+        Me.LinkLabel3.AutoSize = True
+        Me.LinkLabel3.Location = New System.Drawing.Point(5, 401)
+        Me.LinkLabel3.MaximumSize = New System.Drawing.Size(290, 0)
+        Me.LinkLabel3.Name = "LinkLabel3"
+        Me.LinkLabel3.Size = New System.Drawing.Size(290, 39)
+        Me.LinkLabel3.TabIndex = 1210
+        Me.LinkLabel3.TabStop = True
+        Me.LinkLabel3.Text = "https://github.com/rdp/screen-capture-recorder-to-video-windows-free/releases/dow" &
+    "nload/0.12.10/Setup.Screen.Capturer.Recorder.v0.12.10.exe"
         '
         'GroupBox2
         '
@@ -335,7 +359,7 @@ Partial Class ucStreamPlayer
         Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label18.Location = New System.Drawing.Point(6, 445)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(548, 16)
+        Me.Label18.Size = New System.Drawing.Size(547, 16)
         Me.Label18.TabIndex = 21
         Me.Label18.Text = "For Desktop Capture Select Screen capture recorder and virtual audio recoder"
         '
@@ -366,7 +390,7 @@ Partial Class ucStreamPlayer
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.Location = New System.Drawing.Point(13, 97)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(19, 16)
+        Me.Label14.Size = New System.Drawing.Size(18, 16)
         Me.Label14.TabIndex = 20
         Me.Label14.Text = "H"
         '
@@ -376,7 +400,7 @@ Partial Class ucStreamPlayer
         Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.Location = New System.Drawing.Point(10, 70)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(22, 16)
+        Me.Label15.Size = New System.Drawing.Size(21, 16)
         Me.Label15.TabIndex = 19
         Me.Label15.Text = "W"
         '
@@ -386,7 +410,7 @@ Partial Class ucStreamPlayer
         Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label16.Location = New System.Drawing.Point(10, 44)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(18, 16)
+        Me.Label16.Size = New System.Drawing.Size(17, 16)
         Me.Label16.TabIndex = 18
         Me.Label16.Text = "Y"
         '
@@ -396,7 +420,7 @@ Partial Class ucStreamPlayer
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.Location = New System.Drawing.Point(10, 19)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(17, 16)
+        Me.Label17.Size = New System.Drawing.Size(16, 16)
         Me.Label17.TabIndex = 17
         Me.Label17.Text = "X"
         '
@@ -999,8 +1023,8 @@ Partial Class ucStreamPlayer
         Me.txtDesktopDecklink2.ScrollBars = System.Windows.Forms.ScrollBars.Both
         Me.txtDesktopDecklink2.Size = New System.Drawing.Size(506, 23)
         Me.txtDesktopDecklink2.TabIndex = 1205
-        Me.txtDesktopDecklink2.Text = "  -tune zerolatency -f decklink -s 720x576 -pix_fmt uyvy422 -r 25 ""DeckLink Duo (" &
-    "1)"""
+        Me.txtDesktopDecklink2.Text = "  -tune zerolatency -f decklink -s 1920x1080 -pix_fmt uyvy422 -r 25 ""DeckLink Duo" &
+    " (1)"""
         '
         'Label11
         '
@@ -1045,7 +1069,7 @@ Partial Class ucStreamPlayer
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(5, 346)
+        Me.Label7.Location = New System.Drawing.Point(5, 341)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(121, 13)
         Me.Label7.TabIndex = 1198
@@ -1062,11 +1086,11 @@ Partial Class ucStreamPlayer
         '
         'txtStreamFromHere
         '
-        Me.txtStreamFromHere.Location = New System.Drawing.Point(8, 363)
+        Me.txtStreamFromHere.Location = New System.Drawing.Point(8, 356)
         Me.txtStreamFromHere.Multiline = True
         Me.txtStreamFromHere.Name = "txtStreamFromHere"
         Me.txtStreamFromHere.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtStreamFromHere.Size = New System.Drawing.Size(514, 23)
+        Me.txtStreamFromHere.Size = New System.Drawing.Size(514, 36)
         Me.txtStreamFromHere.TabIndex = 1196
         Me.txtStreamFromHere.Text = "ffmpeg.exe -i c:/casparcg/_media/kabhi_kabhi.mp4 -f flv -fflags nobuffer srt://0." &
     "0.0.0:20000?mode=caller "
@@ -1122,7 +1146,7 @@ Partial Class ucStreamPlayer
         Me.txtDecklink.Size = New System.Drawing.Size(509, 40)
         Me.txtDecklink.TabIndex = 1191
         Me.txtDecklink.Text = "ffmpeg.exe -i srt://0.0.0.0:20000?mode=listener -fflags nobuffer -tune zerolatenc" &
-    "y -f decklink -s 720x576 -pix_fmt uyvy422 -r 25 ""DeckLink Duo (1)"""
+    "y -f decklink -s 1920x1080 -pix_fmt uyvy422 -r 25 ""DeckLink Duo (1)"""
         '
         'cmdMonitor
         '
@@ -1172,7 +1196,7 @@ Partial Class ucStreamPlayer
         Me.txtBinFolder.ScrollBars = System.Windows.Forms.ScrollBars.Both
         Me.txtBinFolder.Size = New System.Drawing.Size(509, 27)
         Me.txtBinFolder.TabIndex = 1180
-        Me.txtBinFolder.Text = "c:\casparcg\mydata\goa\FFmpeg\bin\"
+        Me.txtBinFolder.Text = "c:\casparcg\mydata\FFmpeg\"
         '
         'cmdBinFolder
         '
@@ -1182,30 +1206,6 @@ Partial Class ucStreamPlayer
         Me.cmdBinFolder.TabIndex = 1179
         Me.cmdBinFolder.Text = "Change"
         Me.cmdBinFolder.UseVisualStyleBackColor = True
-        '
-        'LinkLabel3
-        '
-        Me.LinkLabel3.AutoSize = True
-        Me.LinkLabel3.Location = New System.Drawing.Point(5, 401)
-        Me.LinkLabel3.MaximumSize = New System.Drawing.Size(290, 0)
-        Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.Size = New System.Drawing.Size(290, 39)
-        Me.LinkLabel3.TabIndex = 1210
-        Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "https://github.com/rdp/screen-capture-recorder-to-video-windows-free/releases/dow" &
-    "nload/0.12.10/Setup.Screen.Capturer.Recorder.v0.12.10.exe"
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(4, 369)
-        Me.Label20.MaximumSize = New System.Drawing.Size(290, 0)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(276, 26)
-        Me.Label20.TabIndex = 1249
-        Me.Label20.Text = "Screen Capture Recorder link (Install if Screen Capture recorder is not avalilabl" &
-    "e here.)"
         '
         'ucStreamPlayer
         '

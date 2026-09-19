@@ -510,7 +510,7 @@ Partial Class ucMAM
         Me.txtOutputToDecklink.ScrollBars = System.Windows.Forms.ScrollBars.Both
         Me.txtOutputToDecklink.Size = New System.Drawing.Size(681, 48)
         Me.txtOutputToDecklink.TabIndex = 848
-        Me.txtOutputToDecklink.Text = "c:/casparcg/mydata/goa/FFmpeg/bin/ffmpeg.exe -i udp://238.1.1.3:2000?pkt_size=131" &
+        Me.txtOutputToDecklink.Text = "c:/casparcg/mydata/FFmpeg/ffmpeg.exe -i udp://238.1.1.3:2000?pkt_size=131" &
     "6  -fflags nobuffer -tune zerolatency -f decklink -s 720x576 -pix_fmt uyvy422 -r" &
     " 25 ""DeckLink Duo (1)"""
         '
