@@ -23,10 +23,10 @@ Partial Class frmmediaplayer
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim MySettings7 As caspar_media_playback.My.MySettings = New caspar_media_playback.My.MySettings()
+        Dim MySettings1 As caspar_media_playback.My.MySettings = New caspar_media_playback.My.MySettings()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmmediaplayer))
-        Dim Alert7 As ALERT = New ALERT()
-        Dim Critical7 As CRITICAL = New CRITICAL()
+        Dim Alert1 As ALERT = New ALERT()
+        Dim Critical1 As CRITICAL = New CRITICAL()
         Me.lblport = New System.Windows.Forms.Label()
         Me.lblhost = New System.Windows.Forms.Label()
         Me.cmdconnect = New System.Windows.Forms.Button()
@@ -165,6 +165,12 @@ Partial Class frmmediaplayer
         Me.RCCBallToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewGameClientDownloadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExternalSoftwaresToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecklinkplayerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecklinkRecorderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeckLinkStreamStudioToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecklinkSrtSuiteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecklinkaudiorecorderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeckLinkScrollPlayerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MediaAssetManagementToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.XDCamSoapClientToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.VDCPControllerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -329,12 +335,7 @@ Partial Class frmmediaplayer
         Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DecklinkplayerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DecklinkRecorderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DecklinkaudiorecorderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeckLinkStreamStudioToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DecklinkSrtSuiteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeckLinkScrollPlayerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DecklinkswitcherToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.nfontsizeforall, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbmodules.SuspendLayout()
         Me.mnuCMP.SuspendLayout()
@@ -392,257 +393,257 @@ Partial Class frmmediaplayer
         '
         'nfontsizeforall
         '
-        MySettings7.chkaspectratio = False
-        MySettings7.chkautomaticreadrss = False
-        MySettings7.chkautomaticupdaterss = False
-        MySettings7.chkcapitalised = False
-        MySettings7.chkclock = False
-        MySettings7.chkclock2 = False
-        MySettings7.chkltrhs1 = False
-        MySettings7.chkltrhs2 = False
-        MySettings7.chkmovingbackground = False
-        MySettings7.chkplaylistlock = False
-        MySettings7.chkPREMULTIPLY = True
-        MySettings7.chkPROGRESSIVE = True
-        MySettings7.chkrssdescription = False
-        MySettings7.chkrsstitle = True
-        MySettings7.chkshowtimeofl = False
-        MySettings7.chksinglecliprecord = True
-        MySettings7.chktemplateforvideo = False
-        MySettings7.cmbalign = "center"
-        MySettings7.cmbcapturedevices = ""
-        MySettings7.cmbcasparcgwindowtitle = "Screen consumer [1|PAL]"
-        MySettings7.cmbchannel = 0
-        MySettings7.cmbchannel_layout = "smpte:L R C LFE Ls Rs"
-        MySettings7.cmbchanneltext = "1"
-        MySettings7.cmbchromacolor = "BLUE"
-        MySettings7.cmbdirection = "RIGHT"
-        MySettings7.cmbdirectionforppt = "LEFT"
-        MySettings7.cmbfileformateoal = "cmbfileformateoal"
-        MySettings7.cmbflashlayerforlogo = 41
-        MySettings7.cmbflashlayerforswf = 16
-        MySettings7.cmbfonths1 = "Times New Roman"
-        MySettings7.cmbfonths2 = "Impact"
-        MySettings7.cmbfontsforall = "Font"
-        MySettings7.cmbfonttemplate = "Calibri"
-        MySettings7.cmbfontvs = "Impact"
-        MySettings7.cmbimageforimagescroll = "vertical"
-        MySettings7.cmbimagescrollblur = 0
-        MySettings7.cmbimagescrollspeed = 3
-        MySettings7.cmblayerbreakingnews = 46
-        MySettings7.cmblayerfacebook = "86"
-        MySettings7.cmblayerhs1 = 36
-        MySettings7.cmblayerhs2 = 31
-        MySettings7.cmblayerhtml = "101"
-        MySettings7.cmblayeronelinesuper = 61
-        MySettings7.cmblayerosd = "106"
-        MySettings7.cmblayerscroll = 51
-        MySettings7.cmblayerSqlhtml = "201"
-        MySettings7.cmblayertemplate = 96
-        MySettings7.cmblayertime = 56
-        MySettings7.cmblayertwitter = "81"
-        MySettings7.cmblayertwolinesuper = 66
-        MySettings7.cmblayervideo = 1
-        MySettings7.cmblayervideo1 = "1"
-        MySettings7.cmblayervideoforimage = 6
-        MySettings7.cmblayervideoforppt = 11
-        MySettings7.cmblayervs = 26
-        MySettings7.cmblive = 2
-        MySettings7.cmbliveoal = 1
-        MySettings7.cmbmediaforaudiotest = "go1080p25"
-        MySettings7.cmbMiscellaneous = "info 1-1"
-        MySettings7.cmboscport = 6250
-        MySettings7.cmbrecordformat = "mp4"
-        MySettings7.cmbrssvideoflashlayer = 76
-        MySettings7.cmbslowmotionrecordquality = 90
-        MySettings7.cmbslowmotionrecordsubsampling = 422
-        MySettings7.cmbsource1 = "decklink 1"
-        MySettings7.cmbsource2 = "decklink 2"
-        MySettings7.cmbsource3 = "decklink 3"
-        MySettings7.cmbsource4 = "decklink 4"
-        MySettings7.cmbtransition = "slide"
-        MySettings7.cmbtransitionforppt = "CUT"
-        MySettings7.cmbtransporttype = "Udp"
-        MySettings7.cmbtweentype = "easenone"
-        MySettings7.cmbtweentypeforppt = "easenone"
-        MySettings7.cmbvideolayerformixer = 1
-        MySettings7.cmbvideolayerfortemplate = 96
-        MySettings7.cmbweathericon1videolayer = 71
-        MySettings7.cmdcolor = System.Drawing.Color.Yellow
-        MySettings7.cmdcolor2 = System.Drawing.Color.Yellow
-        MySettings7.cmdcolorV = System.Drawing.Color.Yellow
-        MySettings7.cmdstripcolor = System.Drawing.Color.DarkGreen
-        MySettings7.cmdstripcolor2 = System.Drawing.Color.DarkGreen
-        MySettings7.DateTimePicker1 = New Date(2014, 10, 3, 0, 0, 0, 0)
-        MySettings7.decklink_live = 2
-        MySettings7.labelcolorborderv = "0xFF0000"
-        MySettings7.lblcolor = "0xFFFF00"
-        MySettings7.lblcolor2 = "0xFFFF00"
-        MySettings7.lblcolorV = "0xFFFF00"
-        MySettings7.lblfilenameamcp = "Default File"
-        MySettings7.lbllogofilename = "Default file"
-        MySettings7.lblshedulerecordingplaylist = "filename=default"
-        MySettings7.lblstripcolor = "0x005500"
-        MySettings7.lblstripcolor2 = "0x005500"
-        'MySettings7.nanchorx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nanchory = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nbrightness = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.nchromaspread = New Decimal(New Integer() {4, 0, 0, 131072})
-        MySettings7.nchromathresholdcenter = New Decimal(New Integer() {1, 0, 0, 65536})
-        'MySettings7.nclipx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nclipxsclae = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nclipy = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nclipyscale = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nContrast = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.ncropbrx = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.ncropbry = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.ncroptlx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.ncroptly = New Decimal(New Integer() {0, 0, 0, 0})
-        MySettings7.newdelemterforscrollandclock = "   *   "
-        'MySettings7.nfillheight = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nfillwidth = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nfillx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nfilly = New Decimal(New Integer() {0, 0, 0, 0})
-        MySettings7.nfontsizeforall = 10
-        'MySettings7.ngamma = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.nlogoheight = 120
-        MySettings7.nlogowidth = 160
-        MySettings7.nlogox = 592
-        MySettings7.nlogoy = 6
-        'MySettings7.nmax_input = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nmax_output = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nmin_input = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nmin_output = New Decimal(New Integer() {0, 0, 0, 0})
-        MySettings7.nmixermastervolume = New Decimal(New Integer() {10, 0, 0, 65536})
-        MySettings7.nnewspeed = New Decimal(New Integer() {20, 0, 0, 65536})
-        'MySettings7.nopacity = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.nopacitylogo = New Decimal(New Integer() {10, 0, 0, 65536})
-        'MySettings7.nperspectiveblx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nperspectivebly = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nperspectivebrx = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nperspectivebry = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nperspectivetlx = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nperspectivetly = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nperspectivetrx = New Decimal(New Integer() {1, 0, 0, 0})
-        'MySettings7.nperspectivetry = New Decimal(New Integer() {0, 0, 0, 0})
-        'MySettings7.nrotationz = New Decimal(New Integer() {0, 0, 0, 0})
-        MySettings7.nrssspeed = 3
-        'MySettings7.nSaturation = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.nsize = 35
-        MySettings7.nsize2 = 35
-        MySettings7.nsizeV = 35
-        MySettings7.nspeed = 6
-        MySettings7.nspeed2 = 3
-        MySettings7.nspeedscroll = 2.5R
-        MySettings7.nspeedV = New Decimal(New Integer() {11, 0, 0, 65536})
-        MySettings7.ntransitionduration = 10
-        MySettings7.ntransitiondurationforppt = 10
-        'MySettings7.nVolume = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.ny = 510
-        MySettings7.ny2 = 410
-        MySettings7.png = False
-        MySettings7.rdojpg = True
-        MySettings7.rss = "http://news.google.com/news?pz=1&cf=all&ned=hi_in&hl=hi&output=rss"
-        MySettings7.rss_delimeter = "   *   "
-        MySettings7.rss_speed = 3
-        MySettings7.rss_update_interval = 10000
-        MySettings7.rssdescription = True
-        MySettings7.rsstitle = True
-        MySettings7.SettingsKey = ""
-        MySettings7.txtaccesstoken = ""
-        MySettings7.txtAccesstokensecret = ""
-        MySettings7.txtAccesstokentwitter = ""
-        MySettings7.txtaddtemplate = 3
-        MySettings7.txtanyamcpcommand = "Play 1-1 go1080p25 loop" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cg 1-2 add 2 cmp/cg_template/clock 1"
-        MySettings7.txtbitrate = New Decimal(New Integer() {8, 0, 0, 0})
-        MySettings7.txtbitrateofl = New Decimal(New Integer() {1, 0, 0, 0})
-        MySettings7.txtbreakingnewstag0 = "xf0"
-        MySettings7.txtbreakingnewstag1 = "xf1"
-        MySettings7.txtbreakingnewstag2 = "xf2"
-        MySettings7.txtbreakingnewsupdateinterval = 4000
-        MySettings7.txtbreakingnewsvalue0 = "Breaking News"
-        MySettings7.txtbreakingnewsvalue1 = "Breaking News"
-        MySettings7.txtcasparcgwindowtitle = "Screen consumer [1|PAL]"
-        MySettings7.txtchannelproducer = "play 2-1 route://1"
-        MySettings7.txtchromakey = "MIXER 1-22 CHROMA"
-        MySettings7.txtchromamixerclear = "mixer 1 clear"
-        MySettings7.txtConsumerkey = ""
-        MySettings7.txtConsumersecret = ""
-        MySettings7.txtcrawl = "Welcome To Doordarshan . This is Horizonal scroll line 1 testing. All are welcome" &
+        MySettings1.chkaspectratio = False
+        MySettings1.chkautomaticreadrss = False
+        MySettings1.chkautomaticupdaterss = False
+        MySettings1.chkcapitalised = False
+        MySettings1.chkclock = False
+        MySettings1.chkclock2 = False
+        MySettings1.chkltrhs1 = False
+        MySettings1.chkltrhs2 = False
+        MySettings1.chkmovingbackground = False
+        MySettings1.chkplaylistlock = False
+        MySettings1.chkPREMULTIPLY = True
+        MySettings1.chkPROGRESSIVE = True
+        MySettings1.chkrssdescription = False
+        MySettings1.chkrsstitle = True
+        MySettings1.chkshowtimeofl = False
+        MySettings1.chksinglecliprecord = True
+        MySettings1.chktemplateforvideo = False
+        MySettings1.cmbalign = "center"
+        MySettings1.cmbcapturedevices = ""
+        MySettings1.cmbcasparcgwindowtitle = "Screen consumer [1|PAL]"
+        MySettings1.cmbchannel = 0
+        MySettings1.cmbchannel_layout = "smpte:L R C LFE Ls Rs"
+        MySettings1.cmbchanneltext = "1"
+        MySettings1.cmbchromacolor = "BLUE"
+        MySettings1.cmbdirection = "RIGHT"
+        MySettings1.cmbdirectionforppt = "LEFT"
+        MySettings1.cmbfileformateoal = "cmbfileformateoal"
+        MySettings1.cmbflashlayerforlogo = 41
+        MySettings1.cmbflashlayerforswf = 16
+        MySettings1.cmbfonths1 = "Times New Roman"
+        MySettings1.cmbfonths2 = "Impact"
+        MySettings1.cmbfontsforall = "Font"
+        MySettings1.cmbfonttemplate = "Calibri"
+        MySettings1.cmbfontvs = "Impact"
+        MySettings1.cmbimageforimagescroll = "vertical"
+        MySettings1.cmbimagescrollblur = 0
+        MySettings1.cmbimagescrollspeed = 3
+        MySettings1.cmblayerbreakingnews = 46
+        MySettings1.cmblayerfacebook = "86"
+        MySettings1.cmblayerhs1 = 36
+        MySettings1.cmblayerhs2 = 31
+        MySettings1.cmblayerhtml = "101"
+        MySettings1.cmblayeronelinesuper = 61
+        MySettings1.cmblayerosd = "106"
+        MySettings1.cmblayerscroll = 51
+        MySettings1.cmblayerSqlhtml = "201"
+        MySettings1.cmblayertemplate = 96
+        MySettings1.cmblayertime = 56
+        MySettings1.cmblayertwitter = "81"
+        MySettings1.cmblayertwolinesuper = 66
+        MySettings1.cmblayervideo = 1
+        MySettings1.cmblayervideo1 = "1"
+        MySettings1.cmblayervideoforimage = 6
+        MySettings1.cmblayervideoforppt = 11
+        MySettings1.cmblayervs = 26
+        MySettings1.cmblive = 2
+        MySettings1.cmbliveoal = 1
+        MySettings1.cmbmediaforaudiotest = "go1080p25"
+        MySettings1.cmbMiscellaneous = "info 1-1"
+        MySettings1.cmboscport = 6250
+        MySettings1.cmbrecordformat = "mp4"
+        MySettings1.cmbrssvideoflashlayer = 76
+        MySettings1.cmbslowmotionrecordquality = 90
+        MySettings1.cmbslowmotionrecordsubsampling = 422
+        MySettings1.cmbsource1 = "decklink 1"
+        MySettings1.cmbsource2 = "decklink 2"
+        MySettings1.cmbsource3 = "decklink 3"
+        MySettings1.cmbsource4 = "decklink 4"
+        MySettings1.cmbtransition = "slide"
+        MySettings1.cmbtransitionforppt = "CUT"
+        MySettings1.cmbtransporttype = "Udp"
+        MySettings1.cmbtweentype = "easenone"
+        MySettings1.cmbtweentypeforppt = "easenone"
+        MySettings1.cmbvideolayerformixer = 1
+        MySettings1.cmbvideolayerfortemplate = 96
+        MySettings1.cmbweathericon1videolayer = 71
+        MySettings1.cmdcolor = System.Drawing.Color.Yellow
+        MySettings1.cmdcolor2 = System.Drawing.Color.Yellow
+        MySettings1.cmdcolorV = System.Drawing.Color.Yellow
+        MySettings1.cmdstripcolor = System.Drawing.Color.DarkGreen
+        MySettings1.cmdstripcolor2 = System.Drawing.Color.DarkGreen
+        MySettings1.DateTimePicker1 = New Date(2014, 10, 3, 0, 0, 0, 0)
+        MySettings1.decklink_live = 2
+        MySettings1.labelcolorborderv = "0xFF0000"
+        MySettings1.lblcolor = "0xFFFF00"
+        MySettings1.lblcolor2 = "0xFFFF00"
+        MySettings1.lblcolorV = "0xFFFF00"
+        MySettings1.lblfilenameamcp = "Default File"
+        MySettings1.lbllogofilename = "Default file"
+        MySettings1.lblshedulerecordingplaylist = "filename=default"
+        MySettings1.lblstripcolor = "0x005500"
+        MySettings1.lblstripcolor2 = "0x005500"
+        MySettings1.nanchorx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nanchory = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nbrightness = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nchromaspread = New Decimal(New Integer() {4, 0, 0, 131072})
+        MySettings1.nchromathresholdcenter = New Decimal(New Integer() {1, 0, 0, 65536})
+        MySettings1.nclipx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nclipxsclae = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nclipy = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nclipyscale = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nContrast = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.ncropbrx = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.ncropbry = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.ncroptlx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.ncroptly = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.newdelemterforscrollandclock = "   *   "
+        MySettings1.nfillheight = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nfillwidth = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nfillx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nfilly = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nfontsizeforall = 10
+        MySettings1.ngamma = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nlogoheight = 120
+        MySettings1.nlogowidth = 160
+        MySettings1.nlogox = 592
+        MySettings1.nlogoy = 6
+        MySettings1.nmax_input = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nmax_output = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nmin_input = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nmin_output = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nmixermastervolume = New Decimal(New Integer() {10, 0, 0, 65536})
+        MySettings1.nnewspeed = New Decimal(New Integer() {20, 0, 0, 65536})
+        MySettings1.nopacity = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nopacitylogo = New Decimal(New Integer() {10, 0, 0, 65536})
+        MySettings1.nperspectiveblx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nperspectivebly = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nperspectivebrx = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nperspectivebry = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nperspectivetlx = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nperspectivetly = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nperspectivetrx = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nperspectivetry = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nrotationz = New Decimal(New Integer() {0, 0, 0, 0})
+        MySettings1.nrssspeed = 3
+        MySettings1.nSaturation = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.nsize = 35
+        MySettings1.nsize2 = 35
+        MySettings1.nsizeV = 35
+        MySettings1.nspeed = 6
+        MySettings1.nspeed2 = 3
+        MySettings1.nspeedscroll = 2.5R
+        MySettings1.nspeedV = New Decimal(New Integer() {11, 0, 0, 65536})
+        MySettings1.ntransitionduration = 10
+        MySettings1.ntransitiondurationforppt = 10
+        MySettings1.nVolume = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.ny = 510
+        MySettings1.ny2 = 410
+        MySettings1.png = False
+        MySettings1.rdojpg = True
+        MySettings1.rss = "http://news.google.com/news?pz=1&cf=all&ned=hi_in&hl=hi&output=rss"
+        MySettings1.rss_delimeter = "   *   "
+        MySettings1.rss_speed = 3
+        MySettings1.rss_update_interval = 10000
+        MySettings1.rssdescription = True
+        MySettings1.rsstitle = True
+        MySettings1.SettingsKey = ""
+        MySettings1.txtaccesstoken = ""
+        MySettings1.txtAccesstokensecret = ""
+        MySettings1.txtAccesstokentwitter = ""
+        MySettings1.txtaddtemplate = 3
+        MySettings1.txtanyamcpcommand = "Play 1-1 go1080p25 loop" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cg 1-2 add 2 cmp/cg_template/clock 1"
+        MySettings1.txtbitrate = New Decimal(New Integer() {8, 0, 0, 0})
+        MySettings1.txtbitrateofl = New Decimal(New Integer() {1, 0, 0, 0})
+        MySettings1.txtbreakingnewstag0 = "xf0"
+        MySettings1.txtbreakingnewstag1 = "xf1"
+        MySettings1.txtbreakingnewstag2 = "xf2"
+        MySettings1.txtbreakingnewsupdateinterval = 4000
+        MySettings1.txtbreakingnewsvalue0 = "Breaking News"
+        MySettings1.txtbreakingnewsvalue1 = "Breaking News"
+        MySettings1.txtcasparcgwindowtitle = "Screen consumer [1|PAL]"
+        MySettings1.txtchannelproducer = "play 2-1 route://1"
+        MySettings1.txtchromakey = "MIXER 1-22 CHROMA"
+        MySettings1.txtchromamixerclear = "mixer 1 clear"
+        MySettings1.txtConsumerkey = ""
+        MySettings1.txtConsumersecret = ""
+        MySettings1.txtcrawl = "Welcome To Doordarshan . This is Horizonal scroll line 1 testing. All are welcome" &
     " to contribute."
-        MySettings7.txtcrawl2 = "Welcome To Doordarshan . This is Horizonal scroll line 2 testing. All are welcome" &
+        MySettings1.txtcrawl2 = "Welcome To Doordarshan . This is Horizonal scroll line 2 testing. All are welcome" &
     " to contribute."
-        MySettings7.txtcrawlv = resources.GetString("MySettings7.txtcrawlv")
-        MySettings7.txtdatetodeleteoal = 180
-        MySettings7.txtdelemeterforscroll = "   *   "
-        MySettings7.txtdirectshowproducer = "play 1-1"
-        MySettings7.txtextraoptionoal = "-s 1280:720"
-        MySettings7.txtextrarecordoptions = ""
-        MySettings7.txtfilelengthofl = 1800
-        MySettings7.txtfilename = "test"
-        MySettings7.txtfourlinecenter1 = "A"
-        MySettings7.txtfourlinecenter2 = "DDK Mumbai"
-        MySettings7.txtfourlinecenter3 = "Presentation"
-        MySettings7.txtfourlinecenter4 = "Live from Mumbai"
-        MySettings7.txtfps = New Decimal(New Integer() {25, 0, 0, 0})
-        MySettings7.txtgraphfacebook = "https://graph.facebook.com/"
-        MySettings7.txthockeyip = "127.0.0.1"
-        MySettings7.txthockeyport = 5250
-        MySettings7.txthost = "127.0.0.1"
-        MySettings7.txthostnamebadminton = "127.0.0.1"
-        MySettings7.txtinterval = 3600
-        MySettings7.txtlayerproducer1 = "play 1-21 go1080p25 loop"
-        MySettings7.txtlayerproducer2 = "play 1-2 route://1-1"
-        MySettings7.txtleftlogo = "file:///C:/Casparcg/mydata/left/clock1.swf"
-        MySettings7.txtlivephonein1 = "Vimlesh Kumar from Mumbai"
-        MySettings7.txtlivephonein2 = "Suresh Paswan from Patna "
-        MySettings7.txtlogolocation = "file:///C:/Casparcg/mydata/logo/time.png"
-        MySettings7.txtmarkin1 = 100
-        MySettings7.txtmarkin2 = 100
-        MySettings7.txtmarkin3 = 100
-        MySettings7.txtmarkin4 = 100
-        MySettings7.txtmediadirectoryoal = "H:/casparcg/_media"
-        MySettings7.txtmiddle = "file:///C:/Casparcg/mydata/middle/MovieBackground1.swf"
-        MySettings7.txtplaycolorbar = "play 1-22 color_bar"
-        MySettings7.txtplaydecklinksm = "play 1 decklink 1"
-        MySettings7.txtplayforslowmotion = "play 2-1 test-replay"
-        MySettings7.txtporip = "127.0.0.1"
-        MySettings7.txtporport = 5250
-        MySettings7.txtport = 5250
-        MySettings7.txtportbadminton = "5250"
-        MySettings7.txtquery = "feed?id=casparcg"
-        MySettings7.txtrecordforslowmotion = "add 1 replay test-replay"
-        MySettings7.txtremovetemplate = 5
-        MySettings7.txtrightlogo = "file:///C:/Casparcg/mydata/right/Royal.jpg"
-        MySettings7.txtrsstimerinterval = 10000
-        MySettings7.txtsearch = ""
-        MySettings7.txtsearchtemplate = ""
-        MySettings7.txtslowmotionmaxframe = 10000
-        MySettings7.txtsqldatabase = "lto"
-        MySettings7.txtsqlpassword = "ddkm"
-        MySettings7.txtsqlport = "3306"
-        MySettings7.txtsqlserver = "localhost\sqlexpress"
-        MySettings7.txtsqluser = "hp"
-        MySettings7.txtstoprecordforslowmotion = "remove 1 replay"
-        MySettings7.txtstreamingcosumer = "ADD 1 STREAM udp://localhost:5004 -codec:v libx264 -tune:v zerolatency -preset:v " &
+        MySettings1.txtcrawlv = resources.GetString("MySettings1.txtcrawlv")
+        MySettings1.txtdatetodeleteoal = 180
+        MySettings1.txtdelemeterforscroll = "   *   "
+        MySettings1.txtdirectshowproducer = "play 1-1"
+        MySettings1.txtextraoptionoal = "-s 1280:720"
+        MySettings1.txtextrarecordoptions = ""
+        MySettings1.txtfilelengthofl = 1800
+        MySettings1.txtfilename = "test"
+        MySettings1.txtfourlinecenter1 = "A"
+        MySettings1.txtfourlinecenter2 = "DDK Mumbai"
+        MySettings1.txtfourlinecenter3 = "Presentation"
+        MySettings1.txtfourlinecenter4 = "Live from Mumbai"
+        MySettings1.txtfps = New Decimal(New Integer() {25, 0, 0, 0})
+        MySettings1.txtgraphfacebook = "https://graph.facebook.com/"
+        MySettings1.txthockeyip = "127.0.0.1"
+        MySettings1.txthockeyport = 5250
+        MySettings1.txthost = "127.0.0.1"
+        MySettings1.txthostnamebadminton = "127.0.0.1"
+        MySettings1.txtinterval = 3600
+        MySettings1.txtlayerproducer1 = "play 1-21 go1080p25 loop"
+        MySettings1.txtlayerproducer2 = "play 1-2 route://1-1"
+        MySettings1.txtleftlogo = "file:///C:/Casparcg/mydata/left/clock1.swf"
+        MySettings1.txtlivephonein1 = "Vimlesh Kumar from Mumbai"
+        MySettings1.txtlivephonein2 = "Suresh Paswan from Patna "
+        MySettings1.txtlogolocation = "file:///C:/Casparcg/mydata/logo/time.png"
+        MySettings1.txtmarkin1 = 100
+        MySettings1.txtmarkin2 = 100
+        MySettings1.txtmarkin3 = 100
+        MySettings1.txtmarkin4 = 100
+        MySettings1.txtmediadirectoryoal = "H:/casparcg/_media"
+        MySettings1.txtmiddle = "file:///C:/Casparcg/mydata/middle/MovieBackground1.swf"
+        MySettings1.txtplaycolorbar = "play 1-22 color_bar"
+        MySettings1.txtplaydecklinksm = "play 1 decklink 1"
+        MySettings1.txtplayforslowmotion = "play 2-1 test-replay"
+        MySettings1.txtporip = "127.0.0.1"
+        MySettings1.txtporport = 5250
+        MySettings1.txtport = 5250
+        MySettings1.txtportbadminton = "5250"
+        MySettings1.txtquery = "feed?id=casparcg"
+        MySettings1.txtrecordforslowmotion = "add 1 replay test-replay"
+        MySettings1.txtremovetemplate = 5
+        MySettings1.txtrightlogo = "file:///C:/Casparcg/mydata/right/Royal.jpg"
+        MySettings1.txtrsstimerinterval = 10000
+        MySettings1.txtsearch = ""
+        MySettings1.txtsearchtemplate = ""
+        MySettings1.txtslowmotionmaxframe = 10000
+        MySettings1.txtsqldatabase = "lto"
+        MySettings1.txtsqlpassword = "ddkm"
+        MySettings1.txtsqlport = "3306"
+        MySettings1.txtsqlserver = "localhost\sqlexpress"
+        MySettings1.txtsqluser = "hp"
+        MySettings1.txtstoprecordforslowmotion = "remove 1 replay"
+        MySettings1.txtstreamingcosumer = "ADD 1 STREAM udp://localhost:5004 -codec:v libx264 -tune:v zerolatency -preset:v " &
     "ultrafast -crf 25 -format mpegts -vf scale=240:180"
-        MySettings7.txtstreamingproducer = "play 1-1 ""http://localhost:8080/"""
-        MySettings7.txtthreelinecenter1 = "A"
-        MySettings7.txtthreelinecenter2 = "DDK MUMBAI"
-        MySettings7.txtthreelinecenter3 = "PRESENTATION"
-        MySettings7.txttopleft = "Live From Mumbai"
-        MySettings7.txttopright = "Recorded"
-        MySettings7.txttwolinecenter1 = "Next Program"
-        MySettings7.txttwolinecenter2 = "Discovery of India(Jawaharlal Nehru)"
-        MySettings7.txturlhtml = "file:///C:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricke" &
+        MySettings1.txtstreamingproducer = "play 1-1 ""http://localhost:8080/"""
+        MySettings1.txtthreelinecenter1 = "A"
+        MySettings1.txtthreelinecenter2 = "DDK MUMBAI"
+        MySettings1.txtthreelinecenter3 = "PRESENTATION"
+        MySettings1.txttopleft = "Live From Mumbai"
+        MySettings1.txttopright = "Recorded"
+        MySettings1.txttwolinecenter1 = "Next Program"
+        MySettings1.txttwolinecenter2 = "Discovery of India(Jawaharlal Nehru)"
+        MySettings1.txturlhtml = "file:///C:/casparcg/CMP/games/HtmlCricket/cricket_bottom_score/gwd_preview_cricke" &
     "t_bottom_score/index.html"
-        MySettings7.txtvideoheight = 576
-        MySettings7.txtvideowidth = 768
-        MySettings7.Vborercolor = System.Drawing.Color.Red
-        MySettings7.xdcamaddress1 = "http://192.168.20.54/webservice/"
-        MySettings7.xdcampassword = "xds-pd1000"
-        MySettings7.xdcamusername = "admin"
-        Me.nfontsizeforall.DataBindings.Add(New System.Windows.Forms.Binding("Value", MySettings7, "nfontsizeforall", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        MySettings1.txtvideoheight = 576
+        MySettings1.txtvideowidth = 768
+        MySettings1.Vborercolor = System.Drawing.Color.Red
+        MySettings1.xdcamaddress1 = "http://192.168.20.54/webservice/"
+        MySettings1.xdcampassword = "xds-pd1000"
+        MySettings1.xdcamusername = "admin"
+        Me.nfontsizeforall.DataBindings.Add(New System.Windows.Forms.Binding("Value", MySettings1, "nfontsizeforall", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.nfontsizeforall.Location = New System.Drawing.Point(865, 32)
         Me.nfontsizeforall.Maximum = New Decimal(New Integer() {50, 0, 0, 0})
         Me.nfontsizeforall.Name = "nfontsizeforall"
@@ -664,7 +665,7 @@ Partial Class frmmediaplayer
         '
         'txtport
         '
-        Me.txtport.DataBindings.Add(New System.Windows.Forms.Binding("Text", MySettings7, "txtport", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.txtport.DataBindings.Add(New System.Windows.Forms.Binding("Text", MySettings1, "txtport", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.txtport.Location = New System.Drawing.Point(209, 29)
         Me.txtport.Name = "txtport"
         Me.txtport.Size = New System.Drawing.Size(30, 20)
@@ -774,7 +775,7 @@ Partial Class frmmediaplayer
         '
         'cmbfontsforall
         '
-        Me.cmbfontsforall.DataBindings.Add(New System.Windows.Forms.Binding("Text", MySettings7, "cmbfontsforall", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.cmbfontsforall.DataBindings.Add(New System.Windows.Forms.Binding("Text", MySettings1, "cmbfontsforall", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cmbfontsforall.FormattingEnabled = True
         Me.cmbfontsforall.Location = New System.Drawing.Point(700, 31)
         Me.cmbfontsforall.Name = "cmbfontsforall"
@@ -1870,10 +1871,46 @@ Partial Class frmmediaplayer
         '
         'ExternalSoftwaresToolStripMenuItem
         '
-        Me.ExternalSoftwaresToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DecklinkplayerToolStripMenuItem, Me.DecklinkRecorderToolStripMenuItem, Me.DeckLinkStreamStudioToolStripMenuItem, Me.DecklinkSrtSuiteToolStripMenuItem, Me.DecklinkaudiorecorderToolStripMenuItem, Me.DeckLinkScrollPlayerToolStripMenuItem, Me.MediaAssetManagementToolStripMenuItem, Me.XDCamSoapClientToolStripMenuItem1, Me.VDCPControllerToolStripMenuItem, Me.UDPChatToolStripMenuItem, Me.XDCamControllersToolStripMenuItem, Me.YouTubeLiveManagemnetToolStripMenuItem})
+        Me.ExternalSoftwaresToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DecklinkswitcherToolStripMenuItem, Me.DecklinkplayerToolStripMenuItem, Me.DecklinkRecorderToolStripMenuItem, Me.DeckLinkStreamStudioToolStripMenuItem, Me.DecklinkSrtSuiteToolStripMenuItem, Me.DecklinkaudiorecorderToolStripMenuItem, Me.DeckLinkScrollPlayerToolStripMenuItem, Me.MediaAssetManagementToolStripMenuItem, Me.XDCamSoapClientToolStripMenuItem1, Me.VDCPControllerToolStripMenuItem, Me.UDPChatToolStripMenuItem, Me.XDCamControllersToolStripMenuItem, Me.YouTubeLiveManagemnetToolStripMenuItem})
         Me.ExternalSoftwaresToolStripMenuItem.Name = "ExternalSoftwaresToolStripMenuItem"
         Me.ExternalSoftwaresToolStripMenuItem.Size = New System.Drawing.Size(114, 20)
         Me.ExternalSoftwaresToolStripMenuItem.Text = "External Softwares"
+        '
+        'DecklinkplayerToolStripMenuItem
+        '
+        Me.DecklinkplayerToolStripMenuItem.Name = "DecklinkplayerToolStripMenuItem"
+        Me.DecklinkplayerToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DecklinkplayerToolStripMenuItem.Text = "decklinkplayer"
+        '
+        'DecklinkRecorderToolStripMenuItem
+        '
+        Me.DecklinkRecorderToolStripMenuItem.Name = "DecklinkRecorderToolStripMenuItem"
+        Me.DecklinkRecorderToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DecklinkRecorderToolStripMenuItem.Text = "decklinkRecorder"
+        '
+        'DeckLinkStreamStudioToolStripMenuItem
+        '
+        Me.DeckLinkStreamStudioToolStripMenuItem.Name = "DeckLinkStreamStudioToolStripMenuItem"
+        Me.DeckLinkStreamStudioToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DeckLinkStreamStudioToolStripMenuItem.Text = "DeckLinkStreamStudio"
+        '
+        'DecklinkSrtSuiteToolStripMenuItem
+        '
+        Me.DecklinkSrtSuiteToolStripMenuItem.Name = "DecklinkSrtSuiteToolStripMenuItem"
+        Me.DecklinkSrtSuiteToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DecklinkSrtSuiteToolStripMenuItem.Text = "DecklinkSrtSuite"
+        '
+        'DecklinkaudiorecorderToolStripMenuItem
+        '
+        Me.DecklinkaudiorecorderToolStripMenuItem.Name = "DecklinkaudiorecorderToolStripMenuItem"
+        Me.DecklinkaudiorecorderToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DecklinkaudiorecorderToolStripMenuItem.Text = "decklinkaudiorecorder"
+        '
+        'DeckLinkScrollPlayerToolStripMenuItem
+        '
+        Me.DeckLinkScrollPlayerToolStripMenuItem.Name = "DeckLinkScrollPlayerToolStripMenuItem"
+        Me.DeckLinkScrollPlayerToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DeckLinkScrollPlayerToolStripMenuItem.Text = "DeckLinkScrollPlayer"
         '
         'MediaAssetManagementToolStripMenuItem
         '
@@ -2876,14 +2913,14 @@ Partial Class frmmediaplayer
         '
         Me.CpBarCPU.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.CpBarCPU.BackColor = System.Drawing.Color.Transparent
-        Alert7.From_Value = 61
-        Alert7.To_Value = 75
-        Me.CpBarCPU.CPB_Alert_Range = Alert7
+        Alert1.From_Value = 61
+        Alert1.To_Value = 75
+        Me.CpBarCPU.CPB_Alert_Range = Alert1
         Me.CpBarCPU.CPB_AlertColor = System.Drawing.Color.Gold
         Me.CpBarCPU.CPB_BackColor = System.Drawing.Color.Black
-        Critical7.From_Value = 76
-        Critical7.To_Value = 100
-        Me.CpBarCPU.CPB_Critical_Range = Critical7
+        Critical1.From_Value = 76
+        Critical1.To_Value = 100
+        Me.CpBarCPU.CPB_Critical_Range = Critical1
         Me.CpBarCPU.CPB_CriticalColor = System.Drawing.Color.Red
         Me.CpBarCPU.CPB_SweepColor = System.Drawing.Color.Aqua
         Me.CpBarCPU.CPB_SweepMaximum = 260
@@ -2893,7 +2930,7 @@ Partial Class frmmediaplayer
         Me.CpBarCPU.CPB_Text_3 = "%"
         Me.CpBarCPU.Location = New System.Drawing.Point(38, -1)
         Me.CpBarCPU.Name = "CpBarCPU"
-        Me.CpBarCPU.Size = New System.Drawing.Size(93, 93)
+        Me.CpBarCPU.Size = New System.Drawing.Size(94, 94)
         Me.CpBarCPU.TabIndex = 1176
         '
         'DockPanel1
@@ -2976,41 +3013,11 @@ Partial Class frmmediaplayer
         Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
         Me.DataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'DecklinkplayerToolStripMenuItem
+        'DecklinkswitcherToolStripMenuItem
         '
-        Me.DecklinkplayerToolStripMenuItem.Name = "DecklinkplayerToolStripMenuItem"
-        Me.DecklinkplayerToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DecklinkplayerToolStripMenuItem.Text = "decklinkplayer"
-        '
-        'DecklinkRecorderToolStripMenuItem
-        '
-        Me.DecklinkRecorderToolStripMenuItem.Name = "DecklinkRecorderToolStripMenuItem"
-        Me.DecklinkRecorderToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DecklinkRecorderToolStripMenuItem.Text = "decklinkRecorder"
-        '
-        'DecklinkaudiorecorderToolStripMenuItem
-        '
-        Me.DecklinkaudiorecorderToolStripMenuItem.Name = "DecklinkaudiorecorderToolStripMenuItem"
-        Me.DecklinkaudiorecorderToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DecklinkaudiorecorderToolStripMenuItem.Text = "decklinkaudiorecorder"
-        '
-        'DeckLinkStreamStudioToolStripMenuItem
-        '
-        Me.DeckLinkStreamStudioToolStripMenuItem.Name = "DeckLinkStreamStudioToolStripMenuItem"
-        Me.DeckLinkStreamStudioToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DeckLinkStreamStudioToolStripMenuItem.Text = "DeckLinkStreamStudio"
-        '
-        'DecklinkSrtSuiteToolStripMenuItem
-        '
-        Me.DecklinkSrtSuiteToolStripMenuItem.Name = "DecklinkSrtSuiteToolStripMenuItem"
-        Me.DecklinkSrtSuiteToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DecklinkSrtSuiteToolStripMenuItem.Text = "DecklinkSrtSuite"
-        '
-        'DeckLinkScrollPlayerToolStripMenuItem
-        '
-        Me.DeckLinkScrollPlayerToolStripMenuItem.Name = "DeckLinkScrollPlayerToolStripMenuItem"
-        Me.DeckLinkScrollPlayerToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.DeckLinkScrollPlayerToolStripMenuItem.Text = "DeckLinkScrollPlayer"
+        Me.DecklinkswitcherToolStripMenuItem.Name = "DecklinkswitcherToolStripMenuItem"
+        Me.DecklinkswitcherToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.DecklinkswitcherToolStripMenuItem.Text = "decklinkswitcher"
         '
         'frmmediaplayer
         '
@@ -3357,4 +3364,5 @@ Partial Class frmmediaplayer
     Friend WithEvents DecklinkSrtSuiteToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DecklinkaudiorecorderToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DeckLinkScrollPlayerToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DecklinkswitcherToolStripMenuItem As ToolStripMenuItem
 End Class

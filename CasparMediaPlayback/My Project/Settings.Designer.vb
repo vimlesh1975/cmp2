@@ -2322,301 +2322,400 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nVolume() As Decimal
+        Public Property nVolume() As Decimal
             Get
                 Return CType(Me("nVolume"),Decimal)
             End Get
+            Set
+                Me("nVolume") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nopacity() As Decimal
+        Public Property nopacity() As Decimal
             Get
                 Return CType(Me("nopacity"),Decimal)
             End Get
+            Set
+                Me("nopacity") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nbrightness() As Decimal
+        Public Property nbrightness() As Decimal
             Get
                 Return CType(Me("nbrightness"),Decimal)
             End Get
+            Set
+                Me("nbrightness") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nSaturation() As Decimal
+        Public Property nSaturation() As Decimal
             Get
                 Return CType(Me("nSaturation"),Decimal)
             End Get
+            Set
+                Me("nSaturation") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nContrast() As Decimal
+        Public Property nContrast() As Decimal
             Get
                 Return CType(Me("nContrast"),Decimal)
             End Get
+            Set
+                Me("nContrast") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nclipx() As Decimal
+        Public Property nclipx() As Decimal
             Get
                 Return CType(Me("nclipx"),Decimal)
             End Get
+            Set
+                Me("nclipx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nclipy() As Decimal
+        Public Property nclipy() As Decimal
             Get
                 Return CType(Me("nclipy"),Decimal)
             End Get
+            Set
+                Me("nclipy") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nclipxsclae() As Decimal
+        Public Property nclipxsclae() As Decimal
             Get
                 Return CType(Me("nclipxsclae"),Decimal)
             End Get
+            Set
+                Me("nclipxsclae") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nclipyscale() As Decimal
+        Public Property nclipyscale() As Decimal
             Get
                 Return CType(Me("nclipyscale"),Decimal)
             End Get
+            Set
+                Me("nclipyscale") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nmin_input() As Decimal
+        Public Property nmin_input() As Decimal
             Get
                 Return CType(Me("nmin_input"),Decimal)
             End Get
+            Set
+                Me("nmin_input") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nmax_input() As Decimal
+        Public Property nmax_input() As Decimal
             Get
                 Return CType(Me("nmax_input"),Decimal)
             End Get
+            Set
+                Me("nmax_input") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property ngamma() As Decimal
+        Public Property ngamma() As Decimal
             Get
                 Return CType(Me("ngamma"),Decimal)
             End Get
+            Set
+                Me("ngamma") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nmin_output() As Decimal
+        Public Property nmin_output() As Decimal
             Get
                 Return CType(Me("nmin_output"),Decimal)
             End Get
+            Set
+                Me("nmin_output") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nmax_output() As Decimal
+        Public Property nmax_output() As Decimal
             Get
                 Return CType(Me("nmax_output"),Decimal)
             End Get
+            Set
+                Me("nmax_output") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nfillx() As Decimal
+        Public Property nfillx() As Decimal
             Get
                 Return CType(Me("nfillx"),Decimal)
             End Get
+            Set
+                Me("nfillx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nfilly() As Decimal
+        Public Property nfilly() As Decimal
             Get
                 Return CType(Me("nfilly"),Decimal)
             End Get
+            Set
+                Me("nfilly") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nfillwidth() As Decimal
+        Public Property nfillwidth() As Decimal
             Get
                 Return CType(Me("nfillwidth"),Decimal)
             End Get
+            Set
+                Me("nfillwidth") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nfillheight() As Decimal
+        Public Property nfillheight() As Decimal
             Get
                 Return CType(Me("nfillheight"),Decimal)
             End Get
+            Set
+                Me("nfillheight") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nanchorx() As Decimal
+        Public Property nanchorx() As Decimal
             Get
                 Return CType(Me("nanchorx"),Decimal)
             End Get
+            Set
+                Me("nanchorx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nanchory() As Decimal
+        Public Property nanchory() As Decimal
             Get
                 Return CType(Me("nanchory"),Decimal)
             End Get
+            Set
+                Me("nanchory") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nrotationz() As Decimal
+        Public Property nrotationz() As Decimal
             Get
                 Return CType(Me("nrotationz"),Decimal)
             End Get
+            Set
+                Me("nrotationz") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property ncroptlx() As Decimal
+        Public Property ncroptlx() As Decimal
             Get
                 Return CType(Me("ncroptlx"),Decimal)
             End Get
+            Set
+                Me("ncroptlx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property ncroptly() As Decimal
+        Public Property ncroptly() As Decimal
             Get
                 Return CType(Me("ncroptly"),Decimal)
             End Get
+            Set
+                Me("ncroptly") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property ncropbrx() As Decimal
+        Public Property ncropbrx() As Decimal
             Get
                 Return CType(Me("ncropbrx"),Decimal)
             End Get
+            Set
+                Me("ncropbrx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property ncropbry() As Decimal
+        Public Property ncropbry() As Decimal
             Get
                 Return CType(Me("ncropbry"),Decimal)
             End Get
+            Set
+                Me("ncropbry") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nperspectivetlx() As Decimal
+        Public Property nperspectivetlx() As Decimal
             Get
                 Return CType(Me("nperspectivetlx"),Decimal)
             End Get
+            Set
+                Me("nperspectivetlx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nperspectivetly() As Decimal
+        Public Property nperspectivetly() As Decimal
             Get
                 Return CType(Me("nperspectivetly"),Decimal)
             End Get
+            Set
+                Me("nperspectivetly") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nperspectivetrx() As Decimal
+        Public Property nperspectivetrx() As Decimal
             Get
                 Return CType(Me("nperspectivetrx"),Decimal)
             End Get
+            Set
+                Me("nperspectivetrx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nperspectivetry() As Decimal
+        Public Property nperspectivetry() As Decimal
             Get
                 Return CType(Me("nperspectivetry"),Decimal)
             End Get
+            Set
+                Me("nperspectivetry") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nperspectivebrx() As Decimal
+        Public Property nperspectivebrx() As Decimal
             Get
                 Return CType(Me("nperspectivebrx"),Decimal)
             End Get
+            Set
+                Me("nperspectivebrx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nperspectivebry() As Decimal
+        Public Property nperspectivebry() As Decimal
             Get
                 Return CType(Me("nperspectivebry"),Decimal)
             End Get
+            Set
+                Me("nperspectivebry") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public ReadOnly Property nperspectiveblx() As Decimal
+        Public Property nperspectiveblx() As Decimal
             Get
                 Return CType(Me("nperspectiveblx"),Decimal)
             End Get
+            Set
+                Me("nperspectiveblx") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public ReadOnly Property nperspectivebly() As Decimal
+        Public Property nperspectivebly() As Decimal
             Get
                 Return CType(Me("nperspectivebly"),Decimal)
             End Get
+            Set
+                Me("nperspectivebly") = value
+            End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _

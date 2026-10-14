@@ -764,103 +764,103 @@ cg 1-2 add 2 cmp/cg_template/clock 1</Value>
     <Setting Name="txtcasparcgwindowtitle" Type="System.String" Scope="User">
       <Value Profile="(Default)">Screen consumer [1|PAL]</Value>
     </Setting>
-    <Setting Name="nVolume" Type="System.Decimal" Scope="Application">
+    <Setting Name="nVolume" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nopacity" Type="System.Decimal" Scope="Application">
+    <Setting Name="nopacity" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nbrightness" Type="System.Decimal" Scope="Application">
+    <Setting Name="nbrightness" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nSaturation" Type="System.Decimal" Scope="Application">
+    <Setting Name="nSaturation" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nContrast" Type="System.Decimal" Scope="Application">
+    <Setting Name="nContrast" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nclipx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nclipx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nclipy" Type="System.Decimal" Scope="Application">
+    <Setting Name="nclipy" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nclipxsclae" Type="System.Decimal" Scope="Application">
+    <Setting Name="nclipxsclae" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nclipyscale" Type="System.Decimal" Scope="Application">
+    <Setting Name="nclipyscale" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nmin_input" Type="System.Decimal" Scope="Application">
+    <Setting Name="nmin_input" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nmax_input" Type="System.Decimal" Scope="Application">
+    <Setting Name="nmax_input" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="ngamma" Type="System.Decimal" Scope="Application">
+    <Setting Name="ngamma" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nmin_output" Type="System.Decimal" Scope="Application">
+    <Setting Name="nmin_output" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nmax_output" Type="System.Decimal" Scope="Application">
+    <Setting Name="nmax_output" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nfillx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nfillx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nfilly" Type="System.Decimal" Scope="Application">
+    <Setting Name="nfilly" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nfillwidth" Type="System.Decimal" Scope="Application">
+    <Setting Name="nfillwidth" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nfillheight" Type="System.Decimal" Scope="Application">
+    <Setting Name="nfillheight" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nanchorx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nanchorx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nanchory" Type="System.Decimal" Scope="Application">
+    <Setting Name="nanchory" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nrotationz" Type="System.Decimal" Scope="Application">
+    <Setting Name="nrotationz" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ncroptlx" Type="System.Decimal" Scope="Application">
+    <Setting Name="ncroptlx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ncroptly" Type="System.Decimal" Scope="Application">
+    <Setting Name="ncroptly" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ncropbrx" Type="System.Decimal" Scope="Application">
+    <Setting Name="ncropbrx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="ncropbry" Type="System.Decimal" Scope="Application">
+    <Setting Name="ncropbry" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nperspectivetlx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivetlx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nperspectivetly" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivetly" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nperspectivetrx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivetrx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nperspectivetry" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivetry" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nperspectivebrx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivebrx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nperspectivebry" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivebry" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="nperspectiveblx" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectiveblx" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="nperspectivebly" Type="System.Decimal" Scope="Application">
+    <Setting Name="nperspectivebly" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="txtConsumerkey" Type="System.String" Scope="User">

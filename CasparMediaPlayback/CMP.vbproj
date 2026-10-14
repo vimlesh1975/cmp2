@@ -1323,7 +1323,7 @@
     <Content Include="Resources\9.png" />
     <Content Include="Resources\Play_last_5_Sec.png" />
     <None Include="Resources\Play_last_5_Sec1.png" />
-    <None Include="Quickstart-4d2796c29251.json">
+    <None Include="Quickstart-4d2796c29251.json" Condition="Exists('Quickstart-4d2796c29251.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Stop.png" />

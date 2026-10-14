@@ -1828,4 +1828,11 @@ Public Class frmmediaplayer
             Process.Start(filePaths(0))
         End If
     End Sub
+
+    Private Sub DecklinkswitcherToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DecklinkswitcherToolStripMenuItem.Click
+        Dim filePaths As String() = System.IO.Directory.GetFiles("C:\casparcg\mydata\ffmpeg\", "DecklinkSwitcher*.exe")
+        If filePaths.Length > 0 Then
+            Process.Start(filePaths(0))
+        End If
+    End Sub
 End Class
